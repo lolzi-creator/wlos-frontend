@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react';
 
+// src/components/common/Card.tsx
 interface CardProps {
     children: ReactNode;
-    color: 'purple' | 'green' | 'yellow';
+    color: 'purple' | 'green' | 'yellow' | 'blue' | 'cyan';
 }
 
 const Card: React.FC<CardProps> = ({ children, color }) => {

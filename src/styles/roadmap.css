@@ -1,0 +1,889 @@
+/* Roadmap Page Styles */
+
+/* Colors */
+:root {
+    --color-blue: #5865F2;
+    --color-blue-light: rgba(88, 101, 242, 0.2);
+    --color-blue-dim: rgba(88, 101, 242, 0.1);
+}
+
+/* Adds blue color to existing options */
+.blue-text {
+    color: var(--color-blue);
+}
+
+.border-blue {
+    border-color: var(--color-blue);
+}
+
+.blue {
+    background-color: var(--color-blue);
+}
+
+.feature-dot.blue {
+    background-color: var(--color-blue);
+}
+
+.blue-orb {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(88, 101, 242, 0.05) 0%, rgba(88, 101, 242, 0) 70%);
+}
+
+/* Roadmap Hero Section */
+.roadmap-hero-section {
+    margin-bottom: 40px;
+}
+
+.roadmap-hero-content {
+    padding: 40px;
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    background-color: rgba(20, 20, 50, 0.4);
+    position: relative;
+}
+
+.roadmap-hero-desc {
+    color: var(--color-text-secondary);
+    margin: 20px 0;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.roadmap-progress-panel {
+    background-color: rgba(10, 10, 35, 0.6);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    padding: 20px;
+}
+
+.progress-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.progress-metric {
+    margin-bottom: 10px;
+}
+
+.metric-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 5px;
+}
+
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar-bg {
+    flex: 1;
+    height: 8px;
+    background-color: rgba(10, 10, 35, 0.8);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    position: relative;
+    border-radius: 4px;
+}
+
+.progress-bar.blue {
+    background-color: var(--color-blue);
+}
+
+.progress-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+    animation: progressGlow 1.5s infinite linear;
+}
+
+@keyframes progressGlow {
+    0% { transform: translateX(-30px); }
+    100% { transform: translateX(300px); }
+}
+
+.progress-value {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.current-phase {
+    background-color: rgba(88, 101, 242, 0.1);
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    padding: 15px;
+    border-radius: 2px;
+}
+
+.phase-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.phase-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.phase-dot.blue {
+    background-color: var(--color-blue);
+}
+
+.phase-title {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.phase-description {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.phase-timeline {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.next-milestone {
+    margin-top: 20px;
+}
+
+.milestone-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.milestone-icon {
+    width: 16px;
+    height: 16px;
+    background-color: rgba(88, 101, 242, 0.2);
+    border: 1px solid var(--color-blue);
+    margin-right: 10px;
+}
+
+.milestone-title {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.milestone-date {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+}
+
+.milestone-progress-bar {
+    height: 5px;
+    background-color: rgba(10, 10, 35, 0.8);
+    border-radius: 2px;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.milestone-progress {
+    height: 100%;
+    border-radius: 2px;
+}
+
+.milestone-progress.blue {
+    background-color: var(--color-blue);
+}
+
+.milestone-percentage {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    text-align: right;
+}
+
+/* Roadmap Timeline Section */
+.roadmap-timeline-section {
+    margin-bottom: 40px;
+}
+
+.timeline-container {
+    padding: 24px;
+    background-color: rgba(10, 10, 37, 0.5);
+    position: relative;
+}
+
+.vertical-timeline {
+    position: relative;
+    margin: 0 auto;
+}
+
+.timeline-phase {
+    position: relative;
+    margin-bottom: 30px;
+    border-left: 2px solid rgba(88, 101, 242, 0.3);
+    padding-left: 30px;
+}
+
+.timeline-phase:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-phase.completed {
+    border-left-color: var(--color-blue);
+}
+
+.timeline-phase.in-progress {
+    border-left-color: var(--color-blue);
+}
+
+.timeline-phase.planned {
+    border-left-color: rgba(88, 101, 242, 0.3);
+}
+
+.phase-indicator {
+    position: absolute;
+    left: -10px;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.phase-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(88, 101, 242, 0.5);
+    background-color: rgba(10, 10, 37, 0.8);
+}
+
+.timeline-phase.completed .phase-dot {
+    background-color: var(--color-blue);
+}
+
+.timeline-phase.in-progress .phase-dot {
+    background-color: var(--color-blue);
+}
+
+.phase-line {
+    height: 100%;
+    width: 2px;
+    background-color: rgba(88, 101, 242, 0.3);
+}
+
+.phase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: rgba(88, 101, 242, 0.05);
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.phase-header:hover {
+    background-color: rgba(88, 101, 242, 0.1);
+}
+
+.phase-title-container {
+    flex: 1;
+}
+
+.phase-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.phase-period {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.phase-status-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.phase-status {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.phase-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 150px;
+}
+
+.progress-bar-bg {
+    flex: 1;
+    height: 6px;
+    background-color: rgba(10, 10, 35, 0.8);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar.inactive {
+    background-color: rgba(88, 101, 242, 0.2);
+}
+
+.progress-bar.blue-pulse {
+    background-color: var(--color-blue);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar.blue-pulse::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+    animation: progressGlow 1.5s infinite linear;
+}
+
+.progress-percentage {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.expand-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(88, 101, 242, 0.1);
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    border-radius: 50%;
+    font-size: 16px;
+    color: var(--color-blue);
+    font-weight: bold;
+}
+
+.phase-content {
+    padding: 20px;
+    background-color: rgba(10, 10, 35, 0.4);
+    border: 1px solid rgba(88, 101, 242, 0.1);
+    border-top: none;
+    margin-top: -1px;
+}
+
+.phase-description {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.phase-milestones {
+    margin-top: 20px;
+}
+
+.milestones-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: var(--color-blue);
+}
+
+.milestones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.milestone-card {
+    padding: 12px;
+    background-color: rgba(10, 10, 35, 0.6);
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    position: relative;
+}
+
+.milestone-card.completed {
+    border-left: 3px solid var(--color-blue);
+}
+
+.milestone-card.in-progress {
+    border-left: 3px solid var(--color-green);
+}
+
+.milestone-card.planned {
+    border-left: 3px solid var(--color-text-secondary);
+}
+
+.milestone-status-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.milestone-card.completed .milestone-status-indicator {
+    background-color: var(--color-blue);
+}
+
+.milestone-card.in-progress .milestone-status-indicator {
+    background-color: var(--color-green);
+}
+
+.milestone-card.planned .milestone-status-indicator {
+    background-color: var(--color-text-secondary);
+}
+
+.milestone-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.milestone-date {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+}
+
+/* Roadmap Features Section */
+.roadmap-features-section {
+    margin-bottom: 40px;
+}
+
+.feature-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.category-button {
+    padding: 8px 16px;
+    background-color: rgba(10, 10, 35, 0.4);
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.category-button:hover {
+    background-color: rgba(88, 101, 242, 0.1);
+}
+
+.category-button.active {
+    background-color: rgba(88, 101, 242, 0.1);
+    border-color: rgba(88, 101, 242, 0.4);
+    color: var(--color-text);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.feature-card {
+    padding: 20px;
+    background-color: rgba(10, 10, 37, 0.5);
+    position: relative;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card.selected {
+    background-color: rgba(88, 101, 242, 0.05);
+}
+
+.feature-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.feature-title-container {
+    flex: 1;
+}
+
+.feature-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.feature-category {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.feature-image-container {
+    width: 40px;
+    height: 40px;
+    margin-left: 15px;
+}
+
+.feature-image {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(88, 101, 242, 0.1);
+    border: 1px solid var(--color-blue);
+}
+
+.feature-info {
+    background-color: rgba(10, 10, 35, 0.6);
+    padding: 12px;
+    border: 1px solid rgba(88, 101, 242, 0.1);
+    margin-bottom: 15px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.info-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.info-value {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.info-value.priority-high {
+    color: var(--color-green);
+}
+
+.info-value.priority-medium {
+    color: var(--color-yellow);
+}
+
+.info-value.priority-low {
+    color: var(--color-text-secondary);
+}
+
+.progress-bar-bg.small {
+    height: 4px;
+}
+
+.feature-description {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.feature-details {
+    background-color: rgba(10, 10, 35, 0.6);
+    padding: 15px;
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    margin-top: 15px;
+}
+
+.details-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--color-blue);
+}
+
+.details-list {
+    margin-bottom: 15px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.detail-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    margin-right: 8px;
+}
+
+.detail-dot.blue {
+    background-color: var(--color-blue);
+}
+
+.feature-action {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+/* Roadmap Milestones Section */
+.roadmap-milestones-section {
+    margin-bottom: 40px;
+}
+
+.milestones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.milestone-card {
+    padding: 20px;
+    background-color: rgba(10, 10, 37, 0.5);
+    position: relative;
+}
+
+.milestone-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.milestone-icon-container {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.milestone-icon {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(88, 101, 242, 0.1);
+    border: 1px solid var(--color-blue);
+}
+
+.milestone-title-container {
+    flex: 1;
+}
+
+.milestone-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.milestone-date {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.milestone-status-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+    border-radius: 2px;
+    margin-left: 15px;
+}
+
+.milestone-status-badge.completed {
+    background-color: rgba(88, 101, 242, 0.1);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    color: var(--color-blue);
+}
+
+.milestone-status-badge.in-progress {
+    background-color: rgba(20, 241, 149, 0.1);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    color: var(--color-green);
+}
+
+.milestone-status-badge.planned {
+    background-color: rgba(153, 153, 153, 0.1);
+    border: 1px solid rgba(153, 153, 153, 0.3);
+    color: var(--color-text-secondary);
+}
+
+.milestone-description {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.milestone-achievements, .milestone-goals, .milestone-dependencies {
+    margin-bottom: 20px;
+}
+
+.section-subtitle {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--color-blue);
+}
+
+.achievements-list, .goals-list, .dependencies-list {
+    list-style: none;
+    padding: 0;
+}
+
+.achievement-item, .goal-item, .dependency-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.achievement-dot, .goal-dot, .dependency-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+.achievement-dot.blue, .goal-dot.blue {
+    background-color: var(--color-blue);
+}
+
+.dependency-dot {
+    background-color: var(--color-text-secondary);
+}
+
+.milestone-metrics {
+    margin-top: 20px;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.metric-box {
+    padding: 12px;
+    background-color: rgba(10, 10, 35, 0.6);
+    border: 1px solid rgba(88, 101, 242, 0.1);
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.metric-label {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+}
+
+.milestone-progress-section {
+    margin-top: 20px;
+}
+
+.progress-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.progress-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.progress-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Tab styles for roadmap page */
+.tab-button.active {
+    color: var(--color-blue);
+}
+
+.tab-button.active::after {
+    background-color: var(--color-blue);
+}
+
+.tab-line {
+    background-color: rgba(88, 101, 242, 0.3);
+}
+
+/* Make the accent line color match blue for roadmap page */
+.roadmap-hero-content .accent-line {
+    background-color: var(--color-blue);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .phase-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .phase-status-container {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .milestones-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .feature-categories, .filter-options {
+        overflow-x: auto;
+        padding-bottom: 10px;
+        flex-wrap: nowrap;
+    }
+
+    .category-button, .filter-option {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .milestone-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .milestone-status-badge {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+}

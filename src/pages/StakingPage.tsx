@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
-import StakingHero from '../components/sections/StakingHero';
-import StakingPools from '../components/sections/StakingPools';
-import StakingStats from '../components/sections/StakingStats';
-import StakingRewards from '../components/sections/StakingRewards.tsx';
+import StakingHero from '../components/sections/Staking/StakingHero.tsx';
+import StakingPools from '../components/sections/Staking/StakingPools.tsx';
+import StakingStats from '../components/sections/Staking/StakingStats.tsx';
+import StakingRewards from '../components/sections/Staking/StakingRewards.tsx';
 
 const StakingPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'staking' | 'rewards'>('staking');

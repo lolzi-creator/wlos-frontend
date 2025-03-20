@@ -1,0 +1,229 @@
+/* Mobile-specific fixes for Warlords of Solana */
+
+/* General mobile adjustments */
+@media (max-width: 768px) {
+    /* Improved container padding */
+    .main-content {
+        padding: 20px 15px !important;
+        padding-top: 80px !important;
+    }
+
+    /* Fix hero sections on all pages */
+    .hero-section,
+    .staking-hero-section,
+    .marketplace-hero-section,
+    .token-hero-section {
+        padding: 25px 15px !important;
+        margin-bottom: 25px !important;
+    }
+
+    .hero-content,
+    .staking-hero-content,
+    .marketplace-hero-content,
+    .token-hero-content {
+        padding: 25px 15px !important;
+    }
+
+    /* Fix hero titles */
+    .hero-title {
+        font-size: 28px !important;
+        margin-bottom: 10px !important;
+        line-height: 1.2 !important;
+    }
+
+    .hero-subtitle {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* Fix section titles and spacing */
+    .section-title {
+        margin-top: 30px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .title-text {
+        font-size: 18px !important;
+    }
+
+    /* Fix cards */
+    .futuristic-card,
+    .feature-card,
+    .acquisition-card,
+    .token-stat-card,
+    .utility-card,
+    .item-card,
+    .pool-details {
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Fix grid layouts */
+    .grid {
+        gap: 15px !important;
+    }
+
+    /* Fix buttons */
+    .futuristic-button {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+    }
+
+    /* Fix info panels */
+    .staking-info-panel,
+    .marketplace-info-panel,
+    .token-info-panel {
+        margin-top: 20px !important;
+        padding: 15px !important;
+    }
+
+    /* Fix dashboard boxes */
+    .staking-stats-grid,
+    .featured-items-grid,
+    .token-metrics-grid {
+        gap: 10px !important;
+    }
+
+    .stat-box {
+        padding: 10px !important;
+    }
+
+    .stat-label {
+        font-size: 10px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .stat-value {
+        font-size: 16px !important;
+    }
+
+    /* Fix feature lists */
+    .feature-list {
+        margin: 15px 0 !important;
+    }
+
+    .feature-item {
+        margin-bottom: 8px !important;
+    }
+
+    .feature-text {
+        font-size: 12px !important;
+    }
+
+    /* Fix card titles */
+    .card-title,
+    .pool-title,
+    .feature-title,
+    .utility-title,
+    .acquisition-title {
+        font-size: 16px !important;
+        margin-bottom: 10px !important;
+    }
+}
+
+/* Specific fixes for extra small screens */
+@media (max-width: 400px) {
+    /* Improve readability on very small screens */
+    .hero-title {
+        font-size: 24px !important;
+    }
+
+    .hero-subtitle {
+        font-size: 11px !important;
+    }
+
+    /* Make buttons more usable on small screens */
+    .futuristic-button {
+        width: 100% !important;
+        margin-bottom: 10px !important;
+        text-align: center !important;
+    }
+
+    /* Fix staking dashboard boxes */
+    .staking-stats-grid,
+    .featured-items-grid,
+    .token-metrics-grid {
+        grid-template-columns: 1fr !important; /* Stack in a single column */
+    }
+
+    /* Fix marketplace item boxes */
+    .featured-item {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    .featured-item-box {
+        width: 40px !important;
+        height: 40px !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+/* Fix specifically for the Marketplace Highlights section */
+.marketplace-info-panel .featured-items-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+@media (max-width: 400px) {
+    .marketplace-info-panel .featured-items-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .marketplace-info-panel .featured-item {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .marketplace-info-panel .featured-item-box {
+        margin-bottom: 5px !important;
+    }
+}
+
+/* Fix for WLOS TOKEN METRICS section */
+.token-info-panel .token-metrics-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+}
+
+.token-price-container {
+    margin-bottom: 15px !important;
+}
+
+/* Fix for Staking Dashboard section */
+.staking-info-panel .staking-stats-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+}
+
+/* Fix for page tabs */
+.page-tabs {
+    margin-bottom: 20px !important;
+    overflow-x: auto !important;
+    display: flex !important;
+    padding-bottom: 5px !important;
+}
+
+.tab-button {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+/* For consistent section spacing across pages */
+section {
+    margin-bottom: 25px !important;
+}
+
+/* Fix for feature dots on mobile */
+.feature-dot {
+    min-width: 6px !important;
+}

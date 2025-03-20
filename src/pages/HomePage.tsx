@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import HeroSection from '../components/sections/HeroSection';
-import StatsSection from '../components/sections/StatsSection';
+import StatsSection from '../components/sections/Staking/StatsSection.tsx';
 import WlosTokenSection from '../components/sections/WlosTokenSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
+
 
 const HomePage: React.FC = () => {
     const [activeLine, setActiveLine] = useState(0);

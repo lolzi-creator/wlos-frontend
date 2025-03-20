@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Button from '../common/Button';
-import SectionTitle from '../common/SectionTitle';
+import Button from '../../common/Button.tsx';
+import SectionTitle from '../../common/SectionTitle.tsx';
 
 const poolData = [
     {
