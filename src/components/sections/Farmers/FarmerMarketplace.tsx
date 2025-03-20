@@ -1,4 +1,3 @@
-// src/components/sections/Farmers/FarmerMarketplace.tsx
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import FarmerCard from './FarmerCard';
@@ -8,12 +7,16 @@ import { useFarmer } from '../../../context/FarmerContext';
 const FarmerMarketplace: React.FC = () => {
     const { buyFarmer, isLoading, error } = useFarmer();
     const [filterRarity, setFilterRarity] = useState<string>('all');
-    const [selectedFarmer] = useState<string | null>(null);
+    const [selectedFarmer, setSelectedFarmer] = useState<string | null>(null);
 
     // Filter farmers based on selected rarity
     const filteredFarmers = filterRarity === 'all'
         ? FARMERS
         : FARMERS.filter(farmer => farmer.rarity === filterRarity);
+
+    const handleSelect = (id: string) => {
+        setSelectedFarmer(selectedFarmer === id ? null : id);
+    };
 
     const handleBuy = async (farmerId: string) => {
         const success = await buyFarmer(farmerId);
@@ -71,6 +74,7 @@ const FarmerMarketplace: React.FC = () => {
                         key={farmer.id}
                         farmer={farmer}
                         selected={selectedFarmer === farmer.id}
+                        onSelect={() => handleSelect(farmer.id)}
                         onBuy={() => handleBuy(farmer.id)}
                     />
                 ))}

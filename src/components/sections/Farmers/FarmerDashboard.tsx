@@ -1,4 +1,3 @@
-// src/components/sections/Farmers/FarmerDashboard.tsx
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import FarmerCard from './FarmerCard';
@@ -8,7 +7,7 @@ import { useFarmer } from '../../../context/FarmerContext';
 
 const FarmerDashboard: React.FC = () => {
     const { ownedFarmers, pendingRewards, harvestRewards, levelUpFarmer, isLoading, error } = useFarmer();
-    const [selectedFarmer] = useState<string | null>(null);
+    const [selectedFarmer, setSelectedFarmer] = useState<string | null>(null);
 
     const handleHarvest = async () => {
         if (pendingRewards <= 0) {
@@ -22,11 +21,12 @@ const FarmerDashboard: React.FC = () => {
         }
     };
 
-    const handleLevelUp = async (ownedFarmerId: string) => {
-        const success = await levelUpFarmer(ownedFarmerId);
-        if (success) {
-            alert('Farmer upgraded successfully!');
-        }
+    const handleSelect = (id: string) => {
+        setSelectedFarmer(selectedFarmer === id ? null : id);
+    };
+
+    const handleLevelUp = (id: string) => {
+        levelUpFarmer(id);
     };
 
     return (
@@ -79,6 +79,7 @@ const FarmerDashboard: React.FC = () => {
                                 owned={true}
                                 level={ownedFarmer.level}
                                 selected={selectedFarmer === ownedFarmer.id}
+                                onSelect={() => handleSelect(ownedFarmer.id)}
                                 onLevelUp={() => handleLevelUp(ownedFarmer.id)}
                             />
                         );

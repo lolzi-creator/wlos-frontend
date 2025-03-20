@@ -1,19 +1,25 @@
-// src/components/sections/Farmers/FarmerCard.tsx
 import React from 'react';
 import { Farmer } from '../../../types/FarmerTypes';
+import Button from '../../common/Button';
 
 interface FarmerCardProps {
     farmer: Farmer;
     owned?: boolean;
     level?: number;
+    selected?: boolean;
     onSelect?: () => void;
+    onBuy?: () => void;
+    onLevelUp?: () => void;
 }
 
 const FarmerCard: React.FC<FarmerCardProps> = ({
                                                    farmer,
                                                    owned = false,
                                                    level = 1,
-                                                   onSelect
+                                                   selected = false,
+                                                   onSelect,
+                                                   onBuy,
+                                                   onLevelUp
                                                }) => {
     // Get rarity to use in classNames
     const rarity = farmer.rarity;
@@ -24,9 +30,18 @@ const FarmerCard: React.FC<FarmerCardProps> = ({
     // Calculate yield percentage for progress bar (assume max is 15)
     const yieldPercentage = Math.min((currentYield / 15) * 100, 100);
 
+    // Use simple functions without event parameters to avoid TypeScript errors
+    const handleBuyClick = () => {
+        if (onBuy) onBuy();
+    };
+
+    const handleLevelUpClick = () => {
+        if (onLevelUp) onLevelUp();
+    };
+
     return (
         <div
-            className={`farmer-card frame-${rarity}`}
+            className={`farmer-card frame-${rarity} ${selected ? 'selected' : ''}`}
             onClick={onSelect}
         >
             {/* Scene background */}
@@ -64,6 +79,26 @@ const FarmerCard: React.FC<FarmerCardProps> = ({
                     <div>YLD: {currentYield.toFixed(1)}</div>
                     <div>{owned ? 'OWNED' : `${farmer.cost} WLOS`}</div>
                 </div>
+
+                {/* Action buttons */}
+                {(onBuy || onLevelUp) && (
+                    <div className="mt-4">
+                        {onBuy && !owned && (
+                            <Button
+                                text="BUY"
+                                color="green"
+                                onClick={handleBuyClick}
+                            />
+                        )}
+                        {onLevelUp && owned && (
+                            <Button
+                                text="LEVEL UP"
+                                color="green"
+                                onClick={handleLevelUpClick}
+                            />
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
