@@ -47,6 +47,7 @@ const MarketplacePage: React.FC = () => {
             </div>
 
             <main className="main-content">
+                <MarketplaceHero />
                 {isConnected ? (
                     <>
                         <div className="page-tabs">

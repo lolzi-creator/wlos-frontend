@@ -1,7 +1,6 @@
+// src/components/sections/Staking/StakingHero.tsx
 import React from 'react';
-import Button from '../../common/Button.tsx';
 import { useWalletConnection } from '../../../context/WalletConnectionProvider';
-import WalletConnectButton from '../../common/WalletConnectButton';
 
 const StakingHero: React.FC = () => {
     const { isConnected } = useWalletConnection();
@@ -32,19 +31,10 @@ const StakingHero: React.FC = () => {
                             </div>
                         </div>
 
-                        {isConnected ? (
-                            <Button
-                                text="STAKE WLOS NOW"
-                                color="green"
-                                onClick={() => console.log('Stake now clicked')}
-                            />
-                        ) : (
-                            <WalletConnectButton color="green" />
-                        )}
+
                     </div>
 
                     <div className="staking-info-panel clip-panel">
-                        <h4 className="text-green-text text-sm font-semibold mb-2">YOUR STAKING DASHBOARD</h4>
                         <div className="h-px w-48 bg-green-text/50 mb-4"></div>
 
                         {isConnected ? (
@@ -73,7 +63,6 @@ const StakingHero: React.FC = () => {
                             </>
                         ) : (
                             <div className="text-center">
-                                <p className="text-gray-400 mb-4">Connect your wallet to view your staking stats and start earning rewards</p>
                             </div>
                         )}
                     </div>

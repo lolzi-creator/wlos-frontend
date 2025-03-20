@@ -1,7 +1,7 @@
+// src/components/sections/Marketplace/MarketplaceHero.tsx
 import React from 'react';
 import Button from '../../common/Button';
 import { useWalletConnection } from '../../../context/WalletConnectionProvider';
-import WalletConnectButton from '../../common/WalletConnectButton';
 
 const MarketplaceHero: React.FC = () => {
     const { isConnected } = useWalletConnection();
@@ -68,11 +68,7 @@ const MarketplaceHero: React.FC = () => {
 
                         {!isConnected && (
                             <div className="connect-prompt">
-                                <p className="text-xs text-center text-gray-400 mb-2">Connect your wallet to purchase items</p>
-                                <WalletConnectButton
-                                    color="yellow"
-                                    fullWidth={true}
-                                />
+
                             </div>
                         )}
                     </div>

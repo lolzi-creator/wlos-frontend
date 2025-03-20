@@ -13,7 +13,7 @@ const StakingPage: React.FC = () => {
     const { isConnected } = useWalletConnection();
 
     // Animation for scanning effect
-    React.useEffect(() => {
+    useEffect(() => {
         const interval = setInterval(() => {
             setActiveLine(prev => (prev + 1) % 100);
         }, 30);
@@ -45,6 +45,7 @@ const StakingPage: React.FC = () => {
             </div>
 
             <main className="main-content">
+                <StakingHero />
                 {isConnected ? (
                     <>
                         <div className="page-tabs">
