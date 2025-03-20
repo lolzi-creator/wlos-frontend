@@ -1,7 +1,11 @@
 import React from 'react';
 import Button from '../../common/Button';
+import { useWalletConnection } from '../../../context/WalletConnectionProvider';
+import WalletConnectButton from '../../common/WalletConnectButton';
 
 const WlosTokenHero: React.FC = () => {
+    const { isConnected } = useWalletConnection();
+
     return (
         <section className="token-hero-section">
             <div className="token-hero-content clip-banner">
@@ -32,11 +36,15 @@ const WlosTokenHero: React.FC = () => {
                             </div>
                         </div>
 
-                        <Button
-                            text="ACQUIRE WLOS"
-                            color="purple"
-                            onClick={() => console.log('Acquire WLOS clicked')}
-                        />
+                        {isConnected ? (
+                            <Button
+                                text="ACQUIRE WLOS"
+                                color="purple"
+                                onClick={() => console.log('Acquire WLOS clicked')}
+                            />
+                        ) : (
+                            <WalletConnectButton color="purple" />
+                        )}
                     </div>
 
                     <div className="token-info-panel clip-panel">
@@ -80,14 +88,14 @@ const WlosTokenHero: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="connect-prompt mt-6">
-                            <Button
-                                text="CONNECT WALLET"
-                                color="purple"
-                                onClick={() => console.log('Connect wallet clicked')}
-                                fullWidth={true}
-                            />
-                        </div>
+                        {!isConnected && (
+                            <div className="connect-prompt mt-6">
+                                <WalletConnectButton
+                                    color="purple"
+                                    fullWidth={true}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

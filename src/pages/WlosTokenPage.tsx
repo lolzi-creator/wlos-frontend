@@ -5,10 +5,13 @@ import WlosTokenStats from '../components/sections/WlosToken/WlosTokenStats';
 import WlosTokenUtility from '../components/sections/WlosToken/WlosTokenUtility.tsx';
 import WlosTokenDistribution from '../components/sections/WlosToken/WlosTokenDistribution';
 import WlosTokenAcquisition from '../components/sections/WlosToken/WlosTokenAcquisition';
+import { useWalletConnection } from '../context/WalletConnectionProvider';
+import WalletConnectButton from '../components/common/WalletConnectButton';
 
 const WlosTokenPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'overview' | 'utility' | 'tokenomics'>('overview');
     const [activeLine, setActiveLine] = useState(0);
+    const { isConnected } = useWalletConnection();
 
     // Animation for scanning effect
     useEffect(() => {
@@ -17,6 +20,9 @@ const WlosTokenPage: React.FC = () => {
         }, 30);
         return () => clearInterval(interval);
     }, []);
+
+    // Most of the token info should be visible to all users, whether connected or not
+    // But acquisition options should only be shown when connected
 
     return (
         <Layout>
@@ -69,7 +75,22 @@ const WlosTokenPage: React.FC = () => {
                     <>
                         <WlosTokenHero />
                         <WlosTokenStats />
-                        <WlosTokenAcquisition />
+
+                        {isConnected ? (
+                            <WlosTokenAcquisition />
+                        ) : (
+                            <div className="wallet-connect-prompt clip-card border-purple mt-8">
+                                <div className="accent-border top purple"></div>
+
+                                <div className="wallet-connect-content text-center p-10">
+                                    <h3 className="prompt-title text-xl font-bold mb-4 purple-text">CONNECT WALLET TO ACQUIRE WLOS</h3>
+                                    <p className="prompt-description text-gray-400 mb-6">
+                                        Connect your wallet to swap, stake, and earn WLOS tokens.
+                                    </p>
+                                    <WalletConnectButton color="purple" />
+                                </div>
+                            </div>
+                        )}
                     </>
                 )}
 

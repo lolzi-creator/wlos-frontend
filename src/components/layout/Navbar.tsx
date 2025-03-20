@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import WalletConnectButton from '../common/WalletConnectButton';
+import { useWalletConnection } from '../../context/WalletConnectionProvider';
 
 const Navbar: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { isConnected } = useWalletConnection();
 
     // Determine active page
     const isActive = (path: string) => {
@@ -45,72 +47,86 @@ const Navbar: React.FC = () => {
             {/* Navigation Items - Desktop & Mobile */}
             <div className={`nav-container ${mobileMenuOpen ? 'open' : ''}`}>
                 <nav className="nav-items">
-                    <nav className="nav-items">
-                        <NavItem
-                            label="BATTLE"
-                            active={isActive('/battle')}
-                            onClick={() => handleNavigation('/')}
-                        />
-                        <NavItem
-                            label="STAKE"
-                            active={isActive('/stake')}
-                            onClick={() => handleNavigation('/stake')}
-                        />
-                        <NavItem
-                            label="MARKETPLACE"
-                            active={isActive('/marketplace')}
-                            onClick={() => handleNavigation('/marketplace')}
-                        />
-                        <NavItem
-                            label="WLOS TOKEN"
-                            active={isActive('/wlos-token')}
-                            onClick={() => handleNavigation('/wlos-token')}
-                        />
-                        <NavItem
-                            label="ROADMAP"
-                            active={isActive('/roadmap')}
-                            onClick={() => handleNavigation('/roadmap')}
-                        />
-                        <NavItem
-                            label="WALLET"
-                            active={isActive('/wallet')}
-                            onClick={() => handleNavigation('/wallet')}
-                        />
-                    </nav>
+                    <div
+                        className={`nav-item ${isActive('/battle') ? 'active' : ''}`}
+                        onClick={() => handleNavigation('/')}
+                    >
+                        BATTLE
+                        {isActive('/battle') && (
+                            <>
+                                <div className="corner-accent top-right"></div>
+                                <div className="corner-accent bottom-left"></div>
+                            </>
+                        )}
+                    </div>
+                    <div
+                        className={`nav-item ${isActive('/stake') ? 'active' : ''}`}
+                        onClick={() => handleNavigation('/stake')}
+                    >
+                        STAKE
+                        {isActive('/stake') && (
+                            <>
+                                <div className="corner-accent top-right"></div>
+                                <div className="corner-accent bottom-left"></div>
+                            </>
+                        )}
+                    </div>
+                    <div
+                        className={`nav-item ${isActive('/marketplace') ? 'active' : ''}`}
+                        onClick={() => handleNavigation('/marketplace')}
+                    >
+                        MARKETPLACE
+                        {isActive('/marketplace') && (
+                            <>
+                                <div className="corner-accent top-right"></div>
+                                <div className="corner-accent bottom-left"></div>
+                            </>
+                        )}
+                    </div>
+                    <div
+                        className={`nav-item ${isActive('/wlos-token') ? 'active' : ''}`}
+                        onClick={() => handleNavigation('/wlos-token')}
+                    >
+                        WLOS TOKEN
+                        {isActive('/wlos-token') && (
+                            <>
+                                <div className="corner-accent top-right"></div>
+                                <div className="corner-accent bottom-left"></div>
+                            </>
+                        )}
+                    </div>
+                    <div
+                        className={`nav-item ${isActive('/roadmap') ? 'active' : ''}`}
+                        onClick={() => handleNavigation('/roadmap')}
+                    >
+                        ROADMAP
+                        {isActive('/roadmap') && (
+                            <>
+                                <div className="corner-accent top-right"></div>
+                                <div className="corner-accent bottom-left"></div>
+                            </>
+                        )}
+                    </div>
+                    <div
+                        className={`nav-item ${isActive('/wallet') ? 'active' : ''}`}
+                        onClick={() => handleNavigation('/wallet')}
+                    >
+                        WALLET
+                        {isActive('/wallet') && (
+                            <>
+                                <div className="corner-accent top-right"></div>
+                                <div className="corner-accent bottom-left"></div>
+                            </>
+                        )}
+                    </div>
                 </nav>
 
-                {/* Wallet Button - Will show in mobile menu when expanded */}
+                {/* Wallet Button */}
                 <div className="wallet-button-container">
-                    <button
-                        className="futuristic-button bg-purple-glow border-purple"
-                        onClick={() => console.log('Connect wallet clicked')}
-                    >
-                        CONNECT WALLET
-                    </button>
+                    <WalletConnectButton color="purple" />
                 </div>
             </div>
         </header>
-    );
-};
-
-// NavItem Component
-interface NavItemProps {
-    label: string;
-    active: boolean;
-    onClick: () => void;
-}
-
-const NavItem: React.FC<NavItemProps> = ({ label, active, onClick }) => {
-    return (
-        <div className={`nav-item ${active ? 'active' : ''}`} onClick={onClick}>
-            {label}
-            {active && (
-                <>
-                    <div className="corner-accent top-right"></div>
-                    <div className="corner-accent bottom-left"></div>
-                </>
-            )}
-        </div>
     );
 };
 

@@ -4,12 +4,15 @@ import MarketplaceHero from '../components/sections/Marketplace/MarketplaceHero.
 import MarketplaceCategories from '../components/sections/Marketplace/MarketplaceCategories';
 import MarketplaceItems from '../components/sections/Marketplace/MarketplaceItems';
 import MarketplaceStats from '../components/sections/Marketplace/MarketplaceStats';
+import { useWalletConnection } from '../context/WalletConnectionProvider';
+import WalletConnectButton from '../components/common/WalletConnectButton';
 
 const MarketplacePage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'browse' | 'inventory'>('browse');
     const [activeLine, setActiveLine] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [sortOrder, setSortOrder] = useState<'price_asc' | 'price_desc' | 'recent'>('recent');
+    const { isConnected } = useWalletConnection();
 
     // Animation for scanning effect
     React.useEffect(() => {
@@ -44,50 +47,65 @@ const MarketplacePage: React.FC = () => {
             </div>
 
             <main className="main-content">
-                <div className="page-tabs">
-                    <button
-                        className={`tab-button ${activeTab === 'browse' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('browse')}
-                    >
-                        MARKETPLACE
-                    </button>
-                    <button
-                        className={`tab-button ${activeTab === 'inventory' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('inventory')}
-                    >
-                        MY INVENTORY
-                    </button>
-                    <div className="tab-line"></div>
-                </div>
-
-                {activeTab === 'browse' ? (
+                {isConnected ? (
                     <>
-                        <MarketplaceHero />
-                        <MarketplaceStats />
-                        <MarketplaceCategories
-                            selectedCategory={selectedCategory}
-                            onSelectCategory={setSelectedCategory}
-                        />
-                        <MarketplaceItems
-                            category={selectedCategory}
-                            sortOrder={sortOrder}
-                            onChangeSortOrder={setSortOrder}
-                        />
-                    </>
-                ) : (
-                    // You can add the Inventory component here later
-                    <div className="coming-soon-section">
-                        <div className="clip-card border-yellow p-8 text-center">
-                            <div className="accent-border top yellow"></div>
-                            <h2 className="text-2xl font-bold mb-4 yellow-text">INVENTORY COMING SOON</h2>
-                            <p className="text-gray-400 mb-6">Your personal inventory section is under development. Soon you'll be able to view and manage all your WLOS items here.</p>
-                            <div className="flex justify-center">
-                                <div className="loading-indicator">
-                                    <div className="loading-dot yellow-bg"></div>
-                                    <div className="loading-dot yellow-bg"></div>
-                                    <div className="loading-dot yellow-bg"></div>
+                        <div className="page-tabs">
+                            <button
+                                className={`tab-button ${activeTab === 'browse' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('browse')}
+                            >
+                                MARKETPLACE
+                            </button>
+                            <button
+                                className={`tab-button ${activeTab === 'inventory' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('inventory')}
+                            >
+                                MY INVENTORY
+                            </button>
+                            <div className="tab-line"></div>
+                        </div>
+
+                        {activeTab === 'browse' ? (
+                            <>
+                                <MarketplaceStats />
+                                <MarketplaceCategories
+                                    selectedCategory={selectedCategory}
+                                    onSelectCategory={setSelectedCategory}
+                                />
+                                <MarketplaceItems
+                                    category={selectedCategory}
+                                    sortOrder={sortOrder}
+                                    onChangeSortOrder={setSortOrder}
+                                />
+                            </>
+                        ) : (
+                            // You can add the Inventory component here later
+                            <div className="coming-soon-section">
+                                <div className="clip-card border-yellow p-8 text-center">
+                                    <div className="accent-border top yellow"></div>
+                                    <h2 className="text-2xl font-bold mb-4 yellow-text">INVENTORY COMING SOON</h2>
+                                    <p className="text-gray-400 mb-6">Your personal inventory section is under development. Soon you'll be able to view and manage all your WLOS items here.</p>
+                                    <div className="flex justify-center">
+                                        <div className="loading-indicator">
+                                            <div className="loading-dot yellow-bg"></div>
+                                            <div className="loading-dot yellow-bg"></div>
+                                            <div className="loading-dot yellow-bg"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        )}
+                    </>
+                ) : (
+                    <div className="wallet-connect-prompt clip-card border-yellow">
+                        <div className="accent-border top yellow"></div>
+
+                        <div className="wallet-connect-content text-center p-10">
+                            <h3 className="prompt-title text-xl font-bold mb-4 yellow-text">CONNECT WALLET TO ACCESS MARKETPLACE</h3>
+                            <p className="prompt-description text-gray-400 mb-6">
+                                Connect your wallet to browse, buy and sell items in the marketplace.
+                            </p>
+                            <WalletConnectButton color="yellow" />
                         </div>
                     </div>
                 )}

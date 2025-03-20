@@ -1,7 +1,11 @@
 import React from 'react';
 import Button from '../../common/Button';
+import { useWalletConnection } from '../../../context/WalletConnectionProvider';
+import WalletConnectButton from '../../common/WalletConnectButton';
 
 const MarketplaceHero: React.FC = () => {
+    const { isConnected } = useWalletConnection();
+
     return (
         <section className="marketplace-hero-section">
             <div className="marketplace-hero-content clip-banner">
@@ -62,15 +66,15 @@ const MarketplaceHero: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="connect-prompt">
-                            <p className="text-xs text-center text-gray-400 mb-2">Connect your wallet to purchase items</p>
-                            <Button
-                                text="CONNECT WALLET"
-                                color="yellow"
-                                onClick={() => console.log('Connect wallet clicked')}
-                                fullWidth={true}
-                            />
-                        </div>
+                        {!isConnected && (
+                            <div className="connect-prompt">
+                                <p className="text-xs text-center text-gray-400 mb-2">Connect your wallet to purchase items</p>
+                                <WalletConnectButton
+                                    color="yellow"
+                                    fullWidth={true}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

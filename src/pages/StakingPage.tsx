@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import StakingHero from '../components/sections/Staking/StakingHero.tsx';
 import StakingPools from '../components/sections/Staking/StakingPools.tsx';
 import StakingStats from '../components/sections/Staking/StakingStats.tsx';
 import StakingRewards from '../components/sections/Staking/StakingRewards.tsx';
+import { useWalletConnection } from '../context/WalletConnectionProvider';
+import WalletConnectButton from '../components/common/WalletConnectButton';
 
 const StakingPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'staking' | 'rewards'>('staking');
     const [activeLine, setActiveLine] = useState(0);
+    const { isConnected } = useWalletConnection();
 
     // Animation for scanning effect
     React.useEffect(() => {
@@ -42,30 +45,45 @@ const StakingPage: React.FC = () => {
             </div>
 
             <main className="main-content">
-                <div className="page-tabs">
-                    <button
-                        className={`tab-button ${activeTab === 'staking' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('staking')}
-                    >
-                        STAKING VAULT
-                    </button>
-                    <button
-                        className={`tab-button ${activeTab === 'rewards' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('rewards')}
-                    >
-                        REWARDS DASHBOARD
-                    </button>
-                    <div className="tab-line"></div>
-                </div>
-
-                {activeTab === 'staking' ? (
+                {isConnected ? (
                     <>
-                        <StakingHero />
-                        <StakingStats />
-                        <StakingPools />
+                        <div className="page-tabs">
+                            <button
+                                className={`tab-button ${activeTab === 'staking' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('staking')}
+                            >
+                                STAKING VAULT
+                            </button>
+                            <button
+                                className={`tab-button ${activeTab === 'rewards' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('rewards')}
+                            >
+                                REWARDS DASHBOARD
+                            </button>
+                            <div className="tab-line"></div>
+                        </div>
+
+                        {activeTab === 'staking' ? (
+                            <>
+                                <StakingStats />
+                                <StakingPools />
+                            </>
+                        ) : (
+                            <StakingRewards />
+                        )}
                     </>
                 ) : (
-                    <StakingRewards />
+                    <div className="wallet-connect-prompt clip-card border-green">
+                        <div className="accent-border top green"></div>
+
+                        <div className="wallet-connect-content text-center p-10">
+                            <h3 className="prompt-title text-xl font-bold mb-4 green-text">CONNECT WALLET TO STAKE</h3>
+                            <p className="prompt-description text-gray-400 mb-6">
+                                Connect your wallet to stake your WLOS tokens and earn rewards.
+                            </p>
+                            <WalletConnectButton color="green" />
+                        </div>
+                    </div>
                 )}
             </main>
         </Layout>

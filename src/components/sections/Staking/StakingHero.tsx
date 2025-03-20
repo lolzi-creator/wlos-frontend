@@ -1,7 +1,11 @@
 import React from 'react';
 import Button from '../../common/Button.tsx';
+import { useWalletConnection } from '../../../context/WalletConnectionProvider';
+import WalletConnectButton from '../../common/WalletConnectButton';
 
 const StakingHero: React.FC = () => {
+    const { isConnected } = useWalletConnection();
+
     return (
         <section className="staking-hero-section">
             <div className="staking-hero-content clip-banner">
@@ -28,48 +32,50 @@ const StakingHero: React.FC = () => {
                             </div>
                         </div>
 
-                        <Button
-                            text="STAKE WLOS NOW"
-                            color="green"
-                            onClick={() => console.log('Stake now clicked')}
-                        />
+                        {isConnected ? (
+                            <Button
+                                text="STAKE WLOS NOW"
+                                color="green"
+                                onClick={() => console.log('Stake now clicked')}
+                            />
+                        ) : (
+                            <WalletConnectButton color="green" />
+                        )}
                     </div>
 
                     <div className="staking-info-panel clip-panel">
                         <h4 className="text-green-text text-sm font-semibold mb-2">YOUR STAKING DASHBOARD</h4>
                         <div className="h-px w-48 bg-green-text/50 mb-4"></div>
 
-                        <div className="staking-stats-grid">
-                            <div className="stat-box">
-                                <div className="stat-label">Available WLOS</div>
-                                <div className="stat-value">0</div>
-                            </div>
+                        {isConnected ? (
+                            <>
+                                <div className="staking-stats-grid">
+                                    <div className="stat-box">
+                                        <div className="stat-label">Available WLOS</div>
+                                        <div className="stat-value">0</div>
+                                    </div>
 
-                            <div className="stat-box">
-                                <div className="stat-label">Staked WLOS</div>
-                                <div className="stat-value">0</div>
-                            </div>
+                                    <div className="stat-box">
+                                        <div className="stat-label">Staked WLOS</div>
+                                        <div className="stat-value">0</div>
+                                    </div>
 
-                            <div className="stat-box">
-                                <div className="stat-label">Current APY</div>
-                                <div className="stat-value text-green-text">25.7%</div>
-                            </div>
+                                    <div className="stat-box">
+                                        <div className="stat-label">Current APY</div>
+                                        <div className="stat-value text-green-text">25.7%</div>
+                                    </div>
 
-                            <div className="stat-box">
-                                <div className="stat-label">Rewards Earned</div>
-                                <div className="stat-value">0 WLOS</div>
+                                    <div className="stat-box">
+                                        <div className="stat-label">Rewards Earned</div>
+                                        <div className="stat-value">0 WLOS</div>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="text-center">
+                                <p className="text-gray-400 mb-4">Connect your wallet to view your staking stats and start earning rewards</p>
                             </div>
-                        </div>
-
-                        <div className="connect-prompt">
-                            <p className="text-xs text-center text-gray-400 mb-2">Connect your wallet to view your staking stats</p>
-                            <Button
-                                text="CONNECT WALLET"
-                                color="green"
-                                onClick={() => console.log('Connect wallet clicked')}
-                                fullWidth={true}
-                            />
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>

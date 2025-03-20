@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import Button from '../../common/Button';
+import { useWalletConnection } from '../../../context/WalletConnectionProvider';
+
 // Mock data for heroes/warlords
 const heroesData = [
     {
@@ -81,6 +83,7 @@ const heroesData = [
 ];
 
 const WalletHeroes: React.FC = () => {
+    const { isConnected } = useWalletConnection();
     const [selectedHero, setSelectedHero] = useState<number | null>(null);
     const [filterRarity, setFilterRarity] = useState<string>('all');
     const [sortBy, setSortBy] = useState<string>('power');
@@ -97,6 +100,11 @@ const WalletHeroes: React.FC = () => {
         if (sortBy === 'name') return a.name.localeCompare(b.name);
         return 0;
     });
+
+    // If not connected, don't render anything - the connection UI is handled in the parent component
+    if (!isConnected) {
+        return null;
+    }
 
     return (
         <section className="wallet-heroes-section">
