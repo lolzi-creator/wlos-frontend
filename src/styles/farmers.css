@@ -1,0 +1,443 @@
+/* src/styles/farmers.css */
+
+/* Farmer layouts */
+.farmer-marketplace-section,
+.farmer-dashboard-section {
+    margin-bottom: 40px;
+}
+
+.farmers-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px auto;
+}
+
+/* Farmer cards */
+.farmer-card {
+    padding: 20px;
+    background-color: rgba(10, 10, 37, 0.5);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.farmer-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.farmer-rarity-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+    border-radius: 2px;
+}
+
+.farmer-rarity-badge.common {
+    background-color: rgba(20, 241, 149, 0.1);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    color: var(--color-green);
+}
+
+.farmer-rarity-badge.rare {
+    background-color: rgba(0, 194, 255, 0.1);
+    border: 1px solid rgba(0, 194, 255, 0.3);
+    color: var(--color-cyan);
+}
+
+.farmer-rarity-badge.epic {
+    background-color: rgba(153, 69, 255, 0.1);
+    border: 1px solid rgba(153, 69, 255, 0.3);
+    color: var(--color-purple);
+}
+
+.farmer-rarity-badge.legendary {
+    background-color: rgba(255, 184, 0, 0.1);
+    border: 1px solid rgba(255, 184, 0, 0.3);
+    color: var(--color-yellow);
+}
+
+.farmer-image-container {
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: rgba(10, 10, 35, 0.4);
+    border: 1px solid rgba(20, 241, 149, 0.1);
+}
+
+.farmer-image {
+    max-height: 160px;
+    max-width: 160px;
+    object-fit: contain;
+}
+
+.farmer-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.farmer-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.farmer-yield {
+    margin-bottom: 12px;
+}
+
+.yield-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.yield-value {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.farmer-description {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.farmer-stats {
+    margin-bottom: 15px;
+}
+
+/* Dashboard overview */
+.dashboard-overview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.rewards-panel {
+    padding: 20px;
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    text-align: center;
+}
+
+.rewards-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--color-green);
+}
+
+.rewards-amount {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.stats-panel {
+    padding: 20px;
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.no-farmers-message {
+    padding: 40px;
+    text-align: center;
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+}
+
+.filter-controls {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(10, 10, 35, 0.4);
+    border: 1px solid rgba(20, 241, 149, 0.1);
+}
+
+.filter-label {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-right: 10px;
+}
+
+.filter-options {
+    display: flex;
+    gap: 5px;
+}
+
+.filter-option {
+    padding: 5px 10px;
+    font-size: 12px;
+    background-color: rgba(10, 10, 35, 0.6);
+    border: 1px solid rgba(20, 241, 149, 0.1);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.filter-option.active {
+    background-color: rgba(20, 241, 149, 0.1);
+    border-color: rgba(20, 241, 149, 0.3);
+    color: var(--color-text);
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(8, 8, 30, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-size: 20px;
+    color: var(--color-green);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .farmers-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-overview {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card styling for farmers */
+.farmer-card {
+    width: 220px;
+    height: 360px;
+    position: relative;
+    margin: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: transform 0.2s;
+}
+
+.farmer-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Card frames per rarity */
+.frame-common {
+    border: 3px solid #14F195;
+    background: linear-gradient(180deg, #0A0A25 0%, #081E14 100%);
+}
+
+.frame-rare {
+    border: 3px solid #00C2FF;
+    background: linear-gradient(180deg, #0A0A25 0%, #081430 100%);
+}
+
+.frame-epic {
+    border: 3px solid #9945FF;
+    background: linear-gradient(180deg, #0A0A25 0%, #190830 100%);
+}
+
+.frame-legendary {
+    border: 3px solid #FFB800;
+    background: linear-gradient(180deg, #0A0A25 0%, #302008 100%);
+}
+
+/* Card background scene */
+.card-scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    z-index: 1;
+}
+
+.scene-common {
+    background: linear-gradient(180deg, #133322 0%, #0A664D 50%, #39E6B3 100%);
+}
+
+.scene-rare {
+    background: linear-gradient(180deg, #133342 0%, #0A5E66 50%, #39C2E6 100%);
+}
+
+.scene-epic {
+    background: linear-gradient(180deg, #25133A 0%, #4A0A66 50%, #A239E6 100%);
+}
+
+.scene-legendary {
+    background: linear-gradient(180deg, #3A331A 0%, #665E0A 50%, #E6C239 100%);
+}
+
+/* Character image */
+.character-container {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 180px;
+    width: 160px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.character-image {
+    max-height: 180px;
+    max-width: 160px;
+    object-fit: contain;
+}
+
+/* Card details */
+.card-details {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    z-index: 2;
+}
+
+.card-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.yield-indicator {
+    width: 60%;
+    height: 10px;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.yield-bar-common {
+    height: 100%;
+    background-color: #14F195;
+}
+
+.yield-bar-rare {
+    height: 100%;
+    background-color: #00C2FF;
+}
+
+.yield-bar-epic {
+    height: 100%;
+    background-color: #9945FF;
+}
+
+.yield-bar-legendary {
+    height: 100%;
+    background-color: #FFB800;
+}
+
+/* Stats area */
+.card-stats {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: rgba(255,255,255,0.7);
+}
+
+/* Corner elements */
+.corner-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    z-index: 3;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: black;
+    font-weight: bold;
+}
+
+.corner-icon-common {
+    background-color: #14F195;
+}
+
+.corner-icon-rare {
+    background-color: #00C2FF;
+}
+
+.corner-icon-epic {
+    background-color: #9945FF;
+}
+
+.corner-icon-legendary {
+    background-color: #FFB800;
+}
+
+/* Rarity badge */
+.rarity-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 8px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.rarity-common {
+    background-color: rgba(20, 241, 149, 0.3);
+    color: #14F195;
+}
+
+.rarity-rare {
+    background-color: rgba(0, 194, 255, 0.3);
+    color: #00C2FF;
+}
+
+.rarity-epic {
+    background-color: rgba(153, 69, 255, 0.3);
+    color: #9945FF;
+}
+
+.rarity-legendary {
+    background-color: rgba(255, 184, 0, 0.3);
+    color: #FFB800;
+}

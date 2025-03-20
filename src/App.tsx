@@ -7,7 +7,9 @@ import RoadmapPage from './pages/RoadmapPage';
 import WalletPage from './pages/WalletPage';
 import { WalletContextProvider } from './context/WalletContext';
 import { WalletConnectionProvider } from './context/WalletConnectionProvider';
+import FarmerPage from "./pages/FarmerPage.tsx";
 
+import './styles/farmers.css';
 import './styles/index.css';
 import './styles/animations.css';
 import './styles/staking.css';
@@ -16,6 +18,7 @@ import './styles/token.css';
 import './styles/roadmap.css';
 import './styles/wallet.css';
 import './styles/mobile-fixes.css';
+
 
 function App() {
     return (
@@ -29,6 +32,7 @@ function App() {
                             <Route path="/battle" element={<Navigate to="/" />} /> {/* Placeholder for future Battle page */}
                             <Route path="/marketplace" element={<MarketplacePage />} />
                             <Route path="/wlos-token" element={<WlosTokenPage />} />
+                            <Route path="/farmers" element={<FarmerPage />} />
                             <Route path="/roadmap" element={<RoadmapPage />} />
                             <Route path="/wallet" element={<WalletPage />} />
                             <Route path="*" element={<Navigate to="/" />} /> {/* Redirect any unknown routes to home */}

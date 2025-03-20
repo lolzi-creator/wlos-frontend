@@ -96,6 +96,18 @@ const Navbar: React.FC = () => {
                         )}
                     </div>
                     <div
+                        className={`nav-item ${isActive('/farmers') ? 'active' : ''}`}
+                        onClick={() => handleNavigation('/farmers')}
+                    >
+                        FARMERS
+                        {isActive('/farmers') && (
+                            <>
+                                <div className="corner-accent top-right"></div>
+                                <div className="corner-accent bottom-left"></div>
+                            </>
+                        )}
+                    </div>
+                    <div
                         className={`nav-item ${isActive('/roadmap') ? 'active' : ''}`}
                         onClick={() => handleNavigation('/roadmap')}
                     >
