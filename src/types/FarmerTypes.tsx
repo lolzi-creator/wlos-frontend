@@ -20,7 +20,7 @@ export const FARMER_PACKS: FarmerPack[] = [
         name: 'Basic Farmer Pack',
         description: 'A standard pack with a chance to get common and rare farmers.',
         cost: 0,
-        imageSrc: '/assets/packs/basic-pack.png',
+        imageSrc: '/assets/packs/basic-pack.jpeg',
         rarityChances: {
             common: 0.8,
             rare: 0.18,
@@ -33,7 +33,7 @@ export const FARMER_PACKS: FarmerPack[] = [
         name: 'Premium Farmer Pack',
         description: 'A premium pack with improved chances for rare and epic farmers.',
         cost: 300,
-        imageSrc: '/assets/packs/premium-pack.png',
+        imageSrc: '/assets/packs/premium-pack.jpeg',
         rarityChances: {
             common: 0.5,
             rare: 0.35,
@@ -46,7 +46,7 @@ export const FARMER_PACKS: FarmerPack[] = [
         name: 'Legendary Farmer Pack',
         description: 'An exclusive pack with guaranteed epic and increased legendary chances.',
         cost: 800,
-        imageSrc: '/assets/packs/legendary-pack.png',
+        imageSrc: '/assets/packs/legendary-pack.jpeg',
         rarityChances: {
             common: 0,
             rare: 0.3,
@@ -136,7 +136,7 @@ export const FARMERS: Farmer[] = [
         rarity: 'legendary',
         baseYieldPerHour: 15.0,
         imageSrc: '/assets/farmers/legendary-mech.jpeg', // Image 6
-        cost: 3000,
+        cost: 500000,
         description: 'Ultimate harvesting technology with quantum field manipulation. Unparalleled efficiency makes this the apex of farming units.'
     }
 ];

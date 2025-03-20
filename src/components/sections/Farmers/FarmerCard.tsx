@@ -60,7 +60,7 @@ const FarmerCard: React.FC<FarmerCardProps> = ({
             onClick={onSelect}
             style={{
                 width: '240px',
-                height: '380px',
+                height: '420px', // Increased height to make room for the button
                 position: 'relative',
                 margin: '12px',
                 borderRadius: '12px',
@@ -72,6 +72,8 @@ const FarmerCard: React.FC<FarmerCardProps> = ({
                 overflow: 'hidden',
                 transition: 'all 0.3s ease',
                 cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
             }}
         >
             {/* Top banner with rarity */}
@@ -222,6 +224,9 @@ const FarmerCard: React.FC<FarmerCardProps> = ({
                 background: 'rgba(8,8,18,0.9)',
                 border: `1px solid ${rarityColor}50`,
                 borderRadius: '5px',
+                flex: 1, // Allow this section to flex and take available space
+                display: 'flex',
+                flexDirection: 'column',
             }}>
                 {/* Yield bar with tech design */}
                 <div style={{
@@ -298,59 +303,61 @@ const FarmerCard: React.FC<FarmerCardProps> = ({
                     </div>
                 </div>
 
-                {/* Action button with hover effect */}
-                {(onBuy || onLevelUp) && (
-                    <div>
-                        {onBuy && !owned && (
-                            <button
-                                onClick={handleBuyClick}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px 0',
-                                    backgroundColor: 'rgba(20, 241, 149, 0.2)',
-                                    border: '1px solid #14F195',
-                                    color: '#fff',
-                                    fontFamily: 'Orbitron, sans-serif',
-                                    fontSize: '14px',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer',
-                                    borderRadius: '4px',
-                                    transition: 'all 0.2s ease',
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '1px',
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                BUY
-                            </button>
-                        )}
-                        {onLevelUp && owned && (
-                            <button
-                                onClick={handleLevelUpClick}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px 0',
-                                    backgroundColor: `rgba(${rarityColor}, 0.2)`,
-                                    border: `1px solid ${rarityColor}`,
-                                    color: '#fff',
-                                    fontFamily: 'Orbitron, sans-serif',
-                                    fontSize: '14px',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer',
-                                    borderRadius: '4px',
-                                    transition: 'all 0.2s ease',
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '1px',
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                LEVEL UP
-                            </button>
-                        )}
-                    </div>
-                )}
+                {/* Spacer to push button to bottom */}
+                <div style={{ flex: 1 }}></div>
+
+                {/* Action button with hover effect - Always visible for owned farmers */}
+                <div style={{ marginTop: 'auto' }}>
+                    {!owned && onBuy && (
+                        <button
+                            onClick={handleBuyClick}
+                            style={{
+                                width: '100%',
+                                padding: '8px 0',
+                                backgroundColor: 'rgba(20, 241, 149, 0.2)',
+                                border: '1px solid #14F195',
+                                color: '#fff',
+                                fontFamily: 'Orbitron, sans-serif',
+                                fontSize: '14px',
+                                fontWeight: 'bold',
+                                cursor: 'pointer',
+                                borderRadius: '4px',
+                                transition: 'all 0.2s ease',
+                                textTransform: 'uppercase',
+                                letterSpacing: '1px',
+                                position: 'relative',
+                                overflow: 'hidden',
+                            }}
+                        >
+                            BUY
+                        </button>
+                    )}
+                    {owned && onLevelUp && (
+                        <button
+                            onClick={handleLevelUpClick}
+                            style={{
+                                width: '100%',
+                                padding: '8px 0',
+                                backgroundColor: '#FFFFFF',
+                                border: '1px solid #CCCCCC',
+                                color: '#000000',
+                                fontFamily: 'Orbitron, sans-serif',
+                                fontSize: '14px',
+                                fontWeight: 'bold',
+                                cursor: 'pointer',
+                                borderRadius: '4px',
+                                transition: 'all 0.2s ease',
+                                textTransform: 'uppercase',
+                                letterSpacing: '1px',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                marginBottom: '8px', // Add some bottom margin
+                            }}
+                        >
+                            LEVEL UP
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Corner accents for selected state */}

@@ -1,0 +1,178 @@
+/* Farmer Dashboard Styles */
+
+/* Dashboard Layout */
+.dashboard-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Rewards Panel */
+.rewards-panel {
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    overflow: hidden;
+}
+
+.rewards-content {
+    padding: 20px;
+}
+
+.rewards-header {
+    display: flex;
+    align-items: flex-start;
+}
+
+.rewards-title {
+    font-size: 18px;
+    margin: 0;
+    color: #14F195;
+    margin-bottom: 5px;
+}
+
+.rewards-amount {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+}
+
+.harvest-button {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: rgba(20, 241, 149, 0.15);
+    border: none;
+    border-top: 1px solid rgba(20, 241, 149, 0.3);
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.harvest-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.harvest-button svg {
+    margin-right: 10px;
+}
+
+/* Stats Panels */
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stats-box {
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.stats-content {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stats-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.stats-label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.stats-value {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    line-height: 1.2;
+}
+
+.yield-value {
+    color: #14F195;
+}
+
+/* Icon Styling */
+.icon-circle {
+    width: 42px;
+    height: 42px;
+    background-color: rgba(20, 241, 149, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px;
+}
+
+/* Farmer Grid */
+.farmers-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px auto;
+}
+
+/* Error and Loading States */
+.error-message {
+    background-color: rgba(255, 77, 77, 0.1);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    color: #FF4D4D;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.no-farmers-message {
+    padding: 30px;
+    text-align: center;
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    border-radius: 8px;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(8, 8, 30, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-size: 20px;
+    color: #14F195;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dashboard-overview {
+        grid-template-columns: 1fr;
+    }
+}
