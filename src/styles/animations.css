@@ -1,0 +1,139 @@
+/* Animations for Warlords of Solana UI */
+
+/* Energy flow animation for power bars */
+@keyframes energyFlow {
+    0% { transform: translateX(-30px); }
+    100% { transform: translateX(300px); }
+}
+
+/* Pulse animation for status indicators */
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Holographic effect */
+@keyframes hologram {
+    0% { transform: rotate(30deg) translateX(-30%); }
+    100% { transform: rotate(30deg) translateX(30%); }
+}
+
+.holographic::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+            45deg,
+            rgba(153, 69, 255, 0) 0%,
+            rgba(153, 69, 255, 0.05) 50%,
+            rgba(153, 69, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: hologram 6s linear infinite;
+    pointer-events: none;
+}
+
+/* Glow animation for buttons */
+@keyframes buttonGlow {
+    0% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.3); }
+    50% { box-shadow: 0 0 10px rgba(153, 69, 255, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.3); }
+}
+
+.futuristic-button:hover {
+    animation: buttonGlow 1.5s infinite;
+}
+
+.futuristic-button:hover.border-purple {
+    animation: purpleButtonGlow 1.5s infinite;
+}
+
+.futuristic-button:hover.border-green {
+    animation: greenButtonGlow 1.5s infinite;
+}
+
+.futuristic-button:hover.border-yellow {
+    animation: yellowButtonGlow 1.5s infinite;
+}
+
+@keyframes purpleButtonGlow {
+    0% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.3); }
+    50% { box-shadow: 0 0 10px rgba(153, 69, 255, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.3); }
+}
+
+@keyframes greenButtonGlow {
+    0% { box-shadow: 0 0 5px rgba(20, 241, 149, 0.3); }
+    50% { box-shadow: 0 0 10px rgba(20, 241, 149, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(20, 241, 149, 0.3); }
+}
+
+@keyframes yellowButtonGlow {
+    0% { box-shadow: 0 0 5px rgba(255, 184, 0, 0.3); }
+    50% { box-shadow: 0 0 10px rgba(255, 184, 0, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(255, 184, 0, 0.3); }
+}
+
+/* Data flow animation for graphs */
+@keyframes dataFlow {
+    0% { stroke-dashoffset: 1000; }
+    100% { stroke-dashoffset: 0; }
+}
+
+.graph-line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: dataFlow 3s ease-out forwards;
+}
+
+/* Scanning line animation */
+@keyframes scanline {
+    0% { opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0; }
+}
+
+.scanline {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(153, 69, 255, 0) 0%, rgba(153, 69, 255, 0.5) 50%, rgba(153, 69, 255, 0) 100%);
+    opacity: 0;
+    animation: scanline 3s infinite;
+}
+
+/* Text typing animation */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+.typing-text {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 3.5s steps(40, end);
+}
+
+/* Energy bar animation */
+@keyframes energyPulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+.power-bar {
+    animation: energyPulse 2s infinite;
+}
+
+/* Item block hover effect */
+.item-block:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+}
