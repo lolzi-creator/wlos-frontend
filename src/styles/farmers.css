@@ -6,6 +6,7 @@
     margin-bottom: 40px;
 }
 
+/* Add this to src/styles/farmers.css */
 .farmers-grid {
     display: flex;
     flex-wrap: wrap;
@@ -440,4 +441,158 @@
 .rarity-legendary {
     background-color: rgba(255, 184, 0, 0.3);
     color: #FFB800;
+}
+
+/* Pack store styles */
+.farmer-packs-section,
+.farmer-packs-inventory {
+    margin-bottom: 40px;
+}
+
+.packs-container,
+.owned-packs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.pack-card,
+.owned-pack-card {
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.pack-card:hover,
+.owned-pack-card:hover {
+    transform: translateY(-5px);
+}
+
+.pack-image-container {
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: rgba(10, 10, 35, 0.4);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+}
+
+.pack-image {
+    width: 140px;
+    height: 200px;
+    background-color: rgba(20, 241, 149, 0.2);
+    border: 2px solid var(--color-green);
+    transform: perspective(800px) rotateY(15deg);
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.pack-info {
+    padding: 10px;
+}
+
+.pack-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--color-green);
+}
+
+.pack-description {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.pack-chances {
+    background-color: rgba(10, 10, 35, 0.6);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(20, 241, 149, 0.2);
+}
+
+.chances-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--color-text-secondary);
+}
+
+.chance-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.chance-row .rarity {
+    font-weight: 500;
+}
+
+.chance-row .rarity.common {
+    color: var(--color-green);
+}
+
+.chance-row .rarity.rare {
+    color: var(--color-cyan);
+}
+
+.chance-row .rarity.epic {
+    color: var(--color-purple);
+}
+
+.chance-row .rarity.legendary {
+    color: var(--color-yellow);
+}
+
+.pack-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 8px;
+    background-color: rgba(10, 10, 35, 0.6);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+}
+
+.price-label {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+.price-value {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.no-packs-message {
+    padding: 40px;
+    text-align: center;
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+}
+
+/* Animation for pack opening */
+@keyframes packOpen {
+    0% { transform: perspective(800px) rotateY(15deg) scale(1); }
+    50% { transform: perspective(800px) rotateY(180deg) scale(1.1); }
+    100% { transform: perspective(800px) rotateY(360deg) scale(1); }
+}
+
+.pack-opening {
+    animation: packOpen 2s forwards;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .packs-container,
+    .owned-packs-grid {
+        grid-template-columns: 1fr;
+    }
 }

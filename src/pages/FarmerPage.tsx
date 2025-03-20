@@ -3,16 +3,18 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import FarmerMarketplace from '../components/sections/Farmers/FarmerMarketplace';
 import FarmerDashboard from '../components/sections/Farmers/FarmerDashboard';
+import FarmerPackStore from '../components/sections/Farmers/FarmerPackStore';
+import FarmerPackInventory from '../components/sections/Farmers/FarmerPackInventory';
 import { useWalletConnection } from '../context/WalletConnectionProvider';
 import WalletConnectButton from '../components/common/WalletConnectButton';
-import { FarmerProvider } from '../context/FarmerContext.tsx';
+import { FarmerProvider } from '../context/FarmerContext';
 
 const FarmerPage: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'marketplace'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'marketplace' | 'packs' | 'inventory'>('dashboard');
     const [activeLine, setActiveLine] = useState(0);
     const { isConnected } = useWalletConnection();
 
-    // Animation for scanning effect (similar to other pages)
+    // Animation for scanning effect
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveLine(prev => (prev + 1) % 100);
@@ -61,10 +63,25 @@ const FarmerPage: React.FC = () => {
                                 >
                                     MARKETPLACE
                                 </button>
+                                <button
+                                    className={`tab-button ${activeTab === 'packs' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('packs')}
+                                >
+                                    PACK STORE
+                                </button>
+                                <button
+                                    className={`tab-button ${activeTab === 'inventory' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('inventory')}
+                                >
+                                    YOUR PACKS
+                                </button>
                                 <div className="tab-line"></div>
                             </div>
 
-                            {activeTab === 'dashboard' ? <FarmerDashboard /> : <FarmerMarketplace />}
+                            {activeTab === 'dashboard' && <FarmerDashboard />}
+                            {activeTab === 'marketplace' && <FarmerMarketplace />}
+                            {activeTab === 'packs' && <FarmerPackStore />}
+                            {activeTab === 'inventory' && <FarmerPackInventory />}
                         </>
                     ) : (
                         <div className="wallet-connect-prompt clip-card border-green">

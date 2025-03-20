@@ -1,4 +1,61 @@
 // src/types/FarmerTypes.ts
+
+export interface FarmerPack {
+    id: string;
+    name: string;
+    description: string;
+    cost: number;
+    imageSrc: string;
+    rarityChances: {
+        common: number;    // e.g., 0.7 (70%)
+        rare: number;      // e.g., 0.2 (20%)
+        epic: number;      // e.g., 0.08 (8%)
+        legendary: number; // e.g., 0.02 (2%)
+    };
+}
+
+export const FARMER_PACKS: FarmerPack[] = [
+    {
+        id: 'basic-pack',
+        name: 'Basic Farmer Pack',
+        description: 'A standard pack with a chance to get common and rare farmers.',
+        cost: 0,
+        imageSrc: '/assets/packs/basic-pack.png',
+        rarityChances: {
+            common: 0.8,
+            rare: 0.18,
+            epic: 0.02,
+            legendary: 0
+        }
+    },
+    {
+        id: 'premium-pack',
+        name: 'Premium Farmer Pack',
+        description: 'A premium pack with improved chances for rare and epic farmers.',
+        cost: 300,
+        imageSrc: '/assets/packs/premium-pack.png',
+        rarityChances: {
+            common: 0.5,
+            rare: 0.35,
+            epic: 0.12,
+            legendary: 0.03
+        }
+    },
+    {
+        id: 'legendary-pack',
+        name: 'Legendary Farmer Pack',
+        description: 'An exclusive pack with guaranteed epic and increased legendary chances.',
+        cost: 800,
+        imageSrc: '/assets/packs/legendary-pack.png',
+        rarityChances: {
+            common: 0,
+            rare: 0.3,
+            epic: 0.55,
+            legendary: 0.15
+        }
+    }
+]
+
 export interface Farmer {
     id: string;
     name: string;
@@ -17,6 +74,7 @@ export interface OwnedFarmer {
     lastHarvested: number;
     equippedItems?: string[];
 }
+
 
 // Define your farmer catalog
 export const FARMERS: Farmer[] = [
@@ -53,7 +111,7 @@ export const FARMERS: Farmer[] = [
     {
         id: 'eco-reaper',
         name: 'Eco Reaper',
-        rarity: 'epic',
+        rarity: 'rare',
         baseYieldPerHour: 3.8,
         imageSrc: '/assets/farmers/green-reaper.jpeg', // Image 4
         cost: 500,

@@ -1,14 +1,30 @@
 // src/context/FarmerContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useWalletConnection } from './WalletConnectionProvider.tsx';
-import { Farmer, OwnedFarmer, FARMERS } from '../types/FarmerTypes.tsx';
+import { useWalletConnection } from './WalletConnectionProvider';
+import { Farmer, OwnedFarmer, FARMERS, FARMER_PACKS } from '../types/FarmerTypes';
+
+// Add new type for owned packs
+export interface OwnedPack {
+    id: string;
+    packId: string;
+    purchasedAt: number;
+}
 
 interface FarmerContextType {
+    // Existing properties
     ownedFarmers: OwnedFarmer[];
     pendingRewards: number;
     buyFarmer: (farmerId: string) => Promise<boolean>;
     harvestRewards: () => Promise<boolean>;
     levelUpFarmer: (ownedFarmerId: string) => Promise<boolean>;
+
+    // New properties for packs
+    ownedPacks: OwnedPack[];
+    buyPack: (packId: string) => Promise<boolean>;
+    openPack: (ownedPackId: string) => Promise<{
+        success: boolean;
+        farmer?: Farmer;
+    }>;
     isLoading: boolean;
     error: string | null;
 }
@@ -24,18 +40,23 @@ export const useFarmer = () => {
 };
 
 export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    // Existing state
     const { isConnected, walletAddress, balance } = useWalletConnection();
     const [ownedFarmers, setOwnedFarmers] = useState<OwnedFarmer[]>([]);
     const [pendingRewards, setPendingRewards] = useState<number>(0);
+
+    // New state for packs
+    const [ownedPacks, setOwnedPacks] = useState<OwnedPack[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     // Load farmers from storage when wallet connects
     useEffect(() => {
         if (isConnected && walletAddress) {
-            loadFarmers();
+            loadData();
         } else {
             setOwnedFarmers([]);
+            setOwnedPacks([]);
             setPendingRewards(0);
         }
     }, [isConnected, walletAddress]);
@@ -49,28 +70,43 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         return () => clearInterval(interval);
     }, [isConnected, ownedFarmers]);
 
-    // Load farmers from localStorage (later replace with blockchain/database)
-    const loadFarmers = () => {
+    // Load all data from localStorage
+    const loadData = () => {
         setIsLoading(true);
         try {
+            // Load farmers
             const storedFarmers = localStorage.getItem(`farmers_${walletAddress}`);
             if (storedFarmers) {
                 setOwnedFarmers(JSON.parse(storedFarmers));
             }
+
+            // Load packs
+            const storedPacks = localStorage.getItem(`farmer_packs_${walletAddress}`);
+            if (storedPacks) {
+                setOwnedPacks(JSON.parse(storedPacks));
+            }
         } catch (err) {
-            console.error('Error loading farmers:', err);
-            setError('Failed to load your farmers');
+            console.error('Error loading data:', err);
+            setError('Failed to load your data');
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Save farmers to localStorage
+    // Save functions
     const saveFarmers = (updatedFarmers: OwnedFarmer[]) => {
         try {
             localStorage.setItem(`farmers_${walletAddress}`, JSON.stringify(updatedFarmers));
         } catch (err) {
             console.error('Error saving farmers:', err);
+        }
+    };
+
+    const savePacks = (updatedPacks: OwnedPack[]) => {
+        try {
+            localStorage.setItem(`farmer_packs_${walletAddress}`, JSON.stringify(updatedPacks));
+        } catch (err) {
+            console.error('Error saving packs:', err);
         }
     };
 
@@ -109,9 +145,6 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 throw new Error('Insufficient WLOS balance');
             }
 
-            // In a real implementation, you'd call your blockchain contract here
-            // For now, we'll just update local state
-
             // Create new owned farmer
             const newFarmer: OwnedFarmer = {
                 id: `${farmerId}_${Date.now()}`,
@@ -145,9 +178,6 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             if (pendingRewards <= 0) {
                 throw new Error('No rewards to harvest');
             }
-
-            // In a real implementation, you'd call your blockchain contract here
-            // For now, we'll just update local state
 
             // Update last harvested time for all farmers
             const now = Date.now();
@@ -209,12 +239,131 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
     };
 
+    // Add buyPack function
+    const buyPack = async (packId: string): Promise<boolean> => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const packInfo = FARMER_PACKS.find(p => p.id === packId);
+            if (!packInfo) {
+                throw new Error('Pack not found');
+            }
+
+            // Check if user has enough balance
+            if (balance.wlos < packInfo.cost) {
+                throw new Error('Insufficient WLOS balance');
+            }
+
+            // Create a new owned pack
+            const newPack: OwnedPack = {
+                id: `${packId}_${Date.now()}`,
+                packId,
+                purchasedAt: Date.now()
+            };
+
+            const updatedPacks = [...ownedPacks, newPack];
+            setOwnedPacks(updatedPacks);
+            savePacks(updatedPacks);
+
+            return true;
+        } catch (err: any) {
+            console.error('Error buying pack:', err);
+            setError(err.message || 'Failed to purchase pack');
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Add openPack function
+    const openPack = async (ownedPackId: string): Promise<{ success: boolean; farmer?: Farmer }> => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            // Find the pack in the inventory
+            const packIndex = ownedPacks.findIndex(p => p.id === ownedPackId);
+            if (packIndex === -1) {
+                throw new Error('Pack not found in your inventory');
+            }
+
+            const ownedPack = ownedPacks[packIndex];
+            const packInfo = FARMER_PACKS.find(p => p.id === ownedPack.packId);
+            if (!packInfo) {
+                throw new Error('Pack type not found');
+            }
+
+            // Remove the pack from inventory
+            const updatedPacks = [...ownedPacks];
+            updatedPacks.splice(packIndex, 1);
+            setOwnedPacks(updatedPacks);
+            savePacks(updatedPacks);
+
+            // Determine which rarity the farmer will be based on chances
+            let rarity: 'common' | 'rare' | 'epic' | 'legendary';
+            const roll = Math.random();
+            let cumulativeProbability = 0;
+
+            if (roll < (cumulativeProbability + packInfo.rarityChances.common)) {
+                rarity = 'common';
+            } else {
+                cumulativeProbability += packInfo.rarityChances.common;
+                if (roll < (cumulativeProbability + packInfo.rarityChances.rare)) {
+                    rarity = 'rare';
+                } else {
+                    cumulativeProbability += packInfo.rarityChances.rare;
+                    if (roll < (cumulativeProbability + packInfo.rarityChances.epic)) {
+                        rarity = 'epic';
+                    } else {
+                        rarity = 'legendary';
+                    }
+                }
+            }
+
+            // Get a random farmer of the selected rarity
+            const rarityFarmers = FARMERS.filter(f => f.rarity === rarity);
+            if (rarityFarmers.length === 0) {
+                // Fallback in case no farmers of this rarity exist
+                throw new Error(`No farmers of ${rarity} rarity available`);
+            }
+
+            const randomFarmer = rarityFarmers[Math.floor(Math.random() * rarityFarmers.length)];
+
+            // Add the farmer to the user's collection
+            const newFarmer: OwnedFarmer = {
+                id: `${randomFarmer.id}_${Date.now()}`,
+                farmerId: randomFarmer.id,
+                level: 1,
+                purchasedAt: Date.now(),
+                lastHarvested: Date.now(),
+                equippedItems: []
+            };
+
+            const updatedFarmers = [...ownedFarmers, newFarmer];
+            setOwnedFarmers(updatedFarmers);
+            saveFarmers(updatedFarmers);
+
+            return { success: true, farmer: randomFarmer };
+        } catch (err: any) {
+            console.error('Error opening pack:', err);
+            setError(err.message || 'Failed to open pack');
+            return { success: false };
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Value object to provide to the context
     const value = {
         ownedFarmers,
         pendingRewards,
         buyFarmer,
         harvestRewards,
         levelUpFarmer,
+        ownedPacks,
+        buyPack,
+        openPack,
         isLoading,
         error
     };

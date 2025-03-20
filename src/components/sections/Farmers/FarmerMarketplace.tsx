@@ -8,6 +8,7 @@ import { useFarmer } from '../../../context/FarmerContext';
 const FarmerMarketplace: React.FC = () => {
     const { buyFarmer, isLoading, error } = useFarmer();
     const [filterRarity, setFilterRarity] = useState<string>('all');
+    const [selectedFarmer] = useState<string | null>(null);
 
     // Filter farmers based on selected rarity
     const filteredFarmers = filterRarity === 'all'
@@ -69,12 +70,13 @@ const FarmerMarketplace: React.FC = () => {
                     <FarmerCard
                         key={farmer.id}
                         farmer={farmer}
+                        selected={selectedFarmer === farmer.id}
                         onBuy={() => handleBuy(farmer.id)}
                     />
                 ))}
             </div>
 
-            {isLoading && <div className="loading-overlay">Processing...</div>}
+            {isLoading && <div className="loading-overlay">Processing purchase...</div>}
         </section>
     );
 };
