@@ -308,29 +308,18 @@ const FarmerCard: React.FC<FarmerCardProps> = ({
 
                 {/* Action button with hover effect - Always visible for owned farmers */}
                 <div style={{ marginTop: 'auto' }}>
-                    {!owned && onBuy && (
-                        <button
-                            onClick={handleBuyClick}
-                            style={{
-                                width: '100%',
-                                padding: '8px 0',
-                                backgroundColor: 'rgba(20, 241, 149, 0.2)',
-                                border: '1px solid #14F195',
-                                color: '#fff',
-                                fontFamily: 'Orbitron, sans-serif',
-                                fontSize: '14px',
-                                fontWeight: 'bold',
-                                cursor: 'pointer',
-                                borderRadius: '4px',
-                                transition: 'all 0.2s ease',
-                                textTransform: 'uppercase',
-                                letterSpacing: '1px',
-                                position: 'relative',
-                                overflow: 'hidden',
-                            }}
-                        >
-                            BUY
-                        </button>
+                    {!owned && (
+                        <div className="pack-info-text" style={{
+                            width: '100%',
+                            padding: '8px 0',
+                            textAlign: 'center',
+                            color: '#14F195',
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            letterSpacing: '1px',
+                        }}>
+                            AVAILABLE IN PACKS
+                        </div>
                     )}
                     {owned && onLevelUp && (
                         <button

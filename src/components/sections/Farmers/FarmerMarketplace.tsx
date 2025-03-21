@@ -1,11 +1,10 @@
+// Modified FarmerMarketplace.tsx
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import FarmerCard from './FarmerCard';
 import { FARMERS } from '../../../types/FarmerTypes';
-import { useFarmer } from '../../../context/FarmerContext';
 
 const FarmerMarketplace: React.FC = () => {
-    const { buyFarmer, isLoading, error } = useFarmer();
     const [filterRarity, setFilterRarity] = useState<string>('all');
     const [selectedFarmer, setSelectedFarmer] = useState<string | null>(null);
 
@@ -18,17 +17,14 @@ const FarmerMarketplace: React.FC = () => {
         setSelectedFarmer(selectedFarmer === id ? null : id);
     };
 
-    const handleBuy = async (farmerId: string) => {
-        const success = await buyFarmer(farmerId);
-        if (success) {
-            // Show success message
-            alert('Farmer purchased successfully!');
-        }
-    };
-
     return (
         <section className="farmer-marketplace-section">
-            <SectionTitle title="FARMER MARKETPLACE" />
+            <SectionTitle title="FARMER SHOWCASE" />
+
+            <div className="marketplace-info-banner">
+                <div className="info-icon"></div>
+                <p>Farmers can only be acquired through packs in the Pack Store. View our collection below!</p>
+            </div>
 
             <div className="filter-controls">
                 <span className="filter-label">Filter By:</span>
@@ -66,8 +62,6 @@ const FarmerMarketplace: React.FC = () => {
                 </div>
             </div>
 
-            {error && <div className="error-message">{error}</div>}
-
             <div className="farmers-grid">
                 {filteredFarmers.map(farmer => (
                     <FarmerCard
@@ -75,12 +69,9 @@ const FarmerMarketplace: React.FC = () => {
                         farmer={farmer}
                         selected={selectedFarmer === farmer.id}
                         onSelect={() => handleSelect(farmer.id)}
-                        onBuy={() => handleBuy(farmer.id)}
                     />
                 ))}
             </div>
-
-            {isLoading && <div className="loading-overlay">Processing purchase...</div>}
         </section>
     );
 };

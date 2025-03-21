@@ -1,17 +1,29 @@
+// src/pages/MarketplacePage.tsx
 import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
-import MarketplaceHero from '../components/sections/Marketplace/MarketplaceHero.tsx';
+import MarketplaceHero from '../components/sections/Marketplace/MarketplaceHero';
+import MarketplaceStats from '../components/sections/Marketplace/MarketplaceStats';
+import FeaturedItems from '../components/sections/Marketplace/FeaturedItems';
 import MarketplaceCategories from '../components/sections/Marketplace/MarketplaceCategories';
 import MarketplaceItems from '../components/sections/Marketplace/MarketplaceItems';
-import MarketplaceStats from '../components/sections/Marketplace/MarketplaceStats';
+import InventoryCategories from '../components/sections/Marketplace/InventoryCategories';
+import InventoryItems from '../components/sections/Marketplace/InventoryItems';
 import { useWalletConnection } from '../context/WalletConnectionProvider';
 import WalletConnectButton from '../components/common/WalletConnectButton';
 
 const MarketplacePage: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<'browse' | 'inventory'>('browse');
-    const [activeLine, setActiveLine] = useState(0);
-    const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    // Three main tabs
+    const [activeTab, setActiveTab] = useState<'stats' | 'marketplace' | 'inventory'>('stats');
+
+    // Filters & Sorting
+    const [selectedMarketCategory, setSelectedMarketCategory] = useState<string>('all');
+    const [selectedInventoryCategory, setSelectedInventoryCategory] = useState<string>('all');
     const [sortOrder, setSortOrder] = useState<'price_asc' | 'price_desc' | 'recent'>('recent');
+
+    // Animation line
+    const [activeLine, setActiveLine] = useState(0);
+
+    // Wallet connection
     const { isConnected } = useWalletConnection();
 
     // Animation for scanning effect
@@ -21,6 +33,11 @@ const MarketplacePage: React.FC = () => {
         }, 30);
         return () => clearInterval(interval);
     }, []);
+
+    // Handle "View All Items" click
+    const handleViewAllItems = () => {
+        setActiveTab('marketplace');
+    };
 
     return (
         <Layout>
@@ -47,13 +64,19 @@ const MarketplacePage: React.FC = () => {
             </div>
 
             <main className="main-content">
-                <MarketplaceHero />
                 {isConnected ? (
                     <>
+                        {/* Main navigation tabs - now at the top */}
                         <div className="page-tabs">
                             <button
-                                className={`tab-button ${activeTab === 'browse' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('browse')}
+                                className={`tab-button ${activeTab === 'stats' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('stats')}
+                            >
+                                STATS
+                            </button>
+                            <button
+                                className={`tab-button ${activeTab === 'marketplace' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('marketplace')}
                             >
                                 MARKETPLACE
                             </button>
@@ -66,49 +89,59 @@ const MarketplacePage: React.FC = () => {
                             <div className="tab-line"></div>
                         </div>
 
-                        {activeTab === 'browse' ? (
+                        {/* Stats tab content */}
+                        {activeTab === 'stats' && (
                             <>
+                                <MarketplaceHero />
                                 <MarketplaceStats />
+                                <FeaturedItems onViewAll={handleViewAllItems} />
+                            </>
+                        )}
+
+                        {/* Marketplace tab content */}
+                        {activeTab === 'marketplace' && (
+                            <>
                                 <MarketplaceCategories
-                                    selectedCategory={selectedCategory}
-                                    onSelectCategory={setSelectedCategory}
+                                    selectedCategory={selectedMarketCategory}
+                                    onSelectCategory={setSelectedMarketCategory}
                                 />
                                 <MarketplaceItems
-                                    category={selectedCategory}
+                                    category={selectedMarketCategory}
                                     sortOrder={sortOrder}
                                     onChangeSortOrder={setSortOrder}
                                 />
                             </>
-                        ) : (
-                            // You can add the Inventory component here later
-                            <div className="coming-soon-section">
-                                <div className="clip-card border-yellow p-8 text-center">
-                                    <div className="accent-border top yellow"></div>
-                                    <h2 className="text-2xl font-bold mb-4 yellow-text">INVENTORY COMING SOON</h2>
-                                    <p className="text-gray-400 mb-6">Your personal inventory section is under development. Soon you'll be able to view and manage all your WLOS items here.</p>
-                                    <div className="flex justify-center">
-                                        <div className="loading-indicator">
-                                            <div className="loading-dot yellow-bg"></div>
-                                            <div className="loading-dot yellow-bg"></div>
-                                            <div className="loading-dot yellow-bg"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        )}
+
+                        {/* Inventory tab content */}
+                        {activeTab === 'inventory' && (
+                            <>
+                                <InventoryCategories
+                                    selectedCategory={selectedInventoryCategory}
+                                    onSelectCategory={setSelectedInventoryCategory}
+                                />
+                                <InventoryItems filterType={selectedInventoryCategory} />
+                            </>
                         )}
                     </>
                 ) : (
-                    <div className="wallet-connect-prompt clip-card border-yellow">
-                        <div className="accent-border top yellow"></div>
+                    // Wallet connection prompt
+                    <>
+                        {/* Show hero section for non-connected users too */}
+                        <MarketplaceHero />
 
-                        <div className="wallet-connect-content text-center p-10">
-                            <h3 className="prompt-title text-xl font-bold mb-4 yellow-text">CONNECT WALLET TO ACCESS MARKETPLACE</h3>
-                            <p className="prompt-description text-gray-400 mb-6">
-                                Connect your wallet to browse, buy and sell items in the marketplace.
-                            </p>
-                            <WalletConnectButton color="yellow" />
+                        <div className="wallet-connect-prompt clip-card border-yellow">
+                            <div className="accent-border top yellow"></div>
+
+                            <div className="wallet-connect-content text-center p-10">
+                                <h3 className="prompt-title text-xl font-bold mb-4 yellow-text">CONNECT WALLET TO ACCESS MARKETPLACE</h3>
+                                <p className="prompt-description text-gray-400 mb-6">
+                                    Connect your wallet to browse, buy and sell items in the marketplace.
+                                </p>
+                                <WalletConnectButton color="yellow" />
+                            </div>
                         </div>
-                    </div>
+                    </>
                 )}
             </main>
         </Layout>

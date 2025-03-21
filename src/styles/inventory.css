@@ -1,0 +1,525 @@
+/* src/styles/inventory.css */
+/* Inventory Items */
+.inventory-items-section {
+    padding: 20px 0;
+}
+
+.inventory-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.inventory-stats .stat-box {
+    background: rgba(10, 10, 40, 0.7);
+    border: 1px solid #FFB800;
+    padding: 20px;
+    flex: 1;
+    margin: 0 10px;
+    text-align: center;
+}
+
+.inventory-stats .stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #FFB800;
+    margin-bottom: 5px;
+}
+
+.inventory-stats .stat-label {
+    font-size: 14px;
+    color: #999;
+    text-transform: uppercase;
+}
+
+.inventory-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.no-items-message {
+    background: rgba(10, 10, 40, 0.7);
+    border: 1px solid #FFB800;
+    padding: 30px;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+
+.no-items-message p {
+    color: #999;
+    font-size: 16px;
+}
+
+/* Inventory Item Card */
+.inventory-item-card {
+    width: 240px;
+    height: 480px;
+    position: relative;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(10,10,35,0.95) 0%, rgba(8,8,25,0.98) 100%);
+    border: 2px solid transparent;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.inventory-item-card.selected {
+    box-shadow: 0 0 20px rgba(255, 184, 0, 0.5);
+    border-color: #FFB800;
+}
+
+.inventory-item-card.for-sale {
+    opacity: 0.7;
+}
+
+.rarity-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.rarity-banner.common {
+    background: linear-gradient(90deg, rgba(20, 241, 149, 0.6) 0%, rgba(20, 241, 149, 0.1) 100%);
+}
+
+.rarity-banner.uncommon {
+    background: linear-gradient(90deg, rgba(73, 233, 255, 0.6) 0%, rgba(73, 233, 255, 0.1) 100%);
+}
+
+.rarity-banner.rare {
+    background: linear-gradient(90deg, rgba(0, 194, 255, 0.6) 0%, rgba(0, 194, 255, 0.1) 100%);
+}
+
+.rarity-banner.epic {
+    background: linear-gradient(90deg, rgba(153, 69, 255, 0.6) 0%, rgba(153, 69, 255, 0.1) 100%);
+}
+
+.rarity-banner.legendary {
+    background: linear-gradient(90deg, rgba(255, 184, 0, 0.6) 0%, rgba(255, 184, 0, 0.1) 100%);
+}
+
+.rarity-text, .type-text {
+    color: #fff;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.equipped-badge {
+    position: absolute;
+    top: 30px;
+    right: -30px;
+    background: #14F195;
+    color: #000;
+    padding: 3px 35px;
+    font-size: 10px;
+    font-weight: bold;
+    transform: rotate(45deg);
+    z-index: 15;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.for-sale-badge {
+    position: absolute;
+    top: 65px;
+    right: -35px;
+    background: #FFB800;
+    color: #000;
+    padding: 3px 40px;
+    font-size: 10px;
+    font-weight: bold;
+    transform: rotate(45deg);
+    z-index: 15;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.charges-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 184, 0, 0.8);
+    color: #000;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 20;
+}
+
+.item-image-container {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.item-image {
+    position: relative;
+    width: 70%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    z-index: 5;
+}
+
+.item-letter {
+    font-size: 48px;
+    font-weight: bold;
+    color: #FFB800;
+}
+
+.item-name-container {
+    position: relative;
+    width: 90%;
+    margin: 10px auto;
+    padding: 5px;
+    text-align: center;
+    background: rgba(8,8,20,0.9);
+    border: 1px solid rgba(255, 184, 0, 0.5);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.3);
+    border-radius: 4px;
+    z-index: 5;
+}
+
+.item-name {
+    margin: 0;
+    padding: 5px 0;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 184, 0, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.item-details {
+    width: 90%;
+    margin: 0 auto;
+    padding: 12px;
+    background: rgba(8,8,18,0.9);
+    border: 1px solid rgba(255, 184, 0, 0.3);
+    border-radius: 5px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-description {
+    font-size: 12px;
+    color: #ccc;
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 0;
+    font-size: 12px;
+}
+
+.stat-name {
+    color: #8B8DA0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value.positive {
+    color: #14F195;
+    font-weight: bold;
+}
+
+.stat-value.negative {
+    color: #FF4D4D;
+    font-weight: bold;
+}
+
+.effect-box {
+    margin: 12px 0;
+    padding: 8px;
+    background: rgba(255, 184, 0, 0.1);
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.effect-text {
+    color: #FFB800;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.duration-text {
+    color: #8B8DA0;
+}
+
+.item-actions {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.action-button, .sell-button {
+    padding: 8px 0;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex: 1;
+}
+
+.action-button {
+    background-color: rgba(20, 241, 149, 0.2);
+    border: 1px solid #14F195;
+    color: #fff;
+}
+
+.sell-button {
+    background-color: rgba(255, 184, 0, 0.2);
+    border: 1px solid #FFB800;
+    color: #fff;
+}
+
+.durability-container {
+    margin-top: 8px;
+}
+
+.durability-bar {
+    height: 4px;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.durability-fill {
+    height: 100%;
+}
+
+.durability-fill.good {
+    background-color: #14F195;
+}
+
+.durability-fill.medium {
+    background-color: #FFB800;
+}
+
+.durability-fill.low {
+    background-color: #FF4D4D;
+}
+
+.durability-text {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 10px;
+    color: #8B8DA0;
+    margin-top: 2px;
+}
+
+.corner-accent {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+}
+
+.corner-accent.top-right {
+    top: 0;
+    right: 0;
+    border-top: 2px solid #FFB800;
+    border-right: 2px solid #FFB800;
+}
+
+.corner-accent.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-bottom: 2px solid #FFB800;
+    border-left: 2px solid #FFB800;
+}
+
+/* Sell Item Popup */
+.sell-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.sell-popup-container {
+    width: 800px;
+    max-width: 90vw;
+    background: rgba(10, 10, 40, 0.95);
+    border: 2px solid #FFB800;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.sell-popup-header {
+    background: linear-gradient(90deg, rgba(255, 184, 0, 0.3) 0%, rgba(255, 184, 0, 0.1) 100%);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sell-popup-title {
+    color: #FFB800;
+    margin: 0;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.sell-popup-content {
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.sell-popup-item {
+    flex: 1;
+    max-width: 280px;
+}
+
+.sell-popup-options {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sell-option {
+    background: rgba(8, 8, 25, 0.7);
+    border: 1px solid rgba(255, 184, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.option-title {
+    color: #FFB800;
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.option-description {
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+.price-display {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 5px;
+}
+
+.price-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #FFB800;
+    margin-right: 5px;
+}
+
+.price-currency {
+    color: #ccc;
+    font-size: 16px;
+}
+
+.discount-notice {
+    color: #FF4D4D;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.listing-price-container {
+    margin-bottom: 15px;
+}
+
+.price-label {
+    display: block;
+    color: #ccc;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.price-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.price-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 184, 0, 0.3);
+    padding: 8px 12px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.fee-display, .net-proceeds {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.fee-label, .proceeds-label {
+    color: #999;
+}
+
+.fee-value {
+    color: #FF4D4D;
+}
+
+.proceeds-value {
+    color: #14F195;
+    font-weight: bold;
+}

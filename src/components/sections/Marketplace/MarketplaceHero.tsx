@@ -31,12 +31,6 @@ const MarketplaceHero: React.FC = () => {
                                 <span className="feature-text">Limited edition collectibles</span>
                             </div>
                         </div>
-
-                        <Button
-                            text="BROWSE ITEMS"
-                            color="yellow"
-                            onClick={() => console.log('Browse items clicked')}
-                        />
                     </div>
 
                     <div className="marketplace-info-panel clip-panel">
