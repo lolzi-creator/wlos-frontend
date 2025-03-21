@@ -1,0 +1,296 @@
+/* src/styles/listings.css */
+
+.my-listings-section {
+    margin-bottom: 40px;
+}
+
+.futuristic-listings-container {
+    padding: 20px;
+    background: rgba(8, 8, 25, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.listings-grid-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(153, 69, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(rgba(153, 69, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 0;
+}
+
+.listings-header {
+    display: grid;
+    grid-template-columns: 280px 100px 100px 150px 180px 180px;
+    gap: 12px;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    color: #00C2FF;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.listing-row {
+    display: grid;
+    grid-template-columns: 280px 100px 100px 150px 180px 180px;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    align-items: center;
+    transition: background 0.2s ease;
+    cursor: pointer;
+}
+
+.listing-row:nth-child(odd) {
+    background: rgba(0, 0, 40, 0.4);
+}
+
+.listing-row:nth-child(even) {
+    background: rgba(30, 0, 60, 0.2);
+}
+
+.listing-row:hover {
+    background: rgba(153, 69, 255, 0.05);
+}
+
+.listing-row.selected {
+    background: rgba(153, 69, 255, 0.1);
+}
+
+.item-icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-right: 12px;
+    font-size: 16px;
+}
+
+.item-name {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 16px;
+}
+
+.item-cell {
+    display: flex;
+    align-items: center;
+}
+
+.type-cell {
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: lowercase;
+}
+
+.rarity-badge {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.price-cell {
+    color: #FFB800;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.date-cell {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.cancel-button {
+    background-color: rgba(153, 102, 51, 0.8);
+    border: 1px solid rgba(255, 204, 102, 0.5);
+    color: #FFFFCC;
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    margin-right: 6px;
+}
+
+.cancel-button:hover {
+    background-color: rgba(153, 102, 51, 1);
+}
+
+.change-price-button {
+    background-color: rgba(51, 102, 153, 0.8);
+    border: 1px solid rgba(102, 204, 255, 0.5);
+    color: #CCFFFF;
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.change-price-button:hover {
+    background-color: rgba(51, 102, 153, 1);
+}
+
+.price-change-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.price-change-content {
+    width: 400px;
+    background: rgba(20, 20, 40, 0.95);
+    border: 1px solid rgba(0, 194, 255, 0.5);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 194, 255, 0.2);
+}
+
+.price-change-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 194, 255, 0.3);
+    padding-bottom: 10px;
+}
+
+.price-change-title {
+    color: #00C2FF;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.price-change-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.price-input-group {
+    margin-bottom: 20px;
+}
+
+.price-input-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #FFFFFF;
+    font-size: 14px;
+}
+
+.price-input-field {
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 0, 30, 0.5);
+    border: 1px solid rgba(0, 194, 255, 0.3);
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-size: 16px;
+}
+
+.price-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.price-cancel-button {
+    background-color: rgba(80, 80, 80, 0.8);
+    border: 1px solid rgba(160, 160, 160, 0.5);
+    color: #FFFFFF;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.price-update-button {
+    background-color: rgba(0, 153, 204, 0.8);
+    border: 1px solid rgba(0, 204, 255, 0.5);
+    color: #FFFFFF;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.no-listings-message {
+    padding: 30px 20px;
+    background: rgba(8, 8, 25, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+    position: relative;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(153, 69, 255, 0.3);
+    border-top: 4px solid #9945FF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

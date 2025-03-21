@@ -1,10 +1,13 @@
-// src/components/sections/Marketplace/ItemCard.tsx
+// src/components/sections/Marketplace/ItemCards.tsx
 import React from 'react';
 import { Item } from '../../../types/ItemTypes';
 import Button from '../../common/Button';
 
 interface ItemCardProps {
-    item: Item;
+    item: Item & {
+        isListing?: boolean;
+        seller?: string;
+    };
     selected?: boolean;
     onSelect?: () => void;
     onBuy?: () => void;
@@ -34,6 +37,12 @@ const ItemCard: React.FC<ItemCardProps> = ({
     const handleBuyClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (onBuy) onBuy();
+    };
+
+    // Format seller address
+    const formatSeller = (address: string) => {
+        if (!address) return '';
+        return `${address.substring(0, 4)}...${address.substring(address.length - 4)}`;
     };
 
     return (
@@ -92,6 +101,26 @@ const ItemCard: React.FC<ItemCardProps> = ({
                     {item.type}
                 </div>
             </div>
+
+            {/* Marketplace listing badge */}
+            {item.isListing && (
+                <div style={{
+                    position: 'absolute',
+                    top: '30px',
+                    right: '0',
+                    padding: '4px 8px',
+                    background: '#FFB800',
+                    color: '#000',
+                    fontSize: '10px',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    zIndex: 5,
+                    borderTopLeftRadius: '4px',
+                    borderBottomLeftRadius: '4px',
+                }}>
+                    Player Listing
+                </div>
+            )}
 
             {/* Image container with hexagonal clip-path */}
             <div style={{
@@ -218,10 +247,10 @@ const ItemCard: React.FC<ItemCardProps> = ({
                                 {statName.replace(/([A-Z])/g, ' $1').trim()}
                             </span>
                             <span style={{
-                                color: value > 0 ? '#14F195' : '#FF4D4D',
+                                color: Number(value) > 0 ? '#14F195' : '#FF4D4D',
                                 fontWeight: 'bold'
                             }}>
-                                {value > 0 ? '+' : ''}{value}
+                                {Number(value) > 0 ? '+' : ''}{value}
                             </span>
                         </div>
                     ))}
@@ -242,6 +271,17 @@ const ItemCard: React.FC<ItemCardProps> = ({
                         <div style={{ color: '#8B8DA0' }}>
                             Duration: {item.duration}
                         </div>
+                    </div>
+                )}
+
+                {/* Seller information for listings */}
+                {item.isListing && item.seller && (
+                    <div style={{
+                        marginBottom: '12px',
+                        fontSize: '12px',
+                        color: '#8B8DA0',
+                    }}>
+                        <span style={{ fontWeight: 'bold' }}>Seller:</span> {formatSeller(item.seller)}
                     </div>
                 )}
 

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import ItemCard from './ItemCards';
 import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface MarketplaceItemsProps {
     category: string;
@@ -15,16 +16,32 @@ const MarketplaceItems: React.FC<MarketplaceItemsProps> = ({
                                                                sortOrder,
                                                                onChangeSortOrder
                                                            }) => {
+    const { marketListings, buyItem, error, isLoading } = useMarketplace();
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+    // Only include player marketplace listings, no catalog items
+    const allItems = [
+        // User marketplace listings only
+        ...marketListings.map(listing => {
+            const baseItem = MARKETPLACE_ITEMS.find(item => item.id === listing.itemId);
+            if (!baseItem) return null;
+
+            return {
+                ...baseItem,
+                id: listing.id, // Use listing ID to identify it
+                price: listing.price, // Use the listing price
+                isListing: true,
+                seller: listing.seller
+            };
+        }).filter(item => item !== null)
+    ];
 
     // Filter items based on selected category
     const filteredItems = category === 'all'
-        ? MARKETPLACE_ITEMS
-        : MARKETPLACE_ITEMS.filter(item =>
-            category === 'rare'
-                ? ['rare', 'epic', 'legendary'].includes(item.rarity)
-                : item.type === category
-        );
+        ? allItems
+        : category === 'rare'
+            ? allItems.filter(item => item && ['rare', 'epic', 'legendary'].includes(item.rarity))
+            : allItems.filter(item => item && item.type === category);
 
     // Sort items based on sort order
     const sortedItems = [...filteredItems].sort((a, b) => {
@@ -38,14 +55,27 @@ const MarketplaceItems: React.FC<MarketplaceItemsProps> = ({
         setSelectedItem(selectedItem === id ? null : id);
     };
 
-    const handleBuyItem = (id: string) => {
-        console.log(`Buying item: ${id}`);
-        // Implement purchase logic here
+    const handleBuyItem = async (id: string) => {
+        try {
+            const success = await buyItem(id);
+            if (success) {
+                // Show success message or feedback
+                setSelectedItem(null);
+            }
+        } catch (error) {
+            console.error('Error buying item:', error);
+        }
     };
 
     return (
         <section className="marketplace-items-section">
             <SectionTitle title="QUANTUM ITEMS" />
+
+            {error && (
+                <div className="error-message">
+                    {error}
+                </div>
+            )}
 
             {/* Filters and Sort */}
             <div className="filters-container">
@@ -87,6 +117,8 @@ const MarketplaceItems: React.FC<MarketplaceItemsProps> = ({
                         selected={selectedItem === item.id}
                         onSelect={() => handleSelectItem(item.id)}
                         onBuy={() => handleBuyItem(item.id)}
+                        isListing={item.isListing}
+                        seller={item.seller}
                     />
                 ))}
             </div>
@@ -99,6 +131,13 @@ const MarketplaceItems: React.FC<MarketplaceItemsProps> = ({
                 <span className="pagination-ellipsis">...</span>
                 <button className="pagination-button">10</button>
             </div>
+
+            {isLoading && (
+                <div className="loading-overlay">
+                    <div className="loading-spinner"></div>
+                    <p>Processing...</p>
+                </div>
+            )}
         </section>
     );
 };

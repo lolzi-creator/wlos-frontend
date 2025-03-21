@@ -2,21 +2,16 @@
 import React, { useState } from 'react';
 import { Item } from '../../../types/ItemTypes';
 import Button from '../../common/Button';
-import InventoryItemCard from './InventoryItemCard';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface SellItemPopupProps {
     item: Item;
+    ownedItemId: string;
     onClose: () => void;
-    onInstantSell: () => void;
-    onListForSale: (price: number) => void;
 }
 
-const SellItemPopup: React.FC<SellItemPopupProps> = ({
-                                                         item,
-                                                         onClose,
-                                                         onInstantSell,
-                                                         onListForSale
-                                                     }) => {
+const SellItemPopup: React.FC<SellItemPopupProps> = ({ item, ownedItemId, onClose }) => {
+    const { sellItem, isLoading } = useMarketplace();
     const [listingPrice, setListingPrice] = useState<number>(Math.round(item.price * 1.2)); // 20% markup by default
     const instantSellPrice = Math.round(item.price * 0.7); // 30% less for instant sell
 
@@ -27,8 +22,27 @@ const SellItemPopup: React.FC<SellItemPopupProps> = ({
         }
     };
 
-    const handleListForSale = () => {
-        onListForSale(listingPrice);
+    const handleInstantSell = async () => {
+        try {
+            // For instant sell, we use a low price and list immediately
+            const success = await sellItem(ownedItemId, instantSellPrice);
+            if (success) {
+                onClose();
+            }
+        } catch (error) {
+            console.error('Error during instant sell:', error);
+        }
+    };
+
+    const handleListForSale = async () => {
+        try {
+            const success = await sellItem(ownedItemId, listingPrice);
+            if (success) {
+                onClose();
+            }
+        } catch (error) {
+            console.error('Error during listing:', error);
+        }
     };
 
     return (
@@ -41,10 +55,37 @@ const SellItemPopup: React.FC<SellItemPopupProps> = ({
 
                 <div className="sell-popup-content">
                     <div className="sell-popup-item">
-                        <InventoryItemCard
-                            item={item}
-                            selected={false}
-                        />
+                        <div className="item-card">
+                            <div className={`rarity-banner ${item.rarity}`}>
+                                <span className="rarity-text">{item.rarity}</span>
+                                <span className="type-text">{item.type}</span>
+                            </div>
+
+                            <div className="item-image-container">
+                                <div className="item-image">
+                                    <span className="item-letter">{item.name.charAt(0)}</span>
+                                </div>
+                            </div>
+
+                            <div className="item-name-container">
+                                <h3 className="item-name">{item.name}</h3>
+                            </div>
+
+                            <div className="item-details">
+                                <p className="item-description">{item.description}</p>
+
+                                <div className="item-stats">
+                                    {Object.entries(item.stats).map(([statName, value]) => (
+                                        <div key={statName} className="stat-row">
+                                            <span className="stat-name">{statName.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                            <span className={`stat-value ${Number(value) > 0 ? 'positive' : 'negative'}`}>
+                                                {Number(value) > 0 ? '+' : ''}{value}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="sell-popup-options">
@@ -63,8 +104,9 @@ const SellItemPopup: React.FC<SellItemPopupProps> = ({
                             <Button
                                 text="SELL NOW"
                                 color="yellow"
-                                onClick={onInstantSell}
+                                onClick={handleInstantSell}
                                 fullWidth={true}
+                                disabled={isLoading}
                             />
                         </div>
 
@@ -99,10 +141,18 @@ const SellItemPopup: React.FC<SellItemPopupProps> = ({
                                 color="yellow"
                                 onClick={handleListForSale}
                                 fullWidth={true}
+                                disabled={isLoading}
                             />
                         </div>
                     </div>
                 </div>
+
+                {isLoading && (
+                    <div className="loading-overlay">
+                        <div className="loading-spinner"></div>
+                        <p>Processing transaction...</p>
+                    </div>
+                )}
             </div>
         </div>
     );

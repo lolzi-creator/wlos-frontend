@@ -3,54 +3,52 @@ import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import InventoryItemCard from './InventoryItemCard';
 import SellItemPopup from './SellItemPopup';
-import { MARKETPLACE_ITEMS, USER_INVENTORY } from '../../../types/ItemTypes';
+import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface InventoryItemsProps {
     filterType: string;
 }
 
 const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
+    const { ownedItems, myListings, useItem, equipItem, error, isLoading } = useMarketplace();
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
     const [sellItem, setSellItem] = useState<any | null>(null);
 
-    // Mock data for items currently for sale
-    const [itemsForSale, setItemsForSale] = useState<any[]>([]);
-
     // Get the full item details for each owned item
-    const ownedItems = USER_INVENTORY.map(ownedItem => {
+    const userItems = ownedItems.map(ownedItem => {
         const itemDetails = MARKETPLACE_ITEMS.find(item => item.id === ownedItem.itemId);
         if (!itemDetails) return null;
 
         return {
             ...ownedItem,
             details: itemDetails,
-            forSale: itemsForSale.some(saleItem => saleItem.id === ownedItem.id)
+            forSale: myListings.some(listing => listing.ownedItemId === ownedItem.id)
         };
     }).filter(item => item !== null);
 
     // Filter by type if needed
     const filteredItems = filterType === 'all'
-        ? ownedItems
+        ? userItems
         : filterType === 'equipped'
-            ? ownedItems.filter(item => item?.equipped)
+            ? userItems.filter(item => item?.equipped)
             : filterType === 'for-sale'
-                ? ownedItems.filter(item => item?.forSale)
-                : ownedItems.filter(item => item?.details.type === filterType);
+                ? userItems.filter(item => item?.forSale)
+                : userItems.filter(item => item?.details.type === filterType);
 
     // Handle item actions (equip/unequip/use)
-    const handleItemAction = (id: string) => {
-        const item = ownedItems.find(item => item?.id === id);
+    const handleItemAction = async (id: string) => {
+        const item = userItems.find(item => item?.id === id);
         if (!item) return;
 
-        const isConsumable = 'charges' in item;
+        const isConsumable = item.details.type === 'consumable';
         const isEquipped = Boolean(item.equipped);
 
         if (isConsumable) {
-            console.log(`Using item: ${id}`);
-            // Implement consumable use logic
+            await useItem(id);
         } else {
-            console.log(`${isEquipped ? 'Unequipping' : 'Equipping'} item: ${id}`);
-            // Implement equip/unequip logic
+            // Toggle equipped state
+            await equipItem(id, isEquipped ? null : 'warlord-1'); // Hardcoded warlord ID for demo
         }
     };
 
@@ -59,46 +57,30 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
         setSellItem(item);
     };
 
-    // Handle instant sell
-    const handleInstantSell = () => {
-        if (!sellItem) return;
-
-        console.log(`Instant selling item: ${sellItem.id} for ${Math.round(sellItem.details.price * 0.7)} WLOS`);
-        // Implementation would go here
-
-        setSellItem(null);
-    };
-
-    // Handle listing an item for sale
-    const handleListForSale = (price: number) => {
-        if (!sellItem) return;
-
-        console.log(`Listing item ${sellItem.id} for sale at ${price} WLOS`);
-
-        // Add to items for sale
-        setItemsForSale(prev => [...prev, { ...sellItem, listingPrice: price }]);
-
-        setSellItem(null);
-    };
-
     return (
         <section className="inventory-items-section">
             <SectionTitle title="YOUR INVENTORY" />
 
+            {error && (
+                <div className="error-message">
+                    {error}
+                </div>
+            )}
+
             <div className="inventory-stats">
                 <div className="stat-box">
-                    <div className="stat-value">{USER_INVENTORY.length}</div>
+                    <div className="stat-value">{ownedItems.length}</div>
                     <div className="stat-label">TOTAL ITEMS</div>
                 </div>
                 <div className="stat-box">
                     <div className="stat-value">
-                        {USER_INVENTORY.filter(item => item.equipped).length}
+                        {ownedItems.filter(item => item.equipped).length}
                     </div>
                     <div className="stat-label">EQUIPPED</div>
                 </div>
                 <div className="stat-box">
                     <div className="stat-value">
-                        {itemsForSale.length}
+                        {myListings.length}
                     </div>
                     <div className="stat-label">FOR SALE</div>
                 </div>
@@ -109,9 +91,9 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
                     {filteredItems.map(item => {
                         if (!item) return null;
 
-                        const isConsumable = 'charges' in item;
+                        const isConsumable = item.details.type === 'consumable';
                         const isEquipped = Boolean(item.equipped);
-                        const isForSale = itemsForSale.some(saleItem => saleItem.id === item.id);
+                        const isForSale = myListings.some(listing => listing.ownedItemId === item.id);
 
                         return (
                             <div key={item.id} className="inventory-item-container">
@@ -140,10 +122,16 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
             {sellItem && (
                 <SellItemPopup
                     item={sellItem.details}
+                    ownedItemId={sellItem.id}
                     onClose={() => setSellItem(null)}
-                    onInstantSell={handleInstantSell}
-                    onListForSale={handleListForSale}
                 />
+            )}
+
+            {isLoading && (
+                <div className="loading-overlay">
+                    <div className="loading-spinner"></div>
+                    <p>Processing...</p>
+                </div>
             )}
         </section>
     );

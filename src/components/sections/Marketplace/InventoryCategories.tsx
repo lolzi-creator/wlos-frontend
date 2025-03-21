@@ -1,47 +1,48 @@
 // src/components/sections/Marketplace/InventoryCategories.tsx
 import React from 'react';
 import SectionTitle from '../../common/SectionTitle';
-import { USER_INVENTORY, MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
+import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface InventoryCategoriesProps {
     selectedCategory: string;
     onSelectCategory: (category: string) => void;
-    itemsForSale: any[]; // Add this prop to receive items for sale
 }
 
 const InventoryCategories: React.FC<InventoryCategoriesProps> = ({
                                                                      selectedCategory,
-                                                                     onSelectCategory,
-                                                                     itemsForSale
+                                                                     onSelectCategory
                                                                  }) => {
+    const { ownedItems, myListings } = useMarketplace();
+
     // Calculate counts for each category dynamically
     const getItemDetails = (itemId: string) =>
         MARKETPLACE_ITEMS.find(item => item.id === itemId);
 
-    const allCount = USER_INVENTORY.length;
+    const allCount = ownedItems.length;
 
-    const equippedCount = USER_INVENTORY.filter(item =>
+    const equippedCount = ownedItems.filter(item =>
         item.equipped
     ).length;
 
-    const forSaleCount = itemsForSale.length;
+    const forSaleCount = myListings.length;
 
-    const weaponCount = USER_INVENTORY.filter(item => {
+    const weaponCount = ownedItems.filter(item => {
         const details = getItemDetails(item.itemId);
         return details?.type === 'weapon';
     }).length;
 
-    const armorCount = USER_INVENTORY.filter(item => {
+    const armorCount = ownedItems.filter(item => {
         const details = getItemDetails(item.itemId);
         return details?.type === 'armor';
     }).length;
 
-    const accessoryCount = USER_INVENTORY.filter(item => {
+    const accessoryCount = ownedItems.filter(item => {
         const details = getItemDetails(item.itemId);
         return details?.type === 'accessory';
     }).length;
 
-    const consumableCount = USER_INVENTORY.filter(item => {
+    const consumableCount = ownedItems.filter(item => {
         const details = getItemDetails(item.itemId);
         return details?.type === 'consumable';
     }).length;

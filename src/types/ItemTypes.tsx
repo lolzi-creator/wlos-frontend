@@ -77,7 +77,7 @@ export const MARKETPLACE_ITEMS: Item[] = [
         name: 'Quantum Blade',
         type: 'weapon',
         rarity: 'epic',
-        price: 750,
+        price: 0,
         stats: {
             attack: 35,
             critChance: 15
@@ -90,7 +90,7 @@ export const MARKETPLACE_ITEMS: Item[] = [
         name: 'Plasma Rifle',
         type: 'weapon',
         rarity: 'rare',
-        price: 450,
+        price: 0,
         stats: {
             attack: 25,
             range: 30

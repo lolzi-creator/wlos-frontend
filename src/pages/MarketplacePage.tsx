@@ -1,5 +1,5 @@
 // src/pages/MarketplacePage.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import MarketplaceHero from '../components/sections/Marketplace/MarketplaceHero';
 import MarketplaceStats from '../components/sections/Marketplace/MarketplaceStats';
@@ -8,12 +8,14 @@ import MarketplaceCategories from '../components/sections/Marketplace/Marketplac
 import MarketplaceItems from '../components/sections/Marketplace/MarketplaceItems';
 import InventoryCategories from '../components/sections/Marketplace/InventoryCategories';
 import InventoryItems from '../components/sections/Marketplace/InventoryItems';
+import MyListings from '../components/sections/Marketplace/MyListings';
 import { useWalletConnection } from '../context/WalletConnectionProvider';
 import WalletConnectButton from '../components/common/WalletConnectButton';
+import { MarketplaceProvider } from '../context/MarketplaceContext';
 
 const MarketplacePage: React.FC = () => {
-    // Three main tabs
-    const [activeTab, setActiveTab] = useState<'stats' | 'marketplace' | 'inventory'>('stats');
+    // Four main tabs (added My Listings tab)
+    const [activeTab, setActiveTab] = useState<'stats' | 'marketplace' | 'inventory' | 'listings'>('stats');
 
     // Filters & Sorting
     const [selectedMarketCategory, setSelectedMarketCategory] = useState<string>('all');
@@ -27,7 +29,7 @@ const MarketplacePage: React.FC = () => {
     const { isConnected } = useWalletConnection();
 
     // Animation for scanning effect
-    React.useEffect(() => {
+    useEffect(() => {
         const interval = setInterval(() => {
             setActiveLine(prev => (prev + 1) % 100);
         }, 30);
@@ -66,7 +68,7 @@ const MarketplacePage: React.FC = () => {
             <main className="main-content">
                 {isConnected ? (
                     <>
-                        {/* Main navigation tabs - now at the top */}
+                        {/* Main navigation tabs - now with 4 tabs including My Listings */}
                         <div className="page-tabs">
                             <button
                                 className={`tab-button ${activeTab === 'stats' ? 'active' : ''}`}
@@ -85,6 +87,12 @@ const MarketplacePage: React.FC = () => {
                                 onClick={() => setActiveTab('inventory')}
                             >
                                 MY INVENTORY
+                            </button>
+                            <button
+                                className={`tab-button ${activeTab === 'listings' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('listings')}
+                            >
+                                MY LISTINGS
                             </button>
                             <div className="tab-line"></div>
                         </div>
@@ -122,6 +130,11 @@ const MarketplacePage: React.FC = () => {
                                 />
                                 <InventoryItems filterType={selectedInventoryCategory} />
                             </>
+                        )}
+
+                        {/* My Listings tab content - new tab */}
+                        {activeTab === 'listings' && (
+                            <MyListings />
                         )}
                     </>
                 ) : (

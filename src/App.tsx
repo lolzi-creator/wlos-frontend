@@ -7,6 +7,7 @@ import RoadmapPage from './pages/RoadmapPage';
 import WalletPage from './pages/WalletPage';
 import { WalletContextProvider } from './context/WalletContext';
 import { WalletConnectionProvider } from './context/WalletConnectionProvider';
+import { MarketplaceProvider } from './context/MarketplaceContext';
 import FarmerPage from "./pages/FarmerPage.tsx";
 
 import './styles/farmers.css';
@@ -18,27 +19,32 @@ import './styles/token.css';
 import './styles/roadmap.css';
 import './styles/wallet.css';
 import './styles/mobile-fixes.css';
+import './styles/marketplace.css';
+import './styles/inventory.css';
+import './styles/listings.css';
 
 
 function App() {
     return (
         <WalletContextProvider>
             <WalletConnectionProvider>
-                <Router>
-                    <div className="app-container">
-                        <Routes>
-                            <Route path="/" element={<HomePage />} />
-                            <Route path="/stake" element={<StakingPage />} />
-                            <Route path="/battle" element={<Navigate to="/" />} /> {/* Placeholder for future Battle page */}
-                            <Route path="/marketplace" element={<MarketplacePage />} />
-                            <Route path="/wlos-token" element={<WlosTokenPage />} />
-                            <Route path="/farmers" element={<FarmerPage />} />
-                            <Route path="/roadmap" element={<RoadmapPage />} />
-                            <Route path="/wallet" element={<WalletPage />} />
-                            <Route path="*" element={<Navigate to="/" />} /> {/* Redirect any unknown routes to home */}
-                        </Routes>
-                    </div>
-                </Router>
+                <MarketplaceProvider>
+                    <Router>
+                        <div className="app-container">
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/stake" element={<StakingPage />} />
+                                <Route path="/battle" element={<Navigate to="/" />} /> {/* Placeholder for future Battle page */}
+                                <Route path="/marketplace" element={<MarketplacePage />} />
+                                <Route path="/wlos-token" element={<WlosTokenPage />} />
+                                <Route path="/farmers" element={<FarmerPage />} />
+                                <Route path="/roadmap" element={<RoadmapPage />} />
+                                <Route path="/wallet" element={<WalletPage />} />
+                                <Route path="*" element={<Navigate to="/" />} /> {/* Redirect any unknown routes to home */}
+                            </Routes>
+                        </div>
+                    </Router>
+                </MarketplaceProvider>
             </WalletConnectionProvider>
         </WalletContextProvider>
     );
