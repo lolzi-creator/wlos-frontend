@@ -3,6 +3,7 @@ import Button from '../../common/Button';
 import SectionTitle from '../../common/SectionTitle';
 import { FARMER_PACKS, Farmer } from '../../../types/FarmerTypes';
 import { useFarmer } from '../../../context/FarmerContext';
+import '../../../styles/farmerPacks.css';
 
 const FarmerPackInventory: React.FC = () => {
     const { ownedPacks, openPack, isLoading, error } = useFarmer();
@@ -11,15 +12,11 @@ const FarmerPackInventory: React.FC = () => {
 
     const handleOpenPack = async (packId: string) => {
         try {
-            // Process the actual pack opening
             const result = await openPack(packId);
-
             if (result.success && result.farmer) {
-                // Store the farmer for display
                 setAnimationFarmer(result.farmer);
                 setShowAnimation(true);
             } else {
-                // Handle error
                 alert('Failed to open pack');
             }
         } catch (err) {
@@ -33,7 +30,6 @@ const FarmerPackInventory: React.FC = () => {
         setAnimationFarmer(null);
     };
 
-    // Only show the "no packs" message if we don't have packs AND we're not showing a result
     if (ownedPacks.length === 0 && !showAnimation) {
         return (
             <section className="farmer-packs-inventory">
@@ -56,46 +52,55 @@ const FarmerPackInventory: React.FC = () => {
                     const packInfo = FARMER_PACKS.find(p => p.id === ownedPack.packId);
                     if (!packInfo) return null;
 
+                    const packColors = {
+                        'basic-pack': '#14F195', // Green
+                        'premium-pack': '#00C2FF', // Cyan
+                        'legendary-pack': '#9945FF' // Purple
+                    };
+                    const packColor = packColors[packInfo.id as keyof typeof packColors];
+
+                    // Instead of trying to rotate text, use individual letters in a column
+                    const packType = packInfo.id.split('-')[0].toUpperCase();
+
                     return (
                         <div key={ownedPack.id} className="owned-pack-card">
-                            <div className="pack-image-container">
-                                <div className="pack-image"></div>
+                            <div className="vertical-text-container" style={{ borderColor: packColor }}>
+                                {/* Render each letter individually in a column */}
+                                <div className="letter-column" style={{ color: packColor }}>
+                                    {`${packType} PACK`.split('').map((letter, index) => (
+                                        <div key={index} className="vertical-letter">
+                                            {letter}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
 
                             <div className="pack-info">
-                                <h3 className="pack-name">{packInfo.name}</h3>
-                                <Button
-                                    text={isLoading ? "PROCESSING..." : "OPEN PACK"}
-                                    color="green"
+                                <h3 className="pack-name" style={{ color: packColor }}>
+                                    {packInfo.name}
+                                </h3>
+
+                                <button
+                                    className="open-pack-button"
+                                    style={{
+                                        backgroundColor: `rgba(8, 40, 30, 0.8)`,
+                                        borderColor: packColor,
+                                        color: packColor
+                                    }}
                                     onClick={() => handleOpenPack(ownedPack.id)}
                                     disabled={isLoading}
-                                />
+                                >
+                                    {isLoading ? "OPENING..." : "OPEN PACK"}
+                                </button>
                             </div>
                         </div>
                     );
                 })}
             </div>
 
-            {/* Simple reveal screen with no animations */}
             {showAnimation && animationFarmer && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: 'rgba(0,0,0,0.9)',
-                    zIndex: 9999,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column'
-                }}>
-                    <div className={`farmer-card frame-${animationFarmer.rarity}`} style={{
-                        width: '280px',
-                        height: '420px',
-                        marginBottom: '20px'
-                    }}>
+                <div className="reveal-overlay">
+                    <div className={`farmer-card frame-${animationFarmer.rarity}`}>
                         <div className={`card-scene scene-${animationFarmer.rarity}`}></div>
 
                         <div className={`rarity-badge rarity-${animationFarmer.rarity}`}>
@@ -124,17 +129,8 @@ const FarmerPackInventory: React.FC = () => {
                     </div>
 
                     <button
+                        className="awesome-button"
                         onClick={closeAnimation}
-                        style={{
-                            padding: '12px 30px',
-                            backgroundColor: '#14F195',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '5px',
-                            fontSize: '16px',
-                            fontWeight: 'bold',
-                            cursor: 'pointer'
-                        }}
                     >
                         AWESOME!
                     </button>

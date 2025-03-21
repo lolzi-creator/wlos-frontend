@@ -1,17 +1,16 @@
-import React from 'react';
-import { FARMER_PACKS } from '../../../types/FarmerTypes';
-import Button from '../../common/Button';
+import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
+import { FARMER_PACKS } from '../../../types/FarmerTypes';
 import { useFarmer } from '../../../context/FarmerContext';
 import '../../../styles/farmerPacks.css';
 
 const FarmerPackStore: React.FC = () => {
     const { buyPack, isLoading, error } = useFarmer();
+    const [hoveredPack, setHoveredPack] = useState<string | null>(null);
 
     const handleBuyPack = async (packId: string) => {
         const success = await buyPack(packId);
         if (success) {
-            // Show success message
             alert('Pack purchased successfully! Check your inventory to open it.');
         }
     };
@@ -22,72 +21,95 @@ const FarmerPackStore: React.FC = () => {
 
             {error && <div className="error-message">{error}</div>}
 
-            <div className="packs-container">
-                {FARMER_PACKS.map(pack => (
-                    <div key={pack.id} className="pack-card">
-                        <div className="pack-image-wrapper">
-                            <div className="pack-image-container">
-                                <img
-                                    src={pack.imageSrc}
-                                    alt={pack.name}
-                                    className="pack-image"
-                                />
-                                <div className="pack-label">
-                                    {pack.id === 'basic-pack' && 'BASIC PACK'}
-                                    {pack.id === 'premium-pack' && 'PREMIUM PACK'}
-                                    {pack.id === 'legendary-pack' && 'LEGENDARY PACK'}
+            <div className="fixed-packs-container">
+                {FARMER_PACKS.map(pack => {
+                    // Determine color based on pack type
+                    const packColors = {
+                        'basic-pack': {
+                            primary: '#14F195', // Green
+                            background: 'rgba(20, 241, 149, 0.05)',
+                            border: 'rgba(20, 241, 149, 0.3)'
+                        },
+                        'premium-pack': {
+                            primary: '#00C2FF', // Cyan
+                            background: 'rgba(0, 194, 255, 0.05)',
+                            border: 'rgba(0, 194, 255, 0.3)'
+                        },
+                        'legendary-pack': {
+                            primary: '#9945FF', // Purple
+                            background: 'rgba(153, 69, 255, 0.05)',
+                            border: 'rgba(153, 69, 255, 0.3)'
+                        }
+                    };
+
+                    const colors = packColors[pack.id as keyof typeof packColors];
+                    const isHovered = hoveredPack === pack.id;
+
+                    return (
+                        <div
+                            key={pack.id}
+                            className="fixed-pack-card"
+                            onMouseEnter={() => setHoveredPack(pack.id)}
+                            onMouseLeave={() => setHoveredPack(null)}
+                            style={{
+                                backgroundColor: colors.background,
+                                borderColor: colors.border
+                            }}
+                        >
+                            <div className="pack-header">
+                                <h3 className="pack-title" style={{ color: colors.primary }}>
+                                    {pack.name}
+                                </h3>
+                            </div>
+
+                            <div className="pack-description">
+                                {pack.description}
+                            </div>
+
+                            {isHovered ? (
+                                <div className="drop-rates-container">
+                                    <div className="drop-rates-header" style={{ color: colors.primary }}>
+                                        DROP RATES
+                                    </div>
+                                    <div className="drop-rate">
+                                        <span className="rate-type" style={{ color: '#14F195' }}>Common:</span>
+                                        <span className="rate-value">{Math.round(pack.rarityChances.common * 100)}%</span>
+                                    </div>
+                                    <div className="drop-rate">
+                                        <span className="rate-type" style={{ color: '#00C2FF' }}>Rare:</span>
+                                        <span className="rate-value">{Math.round(pack.rarityChances.rare * 100)}%</span>
+                                    </div>
+                                    <div className="drop-rate">
+                                        <span className="rate-type" style={{ color: '#9945FF' }}>Epic:</span>
+                                        <span className="rate-value">{Math.round(pack.rarityChances.epic * 100)}%</span>
+                                    </div>
+                                    <div className="drop-rate">
+                                        <span className="rate-type" style={{ color: '#FFB800' }}>Legendary:</span>
+                                        <span className="rate-value">{Math.round(pack.rarityChances.legendary * 100)}%</span>
+                                    </div>
                                 </div>
+                            ) : null}
+
+                            <div className="pack-footer">
+                                <div className="pack-price">
+                                    <span>Price:</span>
+                                    <span className="price-value" style={{ color: colors.primary }}>
+                                        {pack.cost} WLOS
+                                    </span>
+                                </div>
+
+                                <button
+                                    className="buy-pack-button"
+                                    style={{ color: colors.primary, borderColor: colors.primary }}
+                                    onClick={() => handleBuyPack(pack.id)}
+                                    disabled={isLoading}
+                                >
+                                    BUY PACK
+                                </button>
                             </div>
                         </div>
-
-                        <div className="pack-details">
-                            <h3 className="pack-name"
-                                style={{
-                                    color: pack.id === 'basic-pack' ? '#14F195' :
-                                        pack.id === 'premium-pack' ? '#00C2FF' :
-                                            '#9945FF'
-                                }}
-                            >
-                                {pack.name}
-                            </h3>
-
-                            <p className="pack-description">{pack.description}</p>
-
-                            <div className="pack-chances-container">
-                                <div className="chances-header">Drop Chances:</div>
-                                <div className="chance-row">
-                                    <span className="chance-label common">Common:</span>
-                                    <span className="chance-value">{Math.round(pack.rarityChances.common * 100)}%</span>
-                                </div>
-                                <div className="chance-row">
-                                    <span className="chance-label rare">Rare:</span>
-                                    <span className="chance-value">{Math.round(pack.rarityChances.rare * 100)}%</span>
-                                </div>
-                                <div className="chance-row">
-                                    <span className="chance-label epic">Epic:</span>
-                                    <span className="chance-value">{Math.round(pack.rarityChances.epic * 100)}%</span>
-                                </div>
-                                <div className="chance-row">
-                                    <span className="chance-label legendary">Legendary:</span>
-                                    <span className="chance-value">{Math.round(pack.rarityChances.legendary * 100)}%</span>
-                                </div>
-                            </div>
-
-                            <div className="pack-price-container">
-                                <div className="price-label">Price:</div>
-                                <div className="price-value">{pack.cost} WLOS</div>
-                            </div>
-
-                            <button
-                                className="buy-pack-button"
-                                onClick={() => handleBuyPack(pack.id)}
-                                disabled={isLoading}
-                            >
-                                BUY PACK
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </section>
     );
