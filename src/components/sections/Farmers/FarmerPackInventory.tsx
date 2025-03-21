@@ -10,6 +10,20 @@ const FarmerPackInventory: React.FC = () => {
     const [animationFarmer, setAnimationFarmer] = useState<Farmer | null>(null);
     const [showAnimation, setShowAnimation] = useState(false);
 
+    // Group packs by packId to combine duplicates
+    const groupedPacks = ownedPacks.reduce((acc, pack) => {
+        if (!acc[pack.packId]) {
+            acc[pack.packId] = {
+                packId: pack.packId,
+                count: 0,
+                packs: []
+            };
+        }
+        acc[pack.packId].count += 1;
+        acc[pack.packId].packs.push(pack);
+        return acc;
+    }, {} as Record<string, { packId: string; count: number; packs: typeof ownedPacks }>);
+
     const handleOpenPack = async (packId: string) => {
         try {
             const result = await openPack(packId);
@@ -48,8 +62,8 @@ const FarmerPackInventory: React.FC = () => {
             {error && <div className="error-message">{error}</div>}
 
             <div className="owned-packs-grid">
-                {ownedPacks.map(ownedPack => {
-                    const packInfo = FARMER_PACKS.find(p => p.id === ownedPack.packId);
+                {Object.values(groupedPacks).map(group => {
+                    const packInfo = FARMER_PACKS.find(p => p.id === group.packId);
                     if (!packInfo) return null;
 
                     const packColors = {
@@ -59,40 +73,36 @@ const FarmerPackInventory: React.FC = () => {
                     };
                     const packColor = packColors[packInfo.id as keyof typeof packColors];
 
-                    // Instead of trying to rotate text, use individual letters in a column
-                    const packType = packInfo.id.split('-')[0].toUpperCase();
-
                     return (
-                        <div key={ownedPack.id} className="owned-pack-card">
-                            <div className="vertical-text-container" style={{ borderColor: packColor }}>
-                                {/* Render each letter individually in a column */}
-                                <div className="letter-column" style={{ color: packColor }}>
-                                    {`${packType} PACK`.split('').map((letter, index) => (
-                                        <div key={index} className="vertical-letter">
-                                            {letter}
+                        <div key={group.packId} className="owned-pack-card">
+                            <div className="pack-container">
+                                <div className="pack-box" style={{ borderColor: packColor }}>
+                                    <div className="pack-content">
+                                        <div className="pack-name-vertical" style={{ color: packColor }}>
+                                            {packInfo.id.split('-')[0].toUpperCase()} PACK
                                         </div>
-                                    ))}
+                                    </div>
+                                </div>
+                                <div className="pack-info">
+                                    <div className="pack-title" style={{ color: packColor }}>
+                                        {packInfo.name.toUpperCase()}
+                                        {group.count > 1 && <span className="pack-count">x{group.count}</span>}
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="pack-info">
-                                <h3 className="pack-name" style={{ color: packColor }}>
-                                    {packInfo.name}
-                                </h3>
-
-                                <button
-                                    className="open-pack-button"
-                                    style={{
-                                        backgroundColor: `rgba(8, 40, 30, 0.8)`,
-                                        borderColor: packColor,
-                                        color: packColor
-                                    }}
-                                    onClick={() => handleOpenPack(ownedPack.id)}
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? "OPENING..." : "OPEN PACK"}
-                                </button>
-                            </div>
+                            <button
+                                className="open-pack-button"
+                                style={{
+                                    backgroundColor: `rgba(8, 40, 30, 0.8)`,
+                                    borderColor: packColor,
+                                    color: packColor
+                                }}
+                                onClick={() => handleOpenPack(group.packs[0].id)}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "OPENING..." : "OPEN PACK"}
+                            </button>
                         </div>
                     );
                 })}

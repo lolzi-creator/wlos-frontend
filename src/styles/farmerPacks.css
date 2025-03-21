@@ -1,16 +1,43 @@
-/* Fixed Farmer Packs CSS with no overlapping issues */
+/* Cleaned and Organized Farmer Packs CSS */
 
-.farmer-packs-section {
+/* Section Layout */
+.farmer-packs-section,
+.farmer-packs-inventory {
     padding: 0 20px;
+    margin-bottom: 40px;
 }
 
-.fixed-packs-container {
+/* Grid Layouts */
+.fixed-packs-container,
+.packs-container,
+.owned-packs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
 
+/* Error Message */
+.error-message {
+    background-color: rgba(255, 77, 77, 0.15);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    color: #FF4D4D;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* No Packs Message */
+.no-packs-message {
+    padding: 40px;
+    text-align: center;
+    background-color: rgba(10, 10, 37, 0.5);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Fixed Pack Card */
 .fixed-pack-card {
     display: flex;
     flex-direction: column;
@@ -30,6 +57,7 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Pack Header */
 .pack-header {
     padding: 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -43,7 +71,18 @@
     font-family: 'Orbitron', sans-serif;
     letter-spacing: 1px;
 }
+.pack-count {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    font-size: 14px;
+    background-color: rgba(8, 8, 24, 0.6);
+    border-radius: 12px;
+    vertical-align: middle;
+    font-weight: normal;
+}
 
+/* Pack Description */
 .pack-description {
     padding: 16px;
     color: rgba(255, 255, 255, 0.8);
@@ -53,15 +92,15 @@
     flex-grow: 1;
 }
 
-/* Drop rates section that appears on hover */
+/* Drop Rates Container */
 .drop-rates-container {
     padding: 16px;
     background-color: rgba(8, 8, 24, 0.95);
     position: absolute;
-    top: 60px; /* Start below the header */
+    top: 60px;
     left: 0;
     right: 0;
-    bottom: 80px; /* Leave space for footer */
+    bottom: 80px;
     display: flex;
     flex-direction: column;
     animation: fadeIn 0.3s ease;
@@ -106,7 +145,7 @@
     font-family: 'Orbitron', sans-serif;
 }
 
-/* Footer section with price and button */
+/* Pack Footer */
 .pack-footer {
     padding: 16px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -114,7 +153,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: auto; /* Push to bottom */
+    margin-top: auto;
 }
 
 .pack-price {
@@ -152,23 +191,12 @@
     cursor: not-allowed;
 }
 
-.error-message {
-    background-color: rgba(255, 77, 77, 0.15);
-    border: 1px solid rgba(255, 77, 77, 0.3);
-    color: #FF4D4D;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
+/* Scan Line Effect */
+@keyframes scanline {
+    0% { top: -2px; }
+    100% { top: 100%; }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .fixed-packs-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Add scan line effect when hovering card */
 .fixed-pack-card::after {
     content: '';
     position: absolute;
@@ -189,102 +217,65 @@
     opacity: 1;
 }
 
-@keyframes scanline {
-    0% { top: -2px; }
-    100% { top: 100%; }
-}
-
-/* farmerPacks.css - Improved, keeping existing classes */
-
-.farmer-packs-section,
-.farmer-packs-inventory {
-    padding: 0 20px;
-}
-
-/* Common grid layouts */
-.packs-container,
-.owned-packs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
-}
-
-/* Pack cards */
-.pack-card,
+/* Owned Pack Card */
 .owned-pack-card {
-    background-color: rgba(8, 8, 24, 0.8);
-    border-radius: 8px;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.owned-pack-card {
     padding: 20px;
     border: 1px solid rgba(20, 241, 149, 0.1);
     background: rgba(10, 10, 37, 0.7);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .owned-pack-card:hover {
     transform: translateY(-5px);
 }
 
-/* Pack images container */
-.pack-image-container {
-    height: 280px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-}
-
-/* Improved pack card design */
-.pack-card {
-    width: 180px;
-    height: 260px;
-    transform: perspective(800px) rotateY(10deg);
-    transition: all 0.5s ease;
+/* Vertical Text Container for Packs */
+.vertical-text-container {
+    width: 220px;
+    height: 170px;
+    margin: 0 auto 20px;
+    background-color: rgba(8, 30, 25, 0.8);
     border: 2px solid;
+    border-radius: 8px;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
 }
 
-.pack-card:hover {
-    transform: perspective(800px) rotateY(15deg) translateY(-5px);
-}
-
-.pack-inner {
-    width: 90%;
-    height: 90%;
+/* Letter Column */
+.letter-column {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background-color: rgba(8, 8, 20, 0.8);
-    border-radius: 4px;
-}
-
-.pack-name-label {
+    justify-content: center;
     font-family: 'Orbitron', sans-serif;
-    font-size: 18px;
     font-weight: bold;
-    text-align: center;
-    padding: 10px;
+    font-size: 24px;
     text-transform: uppercase;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
+    line-height: 1.1;
     letter-spacing: 2px;
 }
 
-/* Pack info */
+.vertical-letter {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vertical-letter:empty {
+    height: 16px;
+}
+
+/* Pack Info */
 .pack-info {
     display: flex;
     flex-direction: column;
@@ -301,19 +292,11 @@
     letter-spacing: 1px;
 }
 
-.pack-description {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
-    margin-bottom: 20px;
-    text-align: center;
-    line-height: 1.4;
-}
-
-/* Pack open button */
+/* Open Pack Button */
 .open-pack-button {
     width: 100%;
     padding: 12px;
-    background-color: rgba(20, 241, 149, 0.1);
+    background-color: rgba(8, 40, 30, 0.8);
     border: 2px solid;
     color: white;
     font-family: 'Orbitron', sans-serif;
@@ -336,7 +319,7 @@
     cursor: not-allowed;
 }
 
-/* Reveal overlay */
+/* Reveal Overlay */
 .reveal-overlay {
     position: fixed;
     top: 0;
@@ -372,7 +355,7 @@
     box-shadow: 0 5px 15px rgba(20, 241, 149, 0.4);
 }
 
-/* Farmer card styles in reveal */
+/* Farmer Card in Reveal */
 .farmer-card {
     width: 280px;
     height: 400px;
@@ -389,7 +372,7 @@
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* Card frames by rarity */
+/* Card Frames by Rarity */
 .frame-common {
     border: 3px solid #14F195;
     background: linear-gradient(180deg, #0A0A25 0%, #081E14 100%);
@@ -410,7 +393,7 @@
     background: linear-gradient(180deg, #0A0A25 0%, #302008 100%);
 }
 
-/* Card background scenes */
+/* Card Scene Backgrounds */
 .card-scene {
     position: absolute;
     top: 0;
@@ -436,7 +419,7 @@
     background: linear-gradient(180deg, #3A331A 0%, #665E0A 50%, #E6C239 100%);
 }
 
-/* Rarity badge */
+/* Rarity Badge */
 .rarity-badge {
     position: absolute;
     top: 10px;
@@ -469,7 +452,7 @@
     color: #FFB800;
 }
 
-/* Character container */
+/* Character Container */
 .character-container {
     position: absolute;
     top: 50px;
@@ -489,7 +472,7 @@
     object-fit: contain;
 }
 
-/* Card details */
+/* Card Details */
 .card-details {
     position: absolute;
     bottom: 0;
@@ -513,6 +496,7 @@
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
 
+/* Yield Indicator */
 .yield-indicator {
     width: 60%;
     height: 10px;
@@ -551,112 +535,74 @@
     color: rgba(255,255,255,0.7);
 }
 
-/* Empty state message */
-.no-packs-message {
-    padding: 40px;
-    text-align: center;
-    background-color: rgba(10, 10, 37, 0.5);
-    border: 1px solid rgba(20, 241, 149, 0.3);
-    border-radius: 8px;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.error-message {
-    background-color: rgba(255, 77, 77, 0.15);
-    border: 1px solid rgba(255, 77, 77, 0.3);
-    color: #FF4D4D;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-}
-
-/* Responsive adjustments */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
+    .fixed-packs-container,
     .packs-container,
     .owned-packs-grid {
         grid-template-columns: 1fr;
     }
 
-    .pack-image-container {
-        height: 250px;
+
+    .pack-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 15px;
     }
-}
 
-/* Scanning line effect on packs */
-@keyframes scanline {
-    0% { top: 0; }
-    100% { top: 100%; }
-}
+    /* Pack Box - The green outline container */
+    .pack-box {
+        width: 220px;
+        height: 170px;
+        background-color: rgba(0, 20, 10, 0.8);
+        border: 2px solid;
+        border-radius: 8px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
 
+    /* Content inside the pack box */
+    .pack-content {
+        width: 90%;
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-/* Simplified pack display with guaranteed working vertical text */
-/* Add these styles to your existing farmerPacks.css file */
+    /* Vertical text in the pack box */
+    .pack-name-vertical {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        text-orientation: upright;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: 2px;
+        white-space: nowrap;
+    }
 
-/* Simplified pack display with guaranteed working vertical text */
-.simple-pack-display {
-    width: 220px;
-    height: 170px;
-    margin: 0 auto 20px;
-    background-color: rgba(8, 30, 25, 0.8);
-    border: 2px solid;
-    border-radius: 8px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    /* Pack title styles */
+    .pack-title {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: 1px;
+        margin-top: 5px;
+    }
 
-.pack-vertical-text {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 24px;
-    font-weight: bold;
-    text-transform: uppercase;
-    white-space: nowrap;
-    position: absolute;
-    transform-origin: center center;
-    transform: rotate(-90deg);
-    letter-spacing: 3px;
-}
-
-.vertical-text-container {
-    width: 220px;
-    height: 170px;
-    margin: 0 auto 20px;
-    background-color: rgba(8, 30, 25, 0.8);
-    border: 2px solid;
-    border-radius: 8px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Column of individual letters */
-.letter-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-    font-size: 24px;
-    text-transform: uppercase;
-    line-height: 1.1;
-    letter-spacing: 2px;
-}
-
-/* Individual letter styling */
-.vertical-letter {
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Style for space characters */
-.vertical-letter:empty {
-    height: 16px; /* Smaller height for spaces */
-}
+    /* Pack count badge */
+    .pack-count {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 14px;
+        font-weight: bold;
+    }
