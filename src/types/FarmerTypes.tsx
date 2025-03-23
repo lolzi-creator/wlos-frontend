@@ -111,7 +111,7 @@ export const FARMERS: Farmer[] = [
     {
         id: 'eco-reaper',
         name: 'Eco Reaper',
-        rarity: 'rare',
+        rarity: 'epic',
         baseYieldPerHour: 3.8,
         imageSrc: '/assets/farmers/green-reaper.jpeg', // Image 4
         cost: 500,
