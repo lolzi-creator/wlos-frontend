@@ -1,9 +1,10 @@
+// src/components/sections/Farmers/FarmerPackInventory.tsx
 import React, { useState } from 'react';
-import Button from '../../common/Button';
 import SectionTitle from '../../common/SectionTitle';
 import { FARMER_PACKS, Farmer } from '../../../types/FarmerTypes';
 import { useFarmer } from '../../../context/FarmerContext';
-import FarmerCardAnimation from './FarmerCardAnimation';
+import PackOpeningAnimation from '../../common/PackOpeningAnimation';
+import '../../../styles/packAnimations.css';
 import '../../../styles/farmerPacks.css';
 
 const FarmerPackInventory: React.FC = () => {
@@ -109,9 +110,11 @@ const FarmerPackInventory: React.FC = () => {
                 })}
             </div>
 
+            {/* Use the unified animation component */}
             {showAnimation && animationFarmer && (
-                <FarmerCardAnimation
-                    farmer={animationFarmer}
+                <PackOpeningAnimation
+                    entity={animationFarmer}
+                    entityType="farmer"
                     onClose={closeAnimation}
                 />
             )}

@@ -1,0 +1,406 @@
+/* src/styles/packAnimation.css */
+
+/* Overlay that covers the whole screen */
+.reveal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(8px);
+}
+
+/* Animation card styles */
+.entity-card-animation {
+    position: relative;
+    width: 300px;
+    height: 440px;
+    border-radius: 15px;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    box-shadow: 0 0 60px rgba(255, 255, 255, 0.1);
+    transition: all 0.5s ease-out;
+}
+
+/* Revealing animation */
+.entity-card-animation.revealing {
+    animation: reveal 1.5s ease-out forwards;
+    transform: scale(0.1) rotateY(180deg);
+    opacity: 0;
+}
+
+.entity-card-animation.revealed {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes reveal {
+    0% {
+        transform: scale(0.1) rotateY(180deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1) rotateY(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotateY(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Rarity-based borders */
+.entity-card-animation.frame-common {
+    border: 4px solid #14F195;
+    box-shadow: 0 0 20px rgba(20, 241, 149, 0.5), 0 0 40px rgba(20, 241, 149, 0.2);
+}
+
+.entity-card-animation.frame-rare {
+    border: 4px solid #00C2FF;
+    box-shadow: 0 0 20px rgba(0, 194, 255, 0.5), 0 0 40px rgba(0, 194, 255, 0.2);
+}
+
+.entity-card-animation.frame-epic {
+    border: 4px solid #9945FF;
+    box-shadow: 0 0 30px rgba(153, 69, 255, 0.6), 0 0 60px rgba(153, 69, 255, 0.3);
+}
+
+.entity-card-animation.frame-legendary {
+    border: 4px solid #FFB800;
+    box-shadow: 0 0 40px rgba(255, 184, 0, 0.7), 0 0 80px rgba(255, 184, 0, 0.4);
+    animation: legendary-pulse 2s infinite alternate;
+}
+
+@keyframes legendary-pulse {
+    0% {
+        box-shadow: 0 0 40px rgba(255, 184, 0, 0.7), 0 0 80px rgba(255, 184, 0, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 60px rgba(255, 184, 0, 0.9), 0 0 120px rgba(255, 184, 0, 0.6);
+    }
+}
+
+/* Background scenes based on rarity */
+.card-scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    z-index: 1;
+}
+
+.scene-common {
+    background: linear-gradient(145deg, #0A1A15 0%, #081810 100%);
+}
+
+.scene-rare {
+    background: linear-gradient(145deg, #0A1A2A 0%, #081020 100%);
+}
+
+.scene-epic {
+    background: linear-gradient(145deg, #1A0A2A 0%, #100820 100%);
+}
+
+.scene-legendary {
+    background: linear-gradient(145deg, #2A1A0A 0%, #201008 100%);
+    animation: legendary-bg 4s ease infinite;
+}
+
+@keyframes legendary-bg {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Rarity badge */
+.rarity-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 3;
+}
+
+.rarity-common {
+    background-color: rgba(20, 241, 149, 0.9);
+    color: #081810;
+}
+
+.rarity-rare {
+    background-color: rgba(0, 194, 255, 0.9);
+    color: #081020;
+}
+
+.rarity-epic {
+    background-color: rgba(153, 69, 255, 0.9);
+    color: #100820;
+}
+
+.rarity-legendary {
+    background-color: rgba(255, 184, 0, 0.9);
+    color: #201008;
+    animation: legendary-badge-pulse 2s infinite alternate;
+}
+
+@keyframes legendary-badge-pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+/* Character container */
+.character-container {
+    position: relative;
+    width: 100%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    padding: 20px;
+}
+
+.character-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+}
+
+.character-placeholder {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5rem;
+    font-weight: bold;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.character-placeholder.common {
+    color: #14F195;
+}
+
+.character-placeholder.rare {
+    color: #00C2FF;
+}
+
+.character-placeholder.epic {
+    color: #9945FF;
+}
+
+.character-placeholder.legendary {
+    color: #FFB800;
+}
+
+/* Card details section */
+.card-details {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    padding: 15px;
+    z-index: 3;
+}
+
+.card-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Entity indicator bar (for yield or power) */
+.entity-indicator-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.entity-indicator-bar.common .indicator-fill-common {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(20, 241, 149, 0.6) 0%, #14F195 100%);
+    border-radius: 4px;
+}
+
+.entity-indicator-bar.rare .indicator-fill-rare {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0, 194, 255, 0.6) 0%, #00C2FF 100%);
+    border-radius: 4px;
+}
+
+.entity-indicator-bar.epic .indicator-fill-epic {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(153, 69, 255, 0.6) 0%, #9945FF 100%);
+    border-radius: 4px;
+}
+
+.entity-indicator-bar.legendary .indicator-fill-legendary {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 184, 0, 0.6) 0%, #FFB800 100%);
+    border-radius: 4px;
+    animation: legendary-bar-pulse 2s infinite alternate;
+}
+
+@keyframes legendary-bar-pulse {
+    0% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Card stats */
+.card-stats {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 14px;
+}
+
+/* Particles animation */
+.particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: particle-appear 2s ease infinite;
+}
+
+@keyframes particle-appear {
+    0% {
+        transform: scale(0) translateY(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1) translateY(-20px);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0) translateY(-40px);
+        opacity: 0;
+    }
+}
+
+.particle-common {
+    background-color: #14F195;
+    box-shadow: 0 0 10px #14F195;
+}
+
+.particle-rare {
+    background-color: #00C2FF;
+    box-shadow: 0 0 10px #00C2FF;
+}
+
+.particle-epic {
+    background-color: #9945FF;
+    box-shadow: 0 0 10px #9945FF;
+}
+
+.particle-legendary {
+    background-color: #FFB800;
+    box-shadow: 0 0 15px #FFB800;
+}
+
+/* Card glint effect */
+.card-glint {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 100%
+    );
+    transform: skewX(-20deg);
+    animation: card-glint 3s ease-in-out infinite;
+    z-index: 4;
+}
+
+@keyframes card-glint {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 200%;
+    }
+}
+
+/* Awesome button */
+.awesome-button {
+    margin-top: 30px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #4A4A8F 0%, #2A2A5F 100%);
+    border: 2px solid #6A6ADF;
+    border-radius: 6px;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(106, 106, 223, 0.5);
+}
+
+.awesome-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(106, 106, 223, 0.7);
+}
+
+.awesome-button:active {
+    transform: translateY(1px);
+}
