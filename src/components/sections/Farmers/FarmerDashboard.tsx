@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
-import FarmerCard from './FarmerCard';
+import EntityCard from '../../common/EntityCard';
 import { FARMERS } from '../../../types/FarmerTypes';
 import { useFarmer } from '../../../context/FarmerContext';
-import '../../../styles/farmerDashboard.css';
+import '../../../styles/entityCard.css'; // Import the unified entity card styles
 
 const FarmerDashboard: React.FC = () => {
     const { ownedFarmers, pendingRewards, harvestRewards, levelUpFarmer, isLoading, error } = useFarmer();
@@ -114,20 +114,33 @@ const FarmerDashboard: React.FC = () => {
             {error && <div className="error-message">{error}</div>}
 
             {ownedFarmers.length > 0 ? (
-                <div className="farmers-grid">
+                <div className="entity-grid">
                     {ownedFarmers.map(ownedFarmer => {
                         const farmerInfo = FARMERS.find(f => f.id === ownedFarmer.farmerId);
                         if (!farmerInfo) return null;
 
+                        // Calculate current yield
+                        const currentYield = farmerInfo.baseYieldPerHour * (1 + (ownedFarmer.level * 0.1));
+
                         return (
-                            <FarmerCard
+                            <EntityCard
                                 key={ownedFarmer.id}
-                                farmer={farmerInfo}
+                                entity={farmerInfo}
                                 owned={true}
                                 level={ownedFarmer.level}
+                                showYield={true}
                                 selected={selectedFarmer === ownedFarmer.id}
+                                statusLabel="YIELD"
+                                statusValue={`${currentYield.toFixed(1)} / hour`}
+                                primaryAction={{
+                                    text: "LEVEL UP",
+                                    onClick: (e) => {
+                                        e.stopPropagation();
+                                        handleLevelUp(ownedFarmer.id);
+                                    },
+                                    disabled: isLoading
+                                }}
                                 onSelect={() => handleSelect(ownedFarmer.id)}
-                                onLevelUp={() => handleLevelUp(ownedFarmer.id)}
                             />
                         );
                     })}

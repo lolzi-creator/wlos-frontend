@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
-import HeroCard from '../Heroes/HeroCard';
+import EntityCard from '../../common/EntityCard';
 import { HEROES } from '../../../types/HeroTypes';
 import { useHero } from '../../../context/HeroContext';
-import '../../../styles/heroes.css';
+import '../../../styles/entityCard.css'; // Import the unified entity card styles
 
 const HeroDashboard: React.FC = () => {
     const { ownedHeroes, levelUpHero, isLoading, error } = useHero();
@@ -15,6 +15,11 @@ const HeroDashboard: React.FC = () => {
 
     const handleLevelUp = (id: string) => {
         levelUpHero(id);
+    };
+
+    const handleDeploy = (id: string) => {
+        console.log(`Deploy hero ${id} to battle`);
+        // Implementation would call your deployHero function
     };
 
     // Calculate total power
@@ -95,20 +100,45 @@ const HeroDashboard: React.FC = () => {
             {error && <div className="error-message">{error}</div>}
 
             {ownedHeroes.length > 0 ? (
-                <div className="heroes-grid">
+                <div className="entity-grid">
                     {ownedHeroes.map(ownedHero => {
                         const heroInfo = HEROES.find(h => h.id === ownedHero.heroId);
                         if (!heroInfo) return null;
 
+                        // Calculate hero power with level bonus
+                        const heroPower = Math.round(heroInfo.power * (1 + (ownedHero.level * 0.1)));
+
+                        // Get any equipped items
+                        const equipment = ownedHero.equippedItems || [];
+
                         return (
-                            <HeroCard
+                            <EntityCard
                                 key={ownedHero.id}
-                                hero={heroInfo}
+                                entity={heroInfo}
                                 owned={true}
                                 level={ownedHero.level}
+                                showPower={true}
+                                showStats={true}
+                                equipment={equipment}
                                 selected={selectedHero === ownedHero.id}
+                                statusLabel="POWER"
+                                statusValue={heroPower}
+                                primaryAction={{
+                                    text: "DEPLOY",
+                                    onClick: (e) => {
+                                        e.stopPropagation();
+                                        handleDeploy(ownedHero.id);
+                                    }
+                                }}
+                                secondaryAction={{
+                                    text: "LEVEL UP",
+                                    onClick: (e) => {
+                                        e.stopPropagation();
+                                        handleLevelUp(ownedHero.id);
+                                    },
+                                    disabled: isLoading
+                                }}
                                 onSelect={() => handleSelect(ownedHero.id)}
-                                onLevelUp={() => handleLevelUp(ownedHero.id)}
                             />
                         );
                     })}

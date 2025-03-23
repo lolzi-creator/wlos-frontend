@@ -1,12 +1,14 @@
-// Modified FarmerMarketplace.tsx
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
-import FarmerCard from './FarmerCard';
+import EntityCard from '../../common/EntityCard';
 import { FARMERS } from '../../../types/FarmerTypes';
+import { useFarmer } from '../../../context/FarmerContext';
+import '../../../styles/entityCard.css';
 
 const FarmerMarketplace: React.FC = () => {
     const [filterRarity, setFilterRarity] = useState<string>('all');
     const [selectedFarmer, setSelectedFarmer] = useState<string | null>(null);
+    const { isLoading } = useFarmer();
 
     // Filter farmers based on selected rarity
     const filteredFarmers = filterRarity === 'all'
@@ -62,16 +64,23 @@ const FarmerMarketplace: React.FC = () => {
                 </div>
             </div>
 
-            <div className="farmers-grid">
+            <div className="entity-grid">
                 {filteredFarmers.map(farmer => (
-                    <FarmerCard
+                    <EntityCard
                         key={farmer.id}
-                        farmer={farmer}
-                        selected={selectedFarmer === farmer.id}
+                        entity={farmer}
+                        owned={false}
+                        showYield={true}
+                        infoMessage="AVAILABLE IN PACKS"
                         onSelect={() => handleSelect(farmer.id)}
+                        selected={selectedFarmer === farmer.id}
+                        statusLabel="YIELD"
+                        statusValue={`${farmer.baseYieldPerHour.toFixed(1)} / hour`}
                     />
                 ))}
             </div>
+
+            {isLoading && <div className="loading-overlay">Processing...</div>}
         </section>
     );
 };

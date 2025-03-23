@@ -1,0 +1,249 @@
+/* EntityCard.css */
+
+/* Animation for pulsing elements */
+@keyframes pulse-slide {
+    0% {
+        transform: translateX(-30px) skewX(-15deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateX(300px) skewX(-15deg);
+        opacity: 0;
+    }
+}
+
+/* Selection indicator animation */
+@keyframes selection-pulse {
+    0% {
+        box-shadow: 0 0 15px rgba(var(--rarity-color), 0.5),
+        0 0 30px rgba(var(--rarity-color), 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(var(--rarity-color), 0.7),
+        0 0 40px rgba(var(--rarity-color), 0.5);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(var(--rarity-color), 0.5),
+        0 0 30px rgba(var(--rarity-color), 0.3);
+    }
+}
+
+/* Add shimmer effect to card borders on hover */
+@keyframes border-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Float animation for particles */
+@keyframes float-up {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px) rotate(10deg);
+    }
+}
+
+/* Entity Card Base */
+.entity-card {
+    width: 240px;
+    height: 420px;
+    position: relative;
+    margin: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card hover effects */
+.entity-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Selected state */
+.entity-card.selected {
+    transform: translateY(-5px);
+}
+
+/* Add shimmering border effect on hover */
+.entity-card:hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 12px;
+    background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.2) 25%,
+    rgba(255,255,255,0.2) 50%,
+    transparent 100%);
+    background-size: 200% 100%;
+    pointer-events: none;
+    animation: border-shimmer 2s infinite linear;
+}
+
+/* Rarity-based colors */
+.entity-card.common {
+    --rarity-color: 20, 241, 149; /* #14F195 */
+}
+
+.entity-card.rare {
+    --rarity-color: 0, 194, 255; /* #00C2FF */
+}
+
+.entity-card.epic {
+    --rarity-color: 153, 69, 255; /* #9945FF */
+}
+
+.entity-card.legendary {
+    --rarity-color: 255, 184, 0; /* #FFB800 */
+}
+
+/* Rarity-based backgrounds */
+.entity-card.common {
+    background: linear-gradient(145deg, rgba(10, 10, 35, 0.95) 0%, rgba(8, 30, 20, 0.98) 100%);
+}
+
+.entity-card.rare {
+    background: linear-gradient(145deg, rgba(10, 10, 35, 0.95) 0%, rgba(8, 20, 30, 0.98) 100%);
+}
+
+.entity-card.epic {
+    background: linear-gradient(145deg, rgba(10, 10, 35, 0.95) 0%, rgba(15, 8, 30, 0.98) 100%);
+}
+
+.entity-card.legendary {
+    background: linear-gradient(145deg, rgba(10, 10, 35, 0.95) 0%, rgba(30, 20, 8, 0.98) 100%);
+}
+
+/* Button hover effects */
+.entity-card button:hover:not(:disabled) {
+    box-shadow: 0 0 15px rgba(var(--rarity-color), 0.5);
+    filter: brightness(1.2);
+}
+
+/* Tech particles (floating around card) */
+.tech-particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: rgba(var(--rarity-color), 0.7);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float-up 3s infinite;
+}
+
+.entity-card:hover .tech-particle {
+    animation-play-state: running;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .entity-card {
+        width: 200px;
+        height: 380px;
+    }
+}
+
+/* Animation for the hexagonal container */
+@keyframes rotate-slow {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.entity-card:hover .hexagon-outline {
+    animation: rotate-slow 30s linear infinite;
+}
+
+/* Grid layout for multiple cards */
+.entity-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px auto;
+}
+
+/* Equip indicator */
+.equipped-indicator {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    padding: 4px 8px;
+    background: #14F195;
+    color: #000;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 5;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+/* For Sale indicator */
+.for-sale-indicator {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    padding: 4px 8px;
+    background: #FFB800;
+    color: #000;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 5;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+/* Durability bar */
+.durability-bar-container {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.durability-bar-bg {
+    width: 100%;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.durability-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.durability-bar.good {
+    background-color: #14F195;
+}
+
+.durability-bar.medium {
+    background-color: #FFB800;
+}
+
+.durability-bar.low {
+    background-color: #FF4D4D;
+}

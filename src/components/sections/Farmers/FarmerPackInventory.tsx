@@ -3,6 +3,7 @@ import Button from '../../common/Button';
 import SectionTitle from '../../common/SectionTitle';
 import { FARMER_PACKS, Farmer } from '../../../types/FarmerTypes';
 import { useFarmer } from '../../../context/FarmerContext';
+import FarmerCardAnimation from './FarmerCardAnimation';
 import '../../../styles/farmerPacks.css';
 
 const FarmerPackInventory: React.FC = () => {
@@ -94,7 +95,7 @@ const FarmerPackInventory: React.FC = () => {
                             <button
                                 className="open-pack-button"
                                 style={{
-                                    backgroundColor: `rgba(8, 40, 30, 0.8)`,
+                                    backgroundColor: `rgba(8, 8, 25, 0.8)`,
                                     borderColor: packColor,
                                     color: packColor
                                 }}
@@ -109,42 +110,10 @@ const FarmerPackInventory: React.FC = () => {
             </div>
 
             {showAnimation && animationFarmer && (
-                <div className="reveal-overlay">
-                    <div className={`farmer-card frame-${animationFarmer.rarity}`}>
-                        <div className={`card-scene scene-${animationFarmer.rarity}`}></div>
-
-                        <div className={`rarity-badge rarity-${animationFarmer.rarity}`}>
-                            {animationFarmer.rarity}
-                        </div>
-
-                        <div className="character-container">
-                            <img src={animationFarmer.imageSrc} alt={animationFarmer.name} className="character-image" />
-                        </div>
-
-                        <div className="card-details">
-                            <div className="card-name">{animationFarmer.name}</div>
-
-                            <div className="yield-indicator">
-                                <div
-                                    className={`yield-bar-${animationFarmer.rarity}`}
-                                    style={{ width: `${Math.min((animationFarmer.baseYieldPerHour / 15) * 100, 100)}%` }}
-                                ></div>
-                            </div>
-
-                            <div className="card-stats">
-                                <div>YLD: {animationFarmer.baseYieldPerHour.toFixed(1)}</div>
-                                <div>{animationFarmer.rarity.toUpperCase()}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button
-                        className="awesome-button"
-                        onClick={closeAnimation}
-                    >
-                        AWESOME!
-                    </button>
-                </div>
+                <FarmerCardAnimation
+                    farmer={animationFarmer}
+                    onClose={closeAnimation}
+                />
             )}
         </section>
     );
