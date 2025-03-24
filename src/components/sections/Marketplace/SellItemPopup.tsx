@@ -1,11 +1,11 @@
 // src/components/sections/Marketplace/SellItemPopup.tsx
 import React, { useState } from 'react';
-import { Item } from '../../../types/ItemTypes';
 import Button from '../../common/Button';
 import { useMarketplace } from '../../../context/MarketplaceContext';
+import { getRarityColor } from '../../common/PackOpeningAnimation';
 
 interface SellItemPopupProps {
-    item: Item;
+    item: any;
     ownedItemId: string;
     onClose: () => void;
 }
@@ -14,6 +14,7 @@ const SellItemPopup: React.FC<SellItemPopupProps> = ({ item, ownedItemId, onClos
     const { sellItem, isLoading } = useMarketplace();
     const [listingPrice, setListingPrice] = useState<number>(Math.round(item.price * 1.2)); // 20% markup by default
     const instantSellPrice = Math.round(item.price * 0.7); // 30% less for instant sell
+    const rarityColor = getRarityColor(item.rarity);
 
     const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value);
@@ -55,16 +56,32 @@ const SellItemPopup: React.FC<SellItemPopupProps> = ({ item, ownedItemId, onClos
 
                 <div className="sell-popup-content">
                     <div className="sell-popup-item">
-                        <div className="item-card">
-                            <div className={`rarity-banner ${item.rarity}`}>
-                                <span className="rarity-text">{item.rarity}</span>
-                                <span className="type-text">{item.type}</span>
+                        <div className="item-card" style={{ border: `2px solid ${rarityColor}` }}>
+                            <div className="rarity-banner" style={{ backgroundColor: rarityColor }}>
+                                <span className="rarity-text">{item.rarity.toUpperCase()}</span>
+                                <span className="type-text">{item.type.toUpperCase()}</span>
                             </div>
 
                             <div className="item-image-container">
-                                <div className="item-image">
-                                    <span className="item-letter">{item.name.charAt(0)}</span>
-                                </div>
+                                {item.imageSrc ? (
+                                    <img
+                                        src={item.imageSrc}
+                                        alt={item.name}
+                                        className="item-image"
+                                        onError={(e) => {
+                                            e.currentTarget.style.display = 'none';
+                                            e.currentTarget.parentElement!.innerHTML = `
+                                                <div class="item-placeholder" style="color: ${rarityColor}">
+                                                    ${item.name.charAt(0)}
+                                                </div>
+                                            `;
+                                        }}
+                                    />
+                                ) : (
+                                    <div className="item-placeholder" style={{ color: rarityColor }}>
+                                        {item.name.charAt(0)}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="item-name-container">
@@ -84,6 +101,17 @@ const SellItemPopup: React.FC<SellItemPopupProps> = ({ item, ownedItemId, onClos
                                         </div>
                                     ))}
                                 </div>
+
+                                {/* Show effect for consumables */}
+                                {item.effect && (
+                                    <div className="effect-container">
+                                        <div className="effect-title">Effect:</div>
+                                        <div className="effect-text">{item.effect}</div>
+                                        {item.duration && (
+                                            <div className="effect-duration">Duration: {item.duration}</div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

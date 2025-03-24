@@ -1,0 +1,177 @@
+/* src/components/common/InsufficientFundsPopup.css */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.insufficient-funds-popup {
+    background-color: rgba(8, 8, 30, 0.95);
+    border: 2px solid #9945FF;
+    border-radius: 8px;
+    width: 450px;
+    max-width: 90vw;
+    position: relative;
+    box-shadow: 0 0 30px rgba(153, 69, 255, 0.3), 0 0 60px rgba(153, 69, 255, 0.1);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(153, 69, 255, 0.3) 0%, rgba(8, 8, 30, 0.8) 100%);
+    border-bottom: 1px solid rgba(153, 69, 255, 0.3);
+}
+
+.warning-icon {
+    margin-right: 10px;
+}
+
+.popup-title {
+    flex: 1;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #FF4D4D;
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-button:hover {
+    color: #fff;
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.item-info {
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.purchase-text {
+    color: #ccc;
+}
+
+.item-name {
+    color: #9945FF;
+    font-weight: bold;
+}
+
+.balance-container {
+    background-color: rgba(8, 8, 20, 0.6);
+    border: 1px solid rgba(153, 69, 255, 0.2);
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.balance-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.balance-row:last-child {
+    margin-bottom: 0;
+}
+
+.balance-row.needed {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(153, 69, 255, 0.3);
+}
+
+.balance-label {
+    color: #8B8DA0;
+    font-size: 14px;
+}
+
+.balance-value {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.balance-value.required {
+    color: #9945FF;
+}
+
+.balance-value.current {
+    color: #14F195;
+}
+
+.balance-value.needed {
+    color: #FF4D4D;
+    animation: pulse 1.5s infinite;
+}
+
+.glowing-line {
+    height: 1px;
+    background: linear-gradient(90deg,
+    rgba(153, 69, 255, 0) 0%,
+    rgba(153, 69, 255, 0.8) 50%,
+    rgba(153, 69, 255, 0) 100%);
+    margin: 20px 0;
+    position: relative;
+    animation: glow 2s infinite;
+}
+
+.message-section {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.popup-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 20px 20px 20px;
+}
+
+.popup-actions button {
+    flex: 1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(153, 69, 255, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.5); }
+}

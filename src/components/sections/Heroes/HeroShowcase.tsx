@@ -1,6 +1,7 @@
+// src/components/sections/Heroes/HeroShowcase.tsx
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
-import HeroCard from './HeroCard';
+import EntityCard from '../../common/EntityCard';
 import { HEROES } from '../../../types/HeroTypes';
 
 const HeroShowcase: React.FC = () => {
@@ -98,17 +99,38 @@ const HeroShowcase: React.FC = () => {
                         >
                             Balanced
                         </button>
+                        <button
+                            className={`filter-option ${filterType === 'magic' ? 'active' : ''}`}
+                            onClick={() => setFilterType('magic')}
+                        >
+                            Magic
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div className="heroes-grid">
+            <div className="entity-grid">
                 {filteredHeroes.map(hero => (
-                    <HeroCard
+                    <EntityCard
                         key={hero.id}
-                        hero={hero}
+                        entity={{
+                            id: hero.id,
+                            name: hero.name,
+                            rarity: hero.rarity,
+                            type: hero.type,
+                            description: hero.description,
+                            imageSrc: hero.imageSrc,
+                            stats: hero.stats,
+                            abilities: hero.abilities,
+                            power: hero.power
+                        }}
                         selected={selectedHero === hero.id}
                         onSelect={() => handleSelect(hero.id)}
+                        showStats={true}
+                        showPower={true}
+                        infoMessage="AVAILABLE IN PACKS"
+                        statusLabel="POWER"
+                        statusValue={hero.power}
                     />
                 ))}
             </div>

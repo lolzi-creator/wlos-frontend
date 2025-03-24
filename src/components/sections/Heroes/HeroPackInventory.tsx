@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import Button from '../../common/Button';
 import SectionTitle from '../../common/SectionTitle';
+import EntityPack from '../../common/EntityPack';
 import { HERO_PACKS, Hero } from '../../../types/HeroTypes';
 import { useHero } from '../../../context/HeroContext';
-import '../../../styles/farmerPacks.css'; // Reusing the farmer packs CSS
+import PackOpeningAnimation from '../../common/PackOpeningAnimation';
+import '../../../styles/entityPack.css';
+import '../../../styles/packAnimations.css';
 
 const HeroPackInventory: React.FC = () => {
     const { ownedPacks, openPack, isLoading, error } = useHero();
@@ -44,6 +46,13 @@ const HeroPackInventory: React.FC = () => {
         setAnimationHero(null);
     };
 
+    // Map pack type based on ID
+    const getPackType = (id: string): 'basic' | 'premium' | 'legendary' => {
+        if (id.includes('basic')) return 'basic';
+        if (id.includes('premium')) return 'premium';
+        return 'legendary';
+    };
+
     if (ownedPacks.length === 0 && !showAnimation) {
         return (
             <section className="hero-packs-inventory">
@@ -61,94 +70,40 @@ const HeroPackInventory: React.FC = () => {
 
             {error && <div className="error-message">{error}</div>}
 
-            <div className="owned-packs-grid">
-                {Object.values(groupedPacks).map(group => {
+            <div className="packs-container">
+                {Object.entries(groupedPacks).map(([groupId, group]) => {
                     const packInfo = HERO_PACKS.find(p => p.id === group.packId);
                     if (!packInfo) return null;
 
-                    const packColors = {
-                        'basic-pack': '#00C2FF', // Cyan
-                        'premium-pack': '#9945FF', // Purple
-                        'legendary-pack': '#FFB800' // Yellow
-                    };
-                    const packColor = packColors[packInfo.id as keyof typeof packColors];
-
                     return (
-                        <div key={group.packId} className="owned-pack-card">
-                            <div className="pack-container">
-                                <div className="pack-box" style={{ borderColor: packColor }}>
-                                    <div className="pack-content">
-                                        <div className="pack-name-vertical" style={{ color: packColor }}>
-                                            {packInfo.id.split('-')[0].toUpperCase()} PACK
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="pack-info">
-                                    <div className="pack-title" style={{ color: packColor }}>
-                                        {packInfo.name.toUpperCase()}
-                                        {group.count > 1 && <span className="pack-count">x{group.count}</span>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button
-                                className="open-pack-button"
-                                style={{
-                                    backgroundColor: `rgba(8, 8, 25, 0.8)`,
-                                    borderColor: packColor,
-                                    color: packColor
-                                }}
-                                onClick={() => handleOpenPack(group.packs[0].id)}
-                                disabled={isLoading}
-                            >
-                                {isLoading ? "OPENING..." : "OPEN PACK"}
-                            </button>
-                        </div>
+                        <EntityPack
+                            key={groupId}
+                            id={group.packId}
+                            name={packInfo.name}
+                            description={packInfo.description}
+                            cost={packInfo.cost}
+                            packType={getPackType(group.packId)}
+                            entityType="hero"
+                            rarityChances={packInfo.rarityChances}
+                            owned={true}
+                            count={group.count}
+                            onOpen={() => handleOpenPack(group.packs[0].id)}
+                            disabled={isLoading}
+                        />
                     );
                 })}
             </div>
 
+            {/* Pack opening animation */}
             {showAnimation && animationHero && (
-                <div className="reveal-overlay">
-                    <div className={`hero-card frame-${animationHero.rarity}`}>
-                        <div className={`card-scene scene-${animationHero.rarity}`}></div>
-
-                        <div className={`rarity-badge rarity-${animationHero.rarity}`}>
-                            {animationHero.rarity.toUpperCase()}
-                        </div>
-
-                        <div className="character-container">
-                            <div className="character-placeholder">
-                                {animationHero.name.charAt(0)}
-                            </div>
-                        </div>
-
-                        <div className="card-details">
-                            <div className="card-name">{animationHero.name}</div>
-
-                            <div className="card-type">
-                                {animationHero.type.toUpperCase()} - {animationHero.power} POWER
-                            </div>
-
-                            <div className="card-stats">
-                                {Object.entries(animationHero.stats).map(([stat, value]) => (
-                                    <div key={stat} className="stat-item">
-                                        <span className="stat-name">{stat.toUpperCase()}</span>
-                                        <span className="stat-value">{value}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    <button
-                        className="awesome-button"
-                        onClick={closeAnimation}
-                    >
-                        AWESOME!
-                    </button>
-                </div>
+                <PackOpeningAnimation
+                    entity={animationHero}
+                    entityType="hero"
+                    onClose={closeAnimation}
+                />
             )}
+
+            {isLoading && !showAnimation && <div className="loading-overlay">Processing...</div>}
         </section>
     );
 };

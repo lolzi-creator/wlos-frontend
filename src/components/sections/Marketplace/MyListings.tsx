@@ -78,8 +78,7 @@ const MyListings = () => {
         };
     }).filter(listing => listing !== null);
 
-    const handleCancelListing = async (e, listingId) => {
-        e.stopPropagation();
+    const handleCancelListing = async (listingId) => {
         try {
             const success = await cancelListing(listingId);
             if (success) {
@@ -90,8 +89,7 @@ const MyListings = () => {
         }
     };
 
-    const openPriceChangeModal = (e, listingId, currentPrice) => {
-        e.stopPropagation();
+    const openPriceChangeModal = (listingId, currentPrice) => {
         setPriceChangeModal({
             isOpen: true,
             listingId,
@@ -136,7 +134,7 @@ const MyListings = () => {
             case 'rare':
                 return { color: '#00C2FF', letter: 'R' };
             case 'epic':
-                return { color: '#9945FF', letter: 'Q' };
+                return { color: '#9945FF', letter: 'E' };
             case 'legendary':
                 return { color: '#FFB800', letter: 'L' };
             default:
@@ -218,16 +216,22 @@ const MyListings = () => {
                                     </div>
 
                                     {/* Actions cell */}
-                                    <div>
+                                    <div className="action-buttons-container">
                                         <button
                                             className="cancel-button"
-                                            onClick={(e) => handleCancelListing(e, listing.id)}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent row selection
+                                                handleCancelListing(listing.id);
+                                            }}
                                         >
                                             CANCEL
                                         </button>
                                         <button
                                             className="change-price-button"
-                                            onClick={(e) => openPriceChangeModal(e, listing.id, listing.price)}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent row selection
+                                                openPriceChangeModal(listing.id, listing.price);
+                                            }}
                                         >
                                             CHANGE PRICE
                                         </button>

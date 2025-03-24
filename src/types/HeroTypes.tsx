@@ -19,7 +19,7 @@ export const HERO_PACKS: HeroPack[] = [
         id: 'basic-pack',
         name: 'Basic Hero Pack',
         description: 'A standard pack with a chance to get common and rare heroes.',
-        cost: 200,
+        cost: 0,
         imageSrc: '/assets/packs/basic-pack.jpeg',
         rarityChances: {
             common: 0.8,
@@ -45,7 +45,7 @@ export const HERO_PACKS: HeroPack[] = [
         id: 'legendary-pack',
         name: 'Legendary Hero Pack',
         description: 'An exclusive pack with guaranteed epic and increased legendary chances.',
-        cost: 1200,
+        cost: 0,
         imageSrc: '/assets/packs/legendary-pack.jpeg',
         rarityChances: {
             common: 0,

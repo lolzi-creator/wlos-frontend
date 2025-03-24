@@ -1,7 +1,7 @@
 // src/components/sections/Marketplace/InventoryItems.tsx
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
-import InventoryItemCard from './InventoryItemCard';
+import EntityCard from '../../common/EntityCard';
 import SellItemPopup from './SellItemPopup';
 import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
 import { useMarketplace } from '../../../context/MarketplaceContext';
@@ -20,10 +20,15 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
         const itemDetails = MARKETPLACE_ITEMS.find(item => item.id === ownedItem.itemId);
         if (!itemDetails) return null;
 
+        const isForSale = myListings.some(listing => listing.ownedItemId === ownedItem.id);
+
         return {
-            ...ownedItem,
-            details: itemDetails,
-            forSale: myListings.some(listing => listing.ownedItemId === ownedItem.id)
+            ...itemDetails,
+            ownedItemId: ownedItem.id,
+            equipped: ownedItem.equipped,
+            durability: ownedItem.durability,
+            charges: ownedItem.charges,
+            forSale: isForSale
         };
     }).filter(item => item !== null);
 
@@ -34,14 +39,14 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
             ? userItems.filter(item => item?.equipped)
             : filterType === 'for-sale'
                 ? userItems.filter(item => item?.forSale)
-                : userItems.filter(item => item?.details.type === filterType);
+                : userItems.filter(item => item?.type === filterType);
 
     // Handle item actions (equip/unequip/use)
     const handleItemAction = async (id: string) => {
-        const item = userItems.find(item => item?.id === id);
+        const item = userItems.find(item => item?.ownedItemId === id);
         if (!item) return;
 
-        const isConsumable = item.details.type === 'consumable';
+        const isConsumable = item.type === 'consumable';
         const isEquipped = Boolean(item.equipped);
 
         if (isConsumable) {
@@ -55,6 +60,10 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
     // Handle selling an item
     const handleSellItem = (item: any) => {
         setSellItem(item);
+    };
+
+    const handleSelect = (id: string) => {
+        setSelectedItem(selectedItem === id ? null : id);
     };
 
     return (
@@ -87,28 +96,31 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
             </div>
 
             {filteredItems.length > 0 ? (
-                <div className="inventory-grid">
+                <div className="entity-grid">
                     {filteredItems.map(item => {
-                        if (!item) return null;
-
-                        const isConsumable = item.details.type === 'consumable';
-                        const isEquipped = Boolean(item.equipped);
-                        const isForSale = myListings.some(listing => listing.ownedItemId === item.id);
+                        const isConsumable = item.type === 'consumable';
+                        const actionText = isConsumable ? 'USE' : (item.equipped ? 'UNEQUIP' : 'EQUIP');
 
                         return (
-                            <div key={item.id} className="inventory-item-container">
-                                <InventoryItemCard
-                                    item={item.details}
-                                    equipped={isEquipped}
-                                    durability={isConsumable ? undefined : item.durability}
-                                    charges={isConsumable ? item.charges : undefined}
-                                    forSale={isForSale}
-                                    selected={selectedItem === item.id}
-                                    onSelect={() => setSelectedItem(selectedItem === item.id ? null : item.id)}
-                                    onAction={() => handleItemAction(item.id)}
-                                    onSell={() => handleSellItem(item)}
-                                />
-                            </div>
+                            <EntityCard
+                                key={item.ownedItemId}
+                                entity={item}
+                                owned={true}
+                                equipped={Boolean(item.equipped)}
+                                forSale={item.forSale}
+                                selected={selectedItem === item.ownedItemId}
+                                onSelect={() => handleSelect(item.ownedItemId)}
+                                showStats={true}
+                                primaryAction={{
+                                    text: actionText,
+                                    onClick: () => handleItemAction(item.ownedItemId)
+                                }}
+                                secondaryAction={{
+                                    text: "SELL",
+                                    onClick: () => handleSellItem(item),
+                                    disabled: item.forSale
+                                }}
+                            />
                         );
                     })}
                 </div>
@@ -121,8 +133,8 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
             {/* Sell Item Popup */}
             {sellItem && (
                 <SellItemPopup
-                    item={sellItem.details}
-                    ownedItemId={sellItem.id}
+                    item={sellItem}
+                    ownedItemId={sellItem.ownedItemId}
                     onClose={() => setSellItem(null)}
                 />
             )}

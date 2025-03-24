@@ -1,11 +1,11 @@
-// src/components/sections/Farmers/FarmerPackInventory.tsx
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
+import EntityPack from '../../common/EntityPack';
 import { FARMER_PACKS, Farmer } from '../../../types/FarmerTypes';
 import { useFarmer } from '../../../context/FarmerContext';
 import PackOpeningAnimation from '../../common/PackOpeningAnimation';
+import '../../../styles/entityPack.css';
 import '../../../styles/packAnimations.css';
-import '../../../styles/farmerPacks.css';
 
 const FarmerPackInventory: React.FC = () => {
     const { ownedPacks, openPack, isLoading, error } = useFarmer();
@@ -46,6 +46,13 @@ const FarmerPackInventory: React.FC = () => {
         setAnimationFarmer(null);
     };
 
+    // Map pack type based on ID
+    const getPackType = (id: string): 'basic' | 'premium' | 'legendary' => {
+        if (id.includes('basic')) return 'basic';
+        if (id.includes('premium')) return 'premium';
+        return 'legendary';
+    };
+
     if (ownedPacks.length === 0 && !showAnimation) {
         return (
             <section className="farmer-packs-inventory">
@@ -63,54 +70,31 @@ const FarmerPackInventory: React.FC = () => {
 
             {error && <div className="error-message">{error}</div>}
 
-            <div className="owned-packs-grid">
-                {Object.values(groupedPacks).map(group => {
+            <div className="packs-container">
+                {Object.entries(groupedPacks).map(([groupId, group]) => {
                     const packInfo = FARMER_PACKS.find(p => p.id === group.packId);
                     if (!packInfo) return null;
 
-                    const packColors = {
-                        'basic-pack': '#14F195', // Green
-                        'premium-pack': '#00C2FF', // Cyan
-                        'legendary-pack': '#9945FF' // Purple
-                    };
-                    const packColor = packColors[packInfo.id as keyof typeof packColors];
-
                     return (
-                        <div key={group.packId} className="owned-pack-card">
-                            <div className="pack-container">
-                                <div className="pack-box" style={{ borderColor: packColor }}>
-                                    <div className="pack-content">
-                                        <div className="pack-name-vertical" style={{ color: packColor }}>
-                                            {packInfo.id.split('-')[0].toUpperCase()} PACK
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="pack-info">
-                                    <div className="pack-title" style={{ color: packColor }}>
-                                        {packInfo.name.toUpperCase()}
-                                        {group.count > 1 && <span className="pack-count">x{group.count}</span>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button
-                                className="open-pack-button"
-                                style={{
-                                    backgroundColor: `rgba(8, 8, 25, 0.8)`,
-                                    borderColor: packColor,
-                                    color: packColor
-                                }}
-                                onClick={() => handleOpenPack(group.packs[0].id)}
-                                disabled={isLoading}
-                            >
-                                {isLoading ? "OPENING..." : "OPEN PACK"}
-                            </button>
-                        </div>
+                        <EntityPack
+                            key={groupId}
+                            id={group.packId}
+                            name={packInfo.name}
+                            description={packInfo.description}
+                            cost={packInfo.cost}
+                            packType={getPackType(group.packId)}
+                            entityType="farmer"
+                            rarityChances={packInfo.rarityChances}
+                            owned={true}
+                            count={group.count}
+                            onOpen={() => handleOpenPack(group.packs[0].id)}
+                            disabled={isLoading}
+                        />
                     );
                 })}
             </div>
 
-            {/* Use the unified animation component */}
+            {/* Pack opening animation */}
             {showAnimation && animationFarmer && (
                 <PackOpeningAnimation
                     entity={animationFarmer}
@@ -118,6 +102,8 @@ const FarmerPackInventory: React.FC = () => {
                     onClose={closeAnimation}
                 />
             )}
+
+            {isLoading && !showAnimation && <div className="loading-overlay">Processing...</div>}
         </section>
     );
 };

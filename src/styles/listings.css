@@ -294,3 +294,311 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+/* Add to your src/styles/listings.css file */
+
+.futuristic-listings-container {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+    background-color: rgba(8, 8, 30, 0.7);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 194, 255, 0.3);
+    overflow: hidden;
+}
+
+.listings-grid-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+            linear-gradient(rgba(0, 194, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 194, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.listings-header {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1.5fr 2fr;
+    gap: 10px;
+    padding: 15px;
+    background-color: rgba(0, 194, 255, 0.15);
+    color: #00C2FF;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 2;
+    position: relative;
+}
+
+.listings-body {
+    position: relative;
+    z-index: 2;
+}
+
+.listing-row {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1.5fr 2fr;
+    gap: 10px;
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 194, 255, 0.15);
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    align-items: center;
+    position: relative;
+}
+
+.listing-row:hover {
+    background-color: rgba(0, 194, 255, 0.05);
+}
+
+.listing-row.selected {
+    background-color: rgba(0, 194, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
+}
+
+.item-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #000;
+}
+
+.item-name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.type-cell {
+    text-transform: capitalize;
+    color: #eee;
+}
+
+.rarity-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.price-cell {
+    font-weight: bold;
+    color: #FFB800;
+}
+
+.date-cell {
+    color: #ccc;
+    font-size: 13px;
+}
+
+/* Action buttons styles */
+.action-buttons-container {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.cancel-button,
+.change-price-button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    z-index: 10;
+    position: relative;
+}
+
+.cancel-button {
+    background-color: rgba(139, 69, 19, 0.6);
+    border: 1px solid #8B4513;
+    color: #FFB800;
+}
+
+.cancel-button:hover {
+    background-color: rgba(139, 69, 19, 0.8);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.3);
+}
+
+.change-price-button {
+    background-color: rgba(0, 99, 132, 0.6);
+    border: 1px solid #00C2FF;
+    color: #00C2FF;
+}
+
+.change-price-button:hover {
+    background-color: rgba(0, 99, 132, 0.8);
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.3);
+}
+
+/* Modal for price change */
+.price-change-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.price-change-content {
+    background-color: #0A0A25;
+    border: 2px solid #00C2FF;
+    border-radius: 8px;
+    width: 350px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 194, 255, 0.3);
+}
+
+.price-change-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 194, 255, 0.3);
+    padding-bottom: 10px;
+}
+
+.price-change-title {
+    color: #00C2FF;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.price-change-close {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.price-change-close:hover {
+    color: #fff;
+}
+
+.price-input-group {
+    margin-bottom: 20px;
+}
+
+.price-input-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.price-input-field {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 194, 255, 0.5);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+}
+
+.price-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.price-cancel-button,
+.price-update-button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.price-cancel-button {
+    background-color: rgba(70, 70, 70, 0.5);
+    border: 1px solid #666;
+    color: #ccc;
+}
+
+.price-cancel-button:hover {
+    background-color: rgba(70, 70, 70, 0.8);
+}
+
+.price-update-button {
+    background-color: rgba(0, 99, 132, 0.6);
+    border: 1px solid #00C2FF;
+    color: #00C2FF;
+}
+
+.price-update-button:hover {
+    background-color: rgba(0, 99, 132, 0.8);
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.3);
+}
+
+/* No listings message */
+.no-listings-message {
+    position: relative;
+    background-color: rgba(8, 8, 30, 0.7);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 194, 255, 0.3);
+    padding: 40px 20px;
+    text-align: center;
+    color: #ccc;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: #fff;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(0, 194, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #00C2FF;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

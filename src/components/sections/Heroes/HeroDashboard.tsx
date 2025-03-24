@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import EntityCard from '../../common/EntityCard';
-import { HEROES } from '../../../types/HeroTypes';
+import { HEROES, getHeroPower } from '../../../types/HeroTypes';
 import { useHero } from '../../../context/HeroContext';
-import '../../../styles/entityCard.css'; // Import the unified entity card styles
+import '../../../styles/entityCard.css';
 
 const HeroDashboard: React.FC = () => {
     const { ownedHeroes, levelUpHero, isLoading, error } = useHero();
@@ -22,13 +22,11 @@ const HeroDashboard: React.FC = () => {
         // Implementation would call your deployHero function
     };
 
-    // Calculate total power
+    // Calculate total power using the helper function
     const totalPower = ownedHeroes.reduce((total, hero) => {
         const heroInfo = HEROES.find(h => h.id === hero.heroId);
         if (!heroInfo) return total;
-        // Calculate hero power based on level
-        const heroPower = heroInfo.power * (1 + (hero.level * 0.1));
-        return total + heroPower;
+        return total + getHeroPower(heroInfo, hero.level, hero.equippedItems || []);
     }, 0);
 
     return (
@@ -105,11 +103,11 @@ const HeroDashboard: React.FC = () => {
                         const heroInfo = HEROES.find(h => h.id === ownedHero.heroId);
                         if (!heroInfo) return null;
 
-                        // Calculate hero power with level bonus
-                        const heroPower = Math.round(heroInfo.power * (1 + (ownedHero.level * 0.1)));
-
                         // Get any equipped items
                         const equipment = ownedHero.equippedItems || [];
+
+                        // Get actual power using the utility function
+                        const heroPower = getHeroPower(heroInfo, ownedHero.level, equipment);
 
                         return (
                             <EntityCard

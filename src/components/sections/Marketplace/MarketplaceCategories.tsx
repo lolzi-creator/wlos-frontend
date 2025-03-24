@@ -2,6 +2,7 @@
 import React from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
+import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface MarketplaceCategoriesProps {
     selectedCategory: string;
@@ -12,16 +13,26 @@ const MarketplaceCategories: React.FC<MarketplaceCategoriesProps> = ({
                                                                          selectedCategory,
                                                                          onSelectCategory
                                                                      }) => {
+    // Get real marketplace listings from context
+    const { marketListings } = useMarketplace();
+
+    // Map listings to their base items
+    const listingsWithData = marketListings.map(listing => {
+        const baseItem = MARKETPLACE_ITEMS.find(item => item.id === listing.itemId);
+        return baseItem ? { ...listing, type: baseItem.type, rarity: baseItem.rarity } : null;
+    }).filter(item => item !== null);
+
     // Calculate item counts dynamically
-    const allCount = MARKETPLACE_ITEMS.length;
-    const weaponCount = MARKETPLACE_ITEMS.filter(item => item.type === 'weapon').length;
-    const armorCount = MARKETPLACE_ITEMS.filter(item => item.type === 'armor').length;
-    const accessoryCount = MARKETPLACE_ITEMS.filter(item => item.type === 'accessory').length;
-    const consumableCount = MARKETPLACE_ITEMS.filter(item => item.type === 'consumable').length;
-    const rareCount = MARKETPLACE_ITEMS.filter(item =>
-        ['rare', 'epic', 'legendary'].includes(item.rarity)
+    const allCount = listingsWithData.length;
+    const weaponCount = listingsWithData.filter(item => item?.type === 'weapon').length;
+    const armorCount = listingsWithData.filter(item => item?.type === 'armor').length;
+    const accessoryCount = listingsWithData.filter(item => item?.type === 'accessory').length;
+    const consumableCount = listingsWithData.filter(item => item?.type === 'consumable').length;
+    const rareCount = listingsWithData.filter(item =>
+        ['rare', 'epic', 'legendary'].includes(item?.rarity || '')
     ).length;
 
+    // Define categories with dynamic counts
     const categories = [
         { id: 'all', name: 'ALL ITEMS', count: allCount },
         { id: 'weapon', name: 'WEAPONS', count: weaponCount },
@@ -30,6 +41,26 @@ const MarketplaceCategories: React.FC<MarketplaceCategoriesProps> = ({
         { id: 'consumable', name: 'CONSUMABLES', count: consumableCount },
         { id: 'rare', name: 'RARE+ ITEMS', count: rareCount }
     ];
+
+    // Get the appropriate description for the selected category
+    const getCategoryDescription = (categoryId: string) => {
+        switch(categoryId) {
+            case 'all':
+                return 'Browse all items in the marketplace, from common consumables to legendary artifacts.';
+            case 'weapon':
+                return 'Equip your warlord with devastating quantum weapons to dominate the battlefield.';
+            case 'armor':
+                return 'Protect your warlord with advanced defensive gear and energy shields.';
+            case 'accessory':
+                return 'Enhance your warlord with powerful accessories that provide unique bonuses.';
+            case 'consumable':
+                return 'One-time use items that provide powerful temporary effects in battle.';
+            case 'rare':
+                return 'Premium items of Rare quality or higher with exceptional stats and abilities.';
+            default:
+                return '';
+        }
+    };
 
     return (
         <section className="marketplace-categories-section">
@@ -50,7 +81,7 @@ const MarketplaceCategories: React.FC<MarketplaceCategoriesProps> = ({
                             </div>
                             <div className="category-info">
                                 <div className="category-name">{category.name}</div>
-                                <div className="category-count">{category.count} items</div>
+                                <div className="category-count">{category.count} {category.count === 1 ? 'item' : 'items'}</div>
                             </div>
                             {selectedCategory === category.id && (
                                 <>
@@ -65,12 +96,7 @@ const MarketplaceCategories: React.FC<MarketplaceCategoriesProps> = ({
                 <div className="category-description">
                     <div className="description-icon"></div>
                     <div className="description-text">
-                        {selectedCategory === 'all' && 'Browse all items in the marketplace, from common consumables to legendary artifacts.'}
-                        {selectedCategory === 'weapon' && 'Equip your warlord with devastating quantum weapons to dominate the battlefield.'}
-                        {selectedCategory === 'armor' && 'Protect your warlord with advanced defensive gear and energy shields.'}
-                        {selectedCategory === 'accessory' && 'Enhance your warlord with powerful accessories that provide unique bonuses.'}
-                        {selectedCategory === 'consumable' && 'One-time use items that provide powerful temporary effects in battle.'}
-                        {selectedCategory === 'rare' && 'Premium items of Rare quality or higher with exceptional stats and abilities.'}
+                        {getCategoryDescription(selectedCategory)}
                     </div>
                 </div>
             </div>
