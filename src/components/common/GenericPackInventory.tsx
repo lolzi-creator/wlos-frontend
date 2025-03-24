@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import SectionTitle from '../common/SectionTitle';
 import EntityPack from '../common/EntityPack';
+import Popup from '../common/Popup';
 import { Farmer, FARMER_PACKS } from '../../types/FarmerTypes';
 import { Hero, HERO_PACKS } from '../../types/HeroTypes';
 import { useFarmer } from '../../context/FarmerContext';
@@ -42,6 +43,11 @@ const GenericPackInventory: React.FC<GenericPackInventoryProps> = ({ entityType,
         heroContext.ownedPacks, heroContext.isLoading, heroContext.error
     ]);
 
+    // State for popups
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupType, setPopupType] = useState<'success' | 'error' | 'info'>('info');
+    const [popupMessage, setPopupMessage] = useState('');
+
     // Set up state for animations
     const [animationEntity, setAnimationEntity] = useState<Farmer | Hero | null>(null);
     const [showAnimation, setShowAnimation] = useState(false);
@@ -73,8 +79,10 @@ const GenericPackInventory: React.FC<GenericPackInventoryProps> = ({ entityType,
                     setAnimationEntity(result.farmer);
                     setShowAnimation(true);
                 } else {
-                    console.error('Failed to open farmer pack - result:', result);
-                    alert(`Failed to open farmer pack: ${contextData.error || 'Unknown error'}`);
+                    // Show error popup
+                    setPopupType('error');
+                    setPopupMessage(`Failed to open farmer pack: ${result.error || 'Unknown error'}`);
+                    setShowPopup(true);
                 }
             } else {
                 const result = await heroContext.openPack(packId);
@@ -82,20 +90,32 @@ const GenericPackInventory: React.FC<GenericPackInventoryProps> = ({ entityType,
                     setAnimationEntity(result.hero);
                     setShowAnimation(true);
                 } else {
-                    console.error('Failed to open hero pack - result:', result);
-                    alert(`Failed to open hero pack: ${contextData.error || 'Unknown error'}`);
+                    // Show error popup
+                    setPopupType('error');
+                    setPopupMessage(`Failed to open hero pack: ${result.error || 'Unknown error'}`);
+                    setShowPopup(true);
                 }
             }
         } catch (err) {
             console.error(`Error opening ${entityType} pack:`, err);
-            alert(`Error opening pack: ${err}`);
+            // Show error popup
+            setPopupType('error');
+            setPopupMessage(`Error opening pack: ${err}`);
+            setShowPopup(true);
         }
-    }, [entityType, farmerContext, heroContext, contextData.error]);
+    }, [entityType, farmerContext, heroContext]);
 
     const closeAnimation = useCallback(() => {
         setShowAnimation(false);
         setAnimationEntity(null);
-    }, []);
+
+        // Show success popup after animation closes
+        if (animationEntity) {
+            setPopupType('success');
+            setPopupMessage(`Successfully obtained a ${animationEntity.rarity} ${animationEntity.name}!`);
+            setShowPopup(true);
+        }
+    }, [animationEntity]);
 
     // Map pack type based on ID - moved to a pure function
     const getPackType = (id: string): 'basic' | 'premium' | 'legendary' => {
@@ -153,6 +173,15 @@ const GenericPackInventory: React.FC<GenericPackInventoryProps> = ({ entityType,
                     entity={animationEntity}
                     entityType={entityType}
                     onClose={closeAnimation}
+                />
+            )}
+
+            {/* Popup for messages */}
+            {showPopup && (
+                <Popup
+                    type={popupType}
+                    message={popupMessage}
+                    onClose={() => setShowPopup(false)}
                 />
             )}
 

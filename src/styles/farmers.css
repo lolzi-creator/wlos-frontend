@@ -574,3 +574,99 @@
 .modern-farmer-card:hover .tech-particle {
     animation-play-state: running;
 }
+
+/* Add this to your src/styles/farmers.css file */
+
+/* Info Banner */
+.marketplace-info-banner {
+    background: rgba(20, 241, 149, 0.05);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.marketplace-info-banner .info-icon {
+    background: rgba(20, 241, 149, 0.1);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.marketplace-info-banner p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Filter Controls */
+.filter-controls {
+    display: flex;
+    align-items: center;
+    background: rgba(8, 8, 30, 0.6);
+    border: 1px solid rgba(20, 241, 149, 0.15);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+}
+
+.filter-label {
+    font-family: 'Orbitron', sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-right: 16px;
+}
+
+.filter-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-option {
+    background: rgba(20, 241, 149, 0.05);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-option:hover {
+    background: rgba(20, 241, 149, 0.1);
+    border-color: rgba(20, 241, 149, 0.3);
+}
+
+.filter-option.active {
+    background: rgba(20, 241, 149, 0.15);
+    border-color: rgba(20, 241, 149, 0.4);
+    color: #14F195;
+    font-weight: 600;
+}
+
+/* Add responsive adjustments */
+@media (max-width: 768px) {
+    .filter-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-label {
+        margin-bottom: 8px;
+    }
+
+    .filter-options {
+        width: 100%;
+    }
+}

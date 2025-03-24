@@ -1,0 +1,207 @@
+/* Popup styles with a cyberpunk theme */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.popup-container {
+    width: 350px;
+    background: rgba(10, 10, 35, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    position: relative;
+    animation: slideUp 0.3s ease;
+}
+
+/* Style based on popup type */
+.popup-container.success {
+    border: 2px solid #14F195;
+}
+
+.popup-container.error {
+    border: 2px solid #ff4b6b;
+}
+
+.popup-container.info {
+    border: 2px solid #00C2FF;
+}
+
+/* Header of the popup */
+.popup-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popup-header svg {
+    margin-right: 10px;
+}
+
+.popup-title {
+    flex: 1;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+.popup-close:hover {
+    color: white;
+}
+
+/* Content area */
+.popup-content {
+    padding: 20px 15px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Footer with action button */
+.popup-footer {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popup-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+/* Button styles per type */
+.popup-container.success .popup-button {
+    border: 2px solid #14F195;
+    color: #14F195;
+}
+
+.popup-container.success .popup-button:hover {
+    background: rgba(20, 241, 149, 0.1);
+}
+
+.popup-container.error .popup-button {
+    border: 2px solid #ff4b6b;
+    color: #ff4b6b;
+}
+
+.popup-container.error .popup-button:hover {
+    background: rgba(255, 75, 107, 0.1);
+}
+
+.popup-container.info .popup-button {
+    border: 2px solid #00C2FF;
+    color: #00C2FF;
+}
+
+.popup-container.info .popup-button:hover {
+    background: rgba(0, 194, 255, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Glitch effect for a cyberpunk feel */
+.popup-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 5px;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.3;
+    animation: glitch 2s infinite;
+}
+
+.popup-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 5px;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.3;
+    animation: glitch 2s infinite reverse;
+}
+
+.popup-container.success::before,
+.popup-container.success::after {
+    color: #14F195;
+}
+
+.popup-container.error::before,
+.popup-container.error::after {
+    color: #ff4b6b;
+}
+
+.popup-container.info::before,
+.popup-container.info::after {
+    color: #00C2FF;
+}
+
+@keyframes glitch {
+    0%, 100% {
+        clip-path: inset(80% 0 0 0);
+    }
+    20% {
+        clip-path: inset(10% 0 60% 0);
+    }
+    40% {
+        clip-path: inset(30% 0 20% 0);
+    }
+    60% {
+        clip-path: inset(50% 0 40% 0);
+    }
+    80% {
+        clip-path: inset(20% 0 80% 0);
+    }
+}

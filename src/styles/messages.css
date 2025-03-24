@@ -1,0 +1,74 @@
+/* src/styles/messages.css */
+
+/* Success and Error Messages */
+.success-message {
+    background: rgba(20, 241, 149, 0.1);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    border-radius: 5px;
+    padding: 10px;
+    color: #14F195;
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.error-message {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 10px;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Loading States */
+.loading-packs {
+    text-align: center;
+    padding: 40px;
+    background: rgba(8, 8, 30, 0.6);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    z-index: 9999;
+}
+
+.no-packs-message {
+    text-align: center;
+    padding: 40px;
+    background: rgba(8, 8, 30, 0.6);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

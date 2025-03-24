@@ -1,25 +1,42 @@
 // src/components/sections/Farmers/FarmerDashboard.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import EnhancedEntityCard from '../../common/EntityCard';
+import Popup from '../../common/Popup';
 import { FARMERS } from '../../../types/FarmerTypes';
 import { useFarmer } from '../../../context/FarmerContext';
 import '../../../styles/entityCard.css';
 import '../../../styles/farmerDashboard.css';
 
 const FarmerDashboard: React.FC = () => {
-    const { ownedFarmers, pendingRewards, harvestRewards, levelUpFarmer, isLoading, error } = useFarmer();
+    const { ownedFarmers, pendingRewards, totalYieldPerHour, harvestRewards, levelUpFarmer, isLoading, error } = useFarmer();
     const [selectedFarmer, setSelectedFarmer] = useState<string | null>(null);
+
+    // State for popups
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupType, setPopupType] = useState<'success' | 'error' | 'info'>('info');
+    const [popupMessage, setPopupMessage] = useState('');
 
     const handleHarvest = async () => {
         if (pendingRewards <= 0) {
-            alert('No rewards to harvest!');
+            // Show error popup
+            setPopupType('error');
+            setPopupMessage('No rewards to harvest! Wait for your farmers to generate resources.');
+            setShowPopup(true);
             return;
         }
 
         const success = await harvestRewards();
         if (success) {
-            alert(`Successfully harvested ${pendingRewards.toFixed(2)} WLOS!`);
+            // Show success popup
+            setPopupType('success');
+            setPopupMessage(`Successfully harvested ${pendingRewards.toFixed(2)} WLOS!`);
+            setShowPopup(true);
+        } else {
+            // Show error popup
+            setPopupType('error');
+            setPopupMessage(`Failed to harvest rewards: ${error || 'Unknown error'}`);
+            setShowPopup(true);
         }
     };
 
@@ -27,16 +44,54 @@ const FarmerDashboard: React.FC = () => {
         setSelectedFarmer(selectedFarmer === id ? null : id);
     };
 
-    const handleLevelUp = (id: string) => {
-        levelUpFarmer(id);
+    const handleLevelUp = async (id: string) => {
+        // Find the farmer that will be leveled up
+        const farmer = ownedFarmers.find(f => f.id === id);
+        if (!farmer) return;
+
+        // Store the current level and yield before level up
+        const previousLevel = farmer.level;
+        const previousYield = farmer.effectiveYield ||
+            (farmer.baseYieldPerHour * (1 + (farmer.level * 0.1)));
+
+        // Get the farmer name for the message
+        const farmerInfo = FARMERS.find(f => f.id === farmer.farmerId);
+        const farmerName = farmerInfo ? farmerInfo.name : 'Farmer';
+
+        // Try to level up the farmer
+        const success = await levelUpFarmer(id);
+
+        if (success) {
+            // Since the farmer list will be refreshed, we can assume the level was increased by 1
+            const newLevel = previousLevel + 1;
+
+            // Estimate the new yield (10% increase per level)
+            const estimatedNewYield = previousYield * (1 + 0.1);
+
+            // Show success popup with level up details
+            setPopupType('success');
+            setPopupMessage(
+                `Level up successful! Your ${farmerName} is now level ${newLevel}. ` +
+                `Yield increased from ${formatNumber(previousYield)} to approximately ${formatNumber(estimatedNewYield)} WLOS/hour!`
+            );
+            setShowPopup(true);
+        }
+        // Error handling is already done in the useEffect that watches the error state
     };
 
-    // Calculate total hourly yield
-    const totalHourlyYield = ownedFarmers.reduce((total, farmer) => {
-        const farmerInfo = FARMERS.find(f => f.id === farmer.farmerId);
-        if (!farmerInfo) return total;
-        return total + (farmerInfo.baseYieldPerHour * (1 + (farmer.level * 0.1)));
-    }, 0);
+    // Format large numbers
+    const formatNumber = (num: number): string => {
+        return num.toFixed(2);
+    };
+
+    // Show popup for backend errors
+    useEffect(() => {
+        if (error) {
+            setPopupType('error');
+            setPopupMessage(error);
+            setShowPopup(true);
+        }
+    }, [error]);
 
     return (
         <section className="farmer-dashboard-section">
@@ -54,7 +109,7 @@ const FarmerDashboard: React.FC = () => {
 
                     <div className="rewards-content">
                         <div className="rewards-title">Pending Rewards</div>
-                        <div className="rewards-amount">{pendingRewards.toFixed(2)} WLOS</div>
+                        <div className="rewards-amount">{formatNumber(pendingRewards)} WLOS</div>
 
                         <button
                             className="harvest-button"
@@ -96,14 +151,12 @@ const FarmerDashboard: React.FC = () => {
                         <div className="stats-content">
                             <div className="stats-label">Total Yield/Hour</div>
                             <div className="stats-value yield-value">
-                                {totalHourlyYield.toFixed(2)} WLOS
+                                {formatNumber(totalYieldPerHour)} WLOS
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {error && <div className="error-message">{error}</div>}
 
             {ownedFarmers.length > 0 ? (
                 <div className="entity-grid">
@@ -111,26 +164,33 @@ const FarmerDashboard: React.FC = () => {
                         const farmerInfo = FARMERS.find(f => f.id === ownedFarmer.farmerId);
                         if (!farmerInfo) return null;
 
-                        // Calculate current yield
-                        const currentYield = farmerInfo.baseYieldPerHour * (1 + (ownedFarmer.level * 0.1));
+                        // Get the effective yield from the farmer data
+                        // First try to use effectiveYield if it's in the farmer data
+                        // Fallback to calculating it based on level and baseYieldPerHour
+                        const currentYield = ownedFarmer.effectiveYield ||
+                            (farmerInfo.baseYieldPerHour * (1 + (ownedFarmer.level * 0.1)));
 
                         return (
                             <EnhancedEntityCard
                                 key={ownedFarmer.id}
-                                entity={farmerInfo}
+                                entity={{
+                                    ...farmerInfo,
+                                    // Override image if it exists in the backend data
+                                    imageSrc: ownedFarmer.imageSrc || farmerInfo.imageSrc
+                                }}
                                 owned={true}
                                 level={ownedFarmer.level}
                                 showYield={true}
                                 selected={selectedFarmer === ownedFarmer.id}
                                 statusLabel="YIELD"
-                                statusValue={`${currentYield.toFixed(1)} / hour`}
+                                statusValue={`${formatNumber(currentYield)} / hour`}
                                 primaryAction={{
                                     text: "LEVEL UP",
                                     onClick: (e) => {
                                         e.stopPropagation();
                                         handleLevelUp(ownedFarmer.id);
                                     },
-                                    disabled: isLoading
+                                    disabled: isLoading || ownedFarmer.level >= 5 // Max level is 5
                                 }}
                                 onSelect={() => handleSelect(ownedFarmer.id)}
                             />
@@ -139,8 +199,17 @@ const FarmerDashboard: React.FC = () => {
                 </div>
             ) : (
                 <div className="no-farmers-message">
-                    <p>You don't own any farmers yet. Visit the marketplace to buy some!</p>
+                    <p>You don't own any farmers yet. Visit the pack store to get some!</p>
                 </div>
+            )}
+
+            {/* Popup for messages */}
+            {showPopup && (
+                <Popup
+                    type={popupType}
+                    message={popupMessage}
+                    onClose={() => setShowPopup(false)}
+                />
             )}
 
             {isLoading && <div className="loading-overlay">Processing...</div>}

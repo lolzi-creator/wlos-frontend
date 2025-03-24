@@ -1,17 +1,34 @@
-// src/context/FarmerContext.jsx
+// src/context/FarmerContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useWalletConnection } from './WalletConnectionProvider';
-import { farmerService, packService } from '../services/api.ts';
+import { farmerService, packService } from '../services/api';
+import { OwnedFarmer } from '../types/FarmerTypes';
 
-const FarmerContext = createContext();
+// Define the shape of our context
+interface FarmerContextType {
+    ownedFarmers: OwnedFarmer[];
+    ownedPacks: any[];
+    pendingRewards: number;
+    totalYieldPerHour: number;
+    isLoading: boolean;
+    error: string | null;
+    buyPack: (packId: string) => Promise<boolean>;
+    openPack: (packId: string) => Promise<{ success: boolean; farmer?: any; error?: string }>;
+    harvestRewards: () => Promise<boolean>;
+    levelUpFarmer: (farmerId: string) => Promise<boolean>;
+    refresh: () => Promise<void>;
+}
 
-export const FarmerProvider = ({ children }) => {
+const FarmerContext = createContext<FarmerContextType | undefined>(undefined);
+
+export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { walletAddress, isConnected, refreshBalance } = useWalletConnection();
-    const [ownedFarmers, setOwnedFarmers] = useState([]);
-    const [ownedPacks, setOwnedPacks] = useState([]);
-    const [pendingRewards, setPendingRewards] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [ownedFarmers, setOwnedFarmers] = useState<OwnedFarmer[]>([]);
+    const [ownedPacks, setOwnedPacks] = useState<any[]>([]);
+    const [pendingRewards, setPendingRewards] = useState<number>(0);
+    const [totalYieldPerHour, setTotalYieldPerHour] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     // Fetch data when wallet is connected
     useEffect(() => {
@@ -22,6 +39,7 @@ export const FarmerProvider = ({ children }) => {
             setOwnedFarmers([]);
             setOwnedPacks([]);
             setPendingRewards(0);
+            setTotalYieldPerHour(0);
         }
     }, [isConnected, walletAddress]);
 
@@ -33,12 +51,31 @@ export const FarmerProvider = ({ children }) => {
 
             const response = await farmerService.getFarmers(walletAddress);
 
-            setOwnedFarmers(response.data.farmers || []);
+            // Map the backend farmers to our frontend OwnedFarmer format
+            const mappedFarmers = response.data.farmers.map(backendFarmer => ({
+                id: backendFarmer.id.toString(),
+                farmerId: backendFarmer.farmer_id,
+                name: backendFarmer.name,
+                rarity: backendFarmer.rarity,
+                level: backendFarmer.level,
+                baseYieldPerHour: backendFarmer.base_yield_per_hour,
+                effectiveYield: backendFarmer.effectiveYield,
+                purchasedAt: new Date(backendFarmer.purchased_at).getTime(),
+                lastHarvested: new Date(backendFarmer.last_harvested).getTime(),
+                equippedItems: backendFarmer.equipped_items || [],
+                imageSrc: backendFarmer.image_src,
+                description: backendFarmer.description
+            }));
+
+            setOwnedFarmers(mappedFarmers);
             setPendingRewards(response.data.pendingRewards || 0);
+            setTotalYieldPerHour(response.data.totalYieldPerHour || 0);
+
+            console.log('Farmers loaded:', mappedFarmers);
 
         } catch (err) {
             console.error('Error fetching farmers:', err);
-            setError('Failed to fetch farmers');
+            setError('Failed to fetch farmers. Please try again later.');
         } finally {
             setIsLoading(false);
         }
@@ -56,14 +93,14 @@ export const FarmerProvider = ({ children }) => {
 
         } catch (err) {
             console.error('Error fetching packs:', err);
-            setError('Failed to fetch packs');
+            setError('Failed to fetch packs. Please try again later.');
         } finally {
             setIsLoading(false);
         }
     };
 
     // Buy a farmer pack
-    const buyPack = async (packId) => {
+    const buyPack = async (packId: string) => {
         try {
             setIsLoading(true);
             setError(null);
@@ -76,9 +113,9 @@ export const FarmerProvider = ({ children }) => {
 
             return true;
 
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error buying pack:', err);
-            setError(err.response?.data?.error || 'Failed to buy pack');
+            setError(err.response?.data?.error || 'Failed to buy pack. Please try again later.');
             return false;
         } finally {
             setIsLoading(false);
@@ -86,7 +123,7 @@ export const FarmerProvider = ({ children }) => {
     };
 
     // Open a farmer pack
-    const openPack = async (packId) => {
+    const openPack = async (packId: string) => {
         try {
             setIsLoading(true);
             setError(null);
@@ -101,9 +138,9 @@ export const FarmerProvider = ({ children }) => {
             const farmer = response.data.contents.farmers[0];
             return { success: true, farmer };
 
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error opening pack:', err);
-            setError(err.response?.data?.error || 'Failed to open pack');
+            setError(err.response?.data?.error || 'Failed to open pack. Please try again later.');
             return { success: false, error: err.message };
         } finally {
             setIsLoading(false);
@@ -124,9 +161,9 @@ export const FarmerProvider = ({ children }) => {
 
             return true;
 
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error harvesting rewards:', err);
-            setError(err.response?.data?.error || 'Failed to harvest rewards');
+            setError(err.response?.data?.error || 'Failed to harvest rewards. Please try again later.');
             return false;
         } finally {
             setIsLoading(false);
@@ -134,7 +171,7 @@ export const FarmerProvider = ({ children }) => {
     };
 
     // Level up a farmer
-    const levelUpFarmer = async (farmerId) => {
+    const levelUpFarmer = async (farmerId: string) => {
         try {
             setIsLoading(true);
             setError(null);
@@ -146,9 +183,20 @@ export const FarmerProvider = ({ children }) => {
 
             return true;
 
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error leveling up farmer:', err);
-            setError(err.response?.data?.error || 'Failed to level up farmer');
+
+            // Format the error message for better user experience
+            let errorMessage = err.response?.data?.error || 'Failed to level up farmer.';
+
+            // If the error contains information about needing more farmers
+            if (errorMessage.includes('Not enough farmers to merge')) {
+                errorMessage = errorMessage; // The backend error is already user-friendly
+            } else if (errorMessage.includes('already at maximum level')) {
+                errorMessage = 'This farmer is already at maximum level (5).';
+            }
+
+            setError(errorMessage);
             return false;
         } finally {
             setIsLoading(false);
@@ -161,6 +209,7 @@ export const FarmerProvider = ({ children }) => {
                 ownedFarmers,
                 ownedPacks,
                 pendingRewards,
+                totalYieldPerHour,
                 isLoading,
                 error,
                 buyPack,
@@ -175,4 +224,10 @@ export const FarmerProvider = ({ children }) => {
     );
 };
 
-export const useFarmer = () => useContext(FarmerContext);
+export const useFarmer = (): FarmerContextType => {
+    const context = useContext(FarmerContext);
+    if (context === undefined) {
+        throw new Error('useFarmer must be used within a FarmerProvider');
+    }
+    return context;
+};
