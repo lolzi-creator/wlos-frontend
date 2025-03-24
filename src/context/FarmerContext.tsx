@@ -1,7 +1,7 @@
 // src/context/FarmerContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useWalletConnection } from './WalletConnectionProvider';
-import { farmerService, packService } from '../services/api';
+import { farmerService, packService } from '../services/api.ts';
 
 const FarmerContext = createContext();
 

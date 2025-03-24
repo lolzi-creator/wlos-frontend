@@ -1,79 +1,115 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import EntityCard from '../../common/EntityCard';
 import { useWalletConnection } from '../../../context/WalletConnectionProvider';
-import { useFarmer } from '../../../context/FarmerContext';
-import { useHero } from '../../../context/HeroContext';
-import { useMarketplace } from '../../../context/MarketplaceContext';
 import { FARMERS } from '../../../types/FarmerTypes';
 import { HEROES } from '../../../types/HeroTypes';
 import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
 
 const WalletAssets: React.FC = () => {
-    const { isConnected } = useWalletConnection();
-    const { ownedFarmers } = useFarmer();
-    const { ownedHeroes } = useHero();
-    const { ownedItems } = useMarketplace();
-
+    const { isConnected, assets, refreshAssets, isLoading } = useWalletConnection();
     const [selectedCategory, setSelectedCategory] = useState<'all' | 'farmers' | 'heroes' | 'items'>('all');
     const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
+    const [farmersWithDetails, setFarmersWithDetails] = useState<any[]>([]);
+    const [heroesWithDetails, setHeroesWithDetails] = useState<any[]>([]);
+    const [itemsWithDetails, setItemsWithDetails] = useState<any[]>([]);
+
+    // Process assets when they change
+    useEffect(() => {
+        if (assets) {
+            processAssets();
+        }
+    }, [assets]);
+
+    // Process assets to add frontend details
+    const processAssets = () => {
+        // Process farmers
+        const processedFarmers = assets.farmers.map(farmer => {
+            // Get additional details from frontend types
+            const farmerInfo = FARMERS.find(f => f.id === farmer.farmer_id);
+            if (!farmerInfo) return null;
+
+            // Calculate current yield based on level
+            const baseYield = farmer.base_yield_per_hour || farmerInfo.baseYieldPerHour;
+            const currentYield = baseYield * (1 + ((farmer.level - 1) * 0.1));
+
+            return {
+                id: farmer.id,
+                details: {
+                    ...farmerInfo,
+                    name: farmer.name || farmerInfo.name,
+                    imageSrc: farmer.image_src || farmerInfo.imageSrc,
+                    rarity: farmer.rarity || farmerInfo.rarity,
+                    description: farmer.description || farmerInfo.description
+                },
+                type: 'farmer',
+                level: farmer.level,
+                statusValue: `${currentYield.toFixed(1)}/hr`,
+                statusLabel: 'YIELD',
+                lastHarvested: farmer.last_harvested
+            };
+        }).filter(Boolean);
+
+        setFarmersWithDetails(processedFarmers);
+
+        // Process heroes
+        const processedHeroes = assets.heroes.map(hero => {
+            // Get additional details from frontend types
+            const heroInfo = HEROES.find(h => h.id === hero.hero_id);
+            if (!heroInfo) return null;
+
+            // Calculate power based on level
+            const basePower = hero.power || heroInfo.power;
+            const heroPower = basePower * (1 + ((hero.level - 1) * 0.1));
+
+            return {
+                id: hero.id,
+                details: {
+                    ...heroInfo,
+                    name: hero.name || heroInfo.name,
+                    imageSrc: hero.image_src || heroInfo.imageSrc,
+                    rarity: hero.rarity || heroInfo.rarity,
+                    description: hero.description || heroInfo.description
+                },
+                type: 'hero',
+                level: hero.level,
+                statusValue: Math.round(heroPower),
+                statusLabel: 'POWER',
+                equipped: hero.equipped_items || []
+            };
+        }).filter(Boolean);
+
+        setHeroesWithDetails(processedHeroes);
+
+        // Process items
+        const processedItems = assets.items.map(item => {
+            // Get additional details from frontend types
+            const itemDetails = MARKETPLACE_ITEMS.find(i => i.id === item.item_id);
+            if (!itemDetails) return null;
+
+            return {
+                id: item.id,
+                details: {
+                    ...itemDetails,
+                    name: item.name || itemDetails.name,
+                    imageSrc: item.image_src || itemDetails.imageSrc,
+                    rarity: item.rarity || itemDetails.rarity,
+                    description: item.description || itemDetails.description
+                },
+                type: 'item',
+                equipped: item.equipped,
+                durability: item.durability,
+                charges: item.charges
+            };
+        }).filter(Boolean);
+
+        setItemsWithDetails(processedItems);
+    };
 
     // If not connected, don't render anything - the connection UI is handled in the parent component
     if (!isConnected) {
         return null;
     }
-
-    // Get full details for owned farmers
-    const farmersWithDetails = ownedFarmers.map(ownedFarmer => {
-        const farmerInfo = FARMERS.find(f => f.id === ownedFarmer.farmerId);
-        if (!farmerInfo) return null;
-
-        // Calculate current yield based on level
-        const currentYield = farmerInfo.baseYieldPerHour * (1 + (ownedFarmer.level * 0.1));
-
-        return {
-            id: ownedFarmer.id,
-            details: farmerInfo,
-            type: 'farmer',
-            level: ownedFarmer.level,
-            statusValue: `${currentYield.toFixed(1)}/hr`,
-            statusLabel: 'YIELD'
-        };
-    }).filter(Boolean);
-
-    // Get full details for owned heroes
-    const heroesWithDetails = ownedHeroes.map(ownedHero => {
-        const heroInfo = HEROES.find(h => h.id === ownedHero.heroId);
-        if (!heroInfo) return null;
-
-        // Calculate power based on level
-        const heroPower = heroInfo.power * (1 + (ownedHero.level * 0.1));
-
-        return {
-            id: ownedHero.id,
-            details: heroInfo,
-            type: 'hero',
-            level: ownedHero.level,
-            statusValue: Math.round(heroPower),
-            statusLabel: 'POWER',
-            equipped: ownedHero.equippedItems || []
-        };
-    }).filter(Boolean);
-
-    // Get full details for owned items
-    const itemsWithDetails = ownedItems.map(ownedItem => {
-        const itemDetails = MARKETPLACE_ITEMS.find(item => item.id === ownedItem.itemId);
-        if (!itemDetails) return null;
-
-        return {
-            id: ownedItem.id,
-            details: itemDetails,
-            type: 'item',
-            equipped: ownedItem.equipped,
-            durability: ownedItem.durability,
-            charges: ownedItem.charges
-        };
-    }).filter(Boolean);
 
     // Filter assets based on selected category
     let displayedAssets = [];
@@ -174,7 +210,12 @@ const WalletAssets: React.FC = () => {
                 </div>
             </div>
 
-            {displayedAssets.length > 0 ? (
+            {isLoading ? (
+                <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <p>Loading your assets...</p>
+                </div>
+            ) : displayedAssets.length > 0 ? (
                 <div className="entity-grid">
                     {displayedAssets.map(asset => {
                         if (asset.type === 'farmer') {
@@ -241,90 +282,30 @@ const WalletAssets: React.FC = () => {
             )}
 
             <style jsx>{`
-                .asset-overview {
-                    background-color: rgba(8, 8, 30, 0.7);
-                    border-radius: 8px;
-                    padding: 20px;
-                    margin-bottom: 24px;
-                }
-                
-                .assets-stats {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 16px;
-                }
-                
-                .asset-stat-box {
-                    display: flex;
-                    align-items: center;
-                    background-color: rgba(0, 0, 0, 0.3);
-                    border-radius: 6px;
-                    padding: 16px;
-                }
-                
-                .stat-icon {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    margin-right: 12px;
-                    background-color: #00C2FF;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-                
-                .stat-info {
+                .loading-container {
                     display: flex;
                     flex-direction: column;
-                }
-                
-                .stat-value {
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                    color: white;
-                }
-                
-                .stat-label {
-                    font-size: 0.875rem;
-                    color: #8B8DA0;
-                }
-                
-                .asset-filters {
-                    margin-bottom: 24px;
-                }
-                
-                .filter-buttons {
-                    display: flex;
-                    gap: 12px;
-                }
-                
-                .filter-button {
-                    background-color: rgba(0, 0, 0, 0.3);
-                    border: 1px solid #00C2FF;
-                    color: white;
-                    padding: 8px 16px;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                }
-                
-                .filter-button.active {
-                    background-color: rgba(0, 194, 255, 0.2);
-                    box-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
-                }
-                
-                .filter-button:hover {
-                    background-color: rgba(0, 194, 255, 0.1);
-                }
-                
-                .no-assets-message {
+                    align-items: center;
+                    justify-content: center;
+                    padding: 48px 0;
                     background-color: rgba(8, 8, 30, 0.7);
                     border-radius: 8px;
                     border: 1px solid rgba(0, 194, 255, 0.3);
-                    padding: 40px 20px;
-                    text-align: center;
-                    color: #ccc;
-                    margin-top: 20px;
+                }
+
+                .loading-spinner {
+                    width: 40px;
+                    height: 40px;
+                    border: 3px solid rgba(0, 194, 255, 0.3);
+                    border-radius: 50%;
+                    border-top-color: #00C2FF;
+                    animation: spin 1s infinite linear;
+                    margin-bottom: 16px;
+                }
+
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
                 }
             `}</style>
         </section>

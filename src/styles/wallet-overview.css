@@ -450,3 +450,70 @@
 .futuristic-button:hover:after {
     transform: rotate(30deg) translate(10%, 0%);
 }
+
+/* Additional wallet overview styles - add these to wallet-overview.css */
+
+/* Error message styling */
+.error-message {
+    padding: 8px 12px;
+    background-color: rgba(255, 77, 77, 0.1);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    color: #FF4D4D;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+}
+
+/* No activity display */
+.no-activity {
+    text-align: center;
+    padding: 20px;
+    color: #8B8DA0;
+    font-size: 0.875rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+}
+
+/* Loading state styling */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0;
+    background-color: rgba(8, 8, 30, 0.7);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 194, 255, 0.3);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 194, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #00C2FF;
+    animation: spin 1s infinite linear;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Transaction type icons with different colors */
+.type-icon.purchase {
+    background-color: rgba(0, 194, 255, 0.2);
+}
+
+.type-icon.staking, .type-icon.unstaking, .type-icon.staking-reward {
+    background-color: rgba(20, 241, 149, 0.2);
+}
+
+.type-icon.battle-reward {
+    background-color: rgba(153, 69, 255, 0.2);
+}
+
+.type-icon.swap {
+    background-color: rgba(255, 184, 0, 0.2);
+}

@@ -1,38 +1,95 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../common/Button';
 import SectionTitle from '../../common/SectionTitle';
 import { useWalletConnection } from '../../../context/WalletConnectionProvider';
-import { useHero } from '../../../context/HeroContext';
-import { useFarmer } from '../../../context/FarmerContext';
-import { useMarketplace } from '../../../context/MarketplaceContext';
+
+// Define types for activity items
+interface ActivityItem {
+    id: string;
+    type: string;
+    item: string;
+    amount: number;
+    token: string;
+    time: string;
+}
 
 const WalletOverview: React.FC = () => {
-    const { walletAddress, balance, disconnect, isLoading, error, refreshBalance, isConnected } = useWalletConnection();
+    const {
+        walletAddress,
+        balance,
+        transactions,
+        assets,
+        disconnect,
+        isLoading,
+        error,
+        refreshBalance,
+        refreshTransactions,
+        refreshAssets,
+        isConnected
+    } = useWalletConnection();
 
-    // Mock recent activity data - would normally come from an API or blockchain scanner
-    const recentActivity = [
-        { type: 'Purchase', item: 'Quantum Shield', amount: -240, token: 'WLOS', time: '2 hours ago' },
-        { type: 'Battle Reward', item: 'Victory Bonus', amount: 35, token: 'WLOS', time: '5 hours ago' },
-        { type: 'Staking Reward', item: 'Knight Pool', amount: 12.5, token: 'WLOS', time: '1 day ago' },
-        { type: 'Purchase', item: 'Energy Matrix', amount: -95, token: 'WLOS', time: '3 days ago' }
-    ];
+    const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([]);
 
-    // Get real counts from contexts
-    const { ownedHeroes } = useHero();
-    const { ownedFarmers } = useFarmer();
-    const { ownedItems } = useMarketplace();
+    // Update recent activity when transactions change
+    useEffect(() => {
+        if (transactions && transactions.length > 0) {
+            // Take just the first 4 transactions for recent activity
+            const recent = transactions.slice(0, 4).map(tx => {
+                // Calculate relative time (e.g., "2 hours ago")
+                const txDate = new Date(tx.timestamp || new Date(`${tx.date}T${tx.time}`));
+                const relativeTime = getRelativeTime(txDate);
 
-    // Calculate actual stats
-    const stats = {
-        heroes: ownedHeroes?.length || 0,
-        farmers: ownedFarmers?.length || 0,
-        items: ownedItems?.length || 0
+                return {
+                    id: tx.id,
+                    type: tx.type,
+                    item: tx.item,
+                    amount: tx.amount,
+                    token: tx.token,
+                    time: relativeTime
+                };
+            });
+
+            setRecentActivity(recent);
+        }
+    }, [transactions]);
+
+    // Helper function to format relative time
+    const getRelativeTime = (date: Date): string => {
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffMin = Math.round(diffMs / 60000);
+
+        if (diffMin < 1) return 'just now';
+        if (diffMin < 60) return `${diffMin} minutes ago`;
+
+        const diffHr = Math.floor(diffMin / 60);
+        if (diffHr < 24) return `${diffHr} hours ago`;
+
+        const diffDays = Math.floor(diffHr / 24);
+        if (diffDays < 30) return `${diffDays} days ago`;
+
+        const diffMonths = Math.floor(diffDays / 30);
+        return `${diffMonths} months ago`;
     };
 
     // If not connected, don't render anything - the connection UI is handled in WalletPage
     if (!isConnected) {
         return null;
     }
+
+    // Calculate actual stats directly from the assets data
+    const stats = {
+        heroes: assets?.heroes?.length || 0,
+        farmers: assets?.farmers?.length || 0,
+        items: assets?.items?.length || 0
+    };
+
+    // Handle refresh button click
+    const handleRefresh = () => {
+        refreshBalance(walletAddress);
+        refreshTransactions();
+        refreshAssets(walletAddress);  // Add this to refresh assets as well
+    };
 
     return (
         <section className="wallet-overview-section">
@@ -76,7 +133,7 @@ const WalletOverview: React.FC = () => {
                     </div>
 
                     {error && (
-                        <div className="error-message mb-4 text-red-500 text-sm">
+                        <div className="error-message">
                             {error}
                         </div>
                     )}
@@ -111,17 +168,21 @@ const WalletOverview: React.FC = () => {
                         <Button
                             text="REFRESH"
                             color="cyan"
-                            onClick={() => refreshBalance()}
+                            onClick={handleRefresh}
+                            disabled={isLoading}
                         />
                         <Button
                             text="RECEIVE"
                             color="cyan"
-                            onClick={() => console.log('Receive clicked')}
+                            onClick={() => {
+                                navigator.clipboard.writeText(walletAddress);
+                                alert('Address copied to clipboard! Share this address to receive tokens.');
+                            }}
                         />
                         <Button
                             text="BUY"
                             color="cyan"
-                            onClick={() => console.log('Buy clicked')}
+                            onClick={() => window.location.href = '/wlos-token'}
                         />
                     </div>
                 </div>
@@ -164,353 +225,53 @@ const WalletOverview: React.FC = () => {
                         <h3 className="activity-title">RECENT ACTIVITY</h3>
 
                         <div className="activity-list">
-                            {recentActivity.map((activity, index) => (
-                                <div key={index} className="activity-item">
-                                    <div className="activity-type-icon">
-                                        <div className={`type-icon ${activity.type.toLowerCase().replace(' ', '-')}`}></div>
-                                    </div>
-
-                                    <div className="activity-details">
-                                        <div className="activity-primary">
-                                            <div className="activity-type">{activity.type}</div>
-                                            <div className="activity-item-name">{activity.item}</div>
+                            {recentActivity.length > 0 ? (
+                                recentActivity.map((activity) => (
+                                    <div key={activity.id} className="activity-item">
+                                        <div className="activity-type-icon">
+                                            <div className={`type-icon ${activity.type.toLowerCase().replace(' ', '-')}`}></div>
                                         </div>
-                                        <div className="activity-time">{activity.time}</div>
-                                    </div>
 
-                                    <div className="activity-amount">
-                                        <div className={`amount-value ${activity.amount >= 0 ? 'positive' : 'negative'}`}>
-                                            {activity.amount >= 0 ? '+' : ''}{activity.amount}
+                                        <div className="activity-details">
+                                            <div className="activity-primary">
+                                                <div className="activity-type">{activity.type}</div>
+                                                <div className="activity-item-name">{activity.item}</div>
+                                            </div>
+                                            <div className="activity-time">{activity.time}</div>
                                         </div>
-                                        <div className="amount-token">{activity.token}</div>
+
+                                        <div className="activity-amount">
+                                            <div className={`amount-value ${activity.amount >= 0 ? 'positive' : 'negative'}`}>
+                                                {activity.amount >= 0 ? '+' : ''}{activity.amount}
+                                            </div>
+                                            <div className="amount-token">{activity.token}</div>
+                                        </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div className="no-activity">
+                                    <p>No recent activity found.</p>
                                 </div>
-                            ))}
+                            )}
                         </div>
 
                         <div className="view-all-container">
                             <Button
                                 text="VIEW ALL TRANSACTIONS"
                                 color="cyan"
-                                onClick={() => console.log('View all transactions clicked')}
+                                onClick={() => {
+                                    // Scroll to transactions section or open transactions tab
+                                    const transactionsSection = document.querySelector('.wallet-transactions-section');
+                                    if (transactionsSection) {
+                                        transactionsSection.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }}
                                 fullWidth={true}
                             />
                         </div>
                     </div>
                 </div>
             </div>
-
-            <style jsx>{`
-                .wallet-overview-section {
-                    padding-bottom: 2rem;
-                }
-
-                .wallet-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 24px;
-                }
-
-                @media (max-width: 1024px) {
-                    .wallet-grid {
-                        grid-template-columns: 1fr;
-                    }
-                }
-
-                .wallet-info-column, .stats-activity-column {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 24px;
-                }
-
-                .wallet-address-container, .network-info, .wallet-balance-header,
-                .token-balances, .wallet-actions, .stats-card, .activity-card {
-                    background-color: rgba(8, 8, 30, 0.7);
-                    border-radius: 8px;
-                    padding: 16px;
-                    border: 1px solid rgba(0, 194, 255, 0.3);
-                }
-
-                .address-label, .stats-title, .activity-title {
-                    color: #00C2FF;
-                    font-size: 1rem;
-                    font-weight: bold;
-                    margin-bottom: 12px;
-                }
-
-                .address-value {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    background-color: rgba(0, 0, 0, 0.3);
-                    padding: 8px 12px;
-                    border-radius: 4px;
-                    border: 1px solid rgba(0, 194, 255, 0.3);
-                }
-
-                .address-text {
-                    font-family: monospace;
-                    font-size: 1rem;
-                    color: #ffffff;
-                }
-
-                .copy-button {
-                    background: none;
-                    border: none;
-                    color: #00C2FF;
-                    cursor: pointer;
-                }
-
-                .copy-icon {
-                    width: 20px;
-                    height: 20px;
-                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300C2FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='13' height='13' rx='2' ry='2'%3E%3C/rect%3E%3Cpath d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'%3E%3C/path%3E%3C/svg%3E");
-                    background-size: contain;
-                    background-repeat: no-repeat;
-                }
-
-                .network-info {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-
-                .network-status {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                }
-
-                .status-dot {
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 50%;
-                    background-color: #00C2FF;
-                    box-shadow: 0 0 8px #00C2FF;
-                }
-
-                .status-text {
-                    font-size: 0.875rem;
-                    color: #ffffff;
-                }
-
-                .disconnect-button {
-                    background: none;
-                    border: 1px solid #FF4D4D;
-                    color: #FF4D4D;
-                    padding: 4px 8px;
-                    border-radius: 4px;
-                    font-size: 0.75rem;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                }
-
-                .disconnect-button:hover {
-                    background-color: rgba(255, 77, 77, 0.1);
-                }
-
-                .wallet-balance-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-
-                .balance-title {
-                    color: #00C2FF;
-                    font-size: 1rem;
-                    font-weight: bold;
-                }
-
-                .balance-usd {
-                    font-size: 1.25rem;
-                    font-weight: bold;
-                    color: #00C2FF;
-                }
-
-                .token-balances {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 16px;
-                }
-
-                .token-balance {
-                    display: flex;
-                    align-items: center;
-                    padding: 12px;
-                    background-color: rgba(0, 0, 0, 0.3);
-                    border-radius: 6px;
-                }
-
-                .token-icon {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    margin-right: 12px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-weight: bold;
-                }
-
-                .token-icon.sol {
-                    background-color: #14F195;
-                    color: #000000;
-                }
-
-                .token-icon.wlos {
-                    background-color: #9945FF;
-                    color: #000000;
-                }
-
-                .token-info {
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .token-amount {
-                    font-size: 1.25rem;
-                    font-weight: bold;
-                    color: #ffffff;
-                }
-
-                .token-name {
-                    font-size: 0.875rem;
-                    color: #8B8DA0;
-                }
-
-                .wallet-actions {
-                    display: flex;
-                    gap: 12px;
-                }
-
-                .stats-grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 16px;
-                }
-
-                .stat-item {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                    padding: 16px;
-                    background-color: rgba(0, 0, 0, 0.3);
-                    border-radius: 6px;
-                }
-
-                .stat-icon {
-                    width: 48px;
-                    height: 48px;
-                    border-radius: 50%;
-                    margin-bottom: 8px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                }
-
-                .stat-icon.warlords {
-                    background-color: #9945FF;
-                    color: #000000;
-                }
-
-                .stat-icon.items {
-                    background-color: #9945FF;
-                    color: #000000;
-                }
-
-                .stat-icon.transactions {
-                    background-color: #00C2FF;
-                    color: #000000;
-                }
-
-                .stat-value {
-                    font-size: 2rem;
-                    font-weight: bold;
-                    color: #ffffff;
-                }
-
-                .stat-label {
-                    font-size: 0.875rem;
-                    color: #8B8DA0;
-                }
-
-                .activity-list {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 12px;
-                    margin-bottom: 16px;
-                }
-
-                .activity-item {
-                    display: flex;
-                    align-items: center;
-                    padding: 12px;
-                    background-color: rgba(0, 0, 0, 0.3);
-                    border-radius: 6px;
-                }
-
-                .activity-type-icon {
-                    width: 32px;
-                    height: 32px;
-                    border-radius: 50%;
-                    margin-right: 12px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    background-color: rgba(0, 194, 255, 0.2);
-                }
-
-                .activity-details {
-                    flex-grow: 1;
-                }
-
-                .activity-primary {
-                    display: flex;
-                    gap: 8px;
-                }
-
-                .activity-type {
-                    font-weight: bold;
-                    color: #ffffff;
-                }
-
-                .activity-item-name {
-                    color: #8B8DA0;
-                }
-
-                .activity-time {
-                    font-size: 0.75rem;
-                    color: #8B8DA0;
-                }
-
-                .activity-amount {
-                    text-align: right;
-                }
-
-                .amount-value {
-                    font-weight: bold;
-                }
-
-                .amount-value.positive {
-                    color: #14F195;
-                }
-
-                .amount-value.negative {
-                    color: #FF4D4D;
-                }
-
-                .amount-token {
-                    font-size: 0.75rem;
-                    color: #8B8DA0;
-                }
-
-                .view-all-container {
-                    margin-top: 16px;
-                }
-            `}</style>
         </section>
     );
 };
