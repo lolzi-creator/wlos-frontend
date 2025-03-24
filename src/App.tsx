@@ -26,6 +26,8 @@ import './styles/mobile-fixes.css';
 import './styles/marketplace.css';
 import './styles/inventory.css';
 import './styles/listings.css';
+import './styles/wallet-assets.css';
+import './styles/wallet-overview.css';
 
 
 function App() {

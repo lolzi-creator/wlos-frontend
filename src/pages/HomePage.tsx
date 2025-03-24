@@ -4,7 +4,7 @@ import HeroSection from '../components/sections/HeroSection';
 import StatsSection from '../components/sections/Staking/StatsSection.tsx';
 import WlosTokenSection from '../components/sections/WlosTokenSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
-
+import WalletTest from '../components/tests/Wallet';  // Import the test component
 
 const HomePage: React.FC = () => {
     const [activeLine, setActiveLine] = useState(0);
@@ -44,6 +44,7 @@ const HomePage: React.FC = () => {
             <main className="main-content">
                 <HeroSection />
                 <StatsSection />
+                <WalletTest />  {/* Add the test component here */}
                 <WlosTokenSection />
                 <FeaturesSection />
             </main>

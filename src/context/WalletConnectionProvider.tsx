@@ -1,154 +1,145 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { PublicKey, Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { walletService, assetService, authService } from '../services/api';
 
-interface WalletConnectionContextType {
-    isConnected: boolean;
-    publicKey: PublicKey | null;
-    walletAddress: string;
-    connect: () => void;
-    disconnect: () => void;
-    balance: {
-        sol: number;
-        wlos: number;
-        usd: number;
-    };
-    isLoading: boolean;
-    error: string | null;
-    refreshBalance: () => Promise<void>;
-}
+const WalletConnectionContext = createContext();
 
-const defaultContext: WalletConnectionContextType = {
-    isConnected: false,
-    publicKey: null,
-    walletAddress: '',
-    connect: () => {},
-    disconnect: () => {},
-    balance: {
-        sol: 0,
-        wlos: 0,
-        usd: 0
-    },
-    isLoading: false,
-    error: null,
-    refreshBalance: async () => {}
-};
-
-const WalletConnectionContext = createContext<WalletConnectionContextType>(defaultContext);
-
-export const useWalletConnection = () => useContext(WalletConnectionContext);
-
-interface WalletConnectionProviderProps {
-    children: ReactNode;
-}
-
-// SOL price in USD - in a real app you'd fetch this from an API
-const SOL_PRICE_USD = 146.75;
-
-export const WalletConnectionProvider: React.FC<WalletConnectionProviderProps> = ({ children }) => {
-    const { publicKey, wallet, connect, disconnect, connected } = useWallet();
+export const WalletConnectionProvider = ({ children }) => {
+    const { wallet, publicKey, disconnect, signMessage } = useWallet();
     const [isConnected, setIsConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState('');
+    const [balance, setBalance] = useState({ sol: 0, wlos: 0, usd: 0 });
+    const [assets, setAssets] = useState({ heroes: [], farmers: [], items: [] });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState(null);
 
-    // Create a Solana connection
-    const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
+    // Connect wallet and fetch initial data
+    useEffect(() => {
+        if (publicKey) {
+            const address = publicKey.toString();
+            handleConnect(address);
+        } else {
+            setIsConnected(false);
+            setWalletAddress('');
+            setBalance({ sol: 0, wlos: 0, usd: 0 });
+            setAssets({ heroes: [], farmers: [], items: [] });
+        }
+    }, [publicKey]);
 
-    // Set up real balance state
-    const [balance, setBalance] = useState({
-        sol: 0,
-        wlos: 0, // This would come from a token account in a real app
-        usd: 0
-    });
-
-    // Fetch the SOL balance for the connected wallet
-    const fetchSolBalance = async (publicKey: PublicKey) => {
+    // Handle connect wallet
+    const handleConnect = async (address) => {
         try {
             setIsLoading(true);
             setError(null);
+            setWalletAddress(address);
 
-            // Get SOL balance
-            const solBalance = await connection.getBalance(publicKey);
-            const solInWallet = solBalance / LAMPORTS_PER_SOL;
+            // Register wallet in the backend
+            await authService.connectWallet(address);
 
-            // For now, we'll use a mock WLOS balance
-            // In a real app, you'd fetch the token balance from the blockchain
-            const wlosBalance = 0;
+            // Fetch wallet balance
+            await fetchBalance(address);
 
-            // Calculate USD value
-            const usdValue = solInWallet * SOL_PRICE_USD;
+            // Fetch wallet assets
+            await fetchAssets(address);
 
-            setBalance({
-                sol: solInWallet,
-                wlos: wlosBalance,
-                usd: usdValue
-            });
+            setIsConnected(true);
         } catch (err) {
-            console.error('Error fetching balance:', err);
-            setError('Failed to load wallet balance');
+            console.error('Error connecting wallet:', err);
+            setError('Failed to connect wallet');
+            setIsConnected(false);
         } finally {
             setIsLoading(false);
         }
     };
 
-    useEffect(() => {
-        setIsConnected(connected);
-        if (publicKey) {
-            setWalletAddress(publicKey.toString());
-            fetchSolBalance(publicKey);
-        } else {
-            setWalletAddress('');
-            // Reset balance when disconnected
+    // Fetch balance from backend
+    const fetchBalance = async (address) => {
+        try {
+            const response = await walletService.getBalance(address);
+
+            // Calculate USD value (fictional exchange rates)
+            const solUsdValue = response.data.sol * 150; // SOL at $150
+            const wlosUsdValue = response.data.wlos * 1.5; // WLOS at $1.50
+
             setBalance({
-                sol: 0,
-                wlos: 0,
-                usd: 0
+                sol: response.data.sol,
+                wlos: response.data.wlos,
+                usd: solUsdValue + wlosUsdValue
             });
-        }
-    }, [publicKey, connected]);
 
-    const handleConnect = async () => {
-        try {
-            if (wallet) {
-                await connect();
-            }
-        } catch (error) {
-            console.error('Failed to connect wallet:', error);
-            setError('Failed to connect wallet');
+        } catch (err) {
+            console.error('Error fetching balance:', err);
+            throw err;
         }
     };
 
+    // Fetch assets from backend
+    const fetchAssets = async (address) => {
+        try {
+            const response = await assetService.getAllAssets(address);
+
+            setAssets({
+                heroes: response.data.heroes || [],
+                farmers: response.data.farmers || [],
+                items: response.data.items || []
+            });
+
+        } catch (err) {
+            console.error('Error fetching assets:', err);
+            throw err;
+        }
+    };
+
+    // Manual refresh
+    const refreshWallet = async () => {
+        if (!walletAddress) return;
+
+        try {
+            setIsLoading(true);
+            setError(null);
+
+            await Promise.all([
+                fetchBalance(walletAddress),
+                fetchAssets(walletAddress)
+            ]);
+
+        } catch (err) {
+            console.error('Error refreshing wallet data:', err);
+            setError('Failed to refresh wallet data');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Disconnect wallet
     const handleDisconnect = async () => {
-        try {
+        if (disconnect) {
             await disconnect();
-        } catch (error) {
-            console.error('Failed to disconnect wallet:', error);
-            setError('Failed to disconnect wallet');
+            setIsConnected(false);
+            setWalletAddress('');
+            setBalance({ sol: 0, wlos: 0, usd: 0 });
+            setAssets({ heroes: [], farmers: [], items: [] });
         }
-    };
-
-    const refreshBalance = async () => {
-        if (publicKey) {
-            await fetchSolBalance(publicKey);
-        }
-    };
-
-    const value = {
-        isConnected,
-        publicKey,
-        walletAddress,
-        connect: handleConnect,
-        disconnect: handleDisconnect,
-        balance,
-        isLoading,
-        error,
-        refreshBalance
     };
 
     return (
-        <WalletConnectionContext.Provider value={value}>
+        <WalletConnectionContext.Provider
+            value={{
+                isConnected,
+                walletAddress,
+                balance,
+                assets,
+                isLoading,
+                error,
+                disconnect: handleDisconnect,
+                refreshBalance: fetchBalance,
+                refreshAssets: fetchAssets,
+                refreshWallet
+            }}
+        >
             {children}
         </WalletConnectionContext.Provider>
     );
 };
+
+export const useWalletConnection = () => useContext(WalletConnectionContext);

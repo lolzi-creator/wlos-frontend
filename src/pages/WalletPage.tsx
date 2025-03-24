@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import WalletOverview from '../components/sections/Wallet/WalletOverview';
-import WalletHeroes from '../components/sections/Wallet/WalletHeroes';
-import WalletItems from '../components/sections/Wallet/WalletItems';
+// Removed redundant imports
 import WalletTransactions from '../components/sections/Wallet/WalletTransactions';
+import WalletAssets from '../components/sections/Wallet/WalletAssets';
 import { useWalletConnection } from '../context/WalletConnectionProvider';
 import WalletConnectButton from '../components/common/WalletConnectButton';
 
 const WalletPage: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<'overview' | 'heroes' | 'items' | 'transactions'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'assets' | 'transactions'>('overview');
     const [activeLine, setActiveLine] = useState(0);
     const { isConnected } = useWalletConnection();
 
@@ -55,16 +55,10 @@ const WalletPage: React.FC = () => {
                                 OVERVIEW
                             </button>
                             <button
-                                className={`tab-button ${activeTab === 'heroes' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('heroes')}
+                                className={`tab-button ${activeTab === 'assets' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('assets')}
                             >
-                                WARLORDS
-                            </button>
-                            <button
-                                className={`tab-button ${activeTab === 'items' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('items')}
-                            >
-                                INVENTORY
+                                ASSETS
                             </button>
                             <button
                                 className={`tab-button ${activeTab === 'transactions' ? 'active' : ''}`}
@@ -76,8 +70,7 @@ const WalletPage: React.FC = () => {
                         </div>
 
                         {activeTab === 'overview' && <WalletOverview />}
-                        {activeTab === 'heroes' && <WalletHeroes />}
-                        {activeTab === 'items' && <WalletItems />}
+                        {activeTab === 'assets' && <WalletAssets />}
                         {activeTab === 'transactions' && <WalletTransactions />}
                     </>
                 ) : (
