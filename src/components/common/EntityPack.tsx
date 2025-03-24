@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import '../../styles/entityPack.css';
 
 interface PackRarityChances {
@@ -23,6 +23,43 @@ export interface EntityPackProps {
     onOpen?: () => void;
 }
 
+// Colors and styles are calculated once and memoized
+const getPackTypeColors = (packType: string, entityType: string) => {
+    const baseColors = {
+        'basic': {
+            farmer: '#14F195', // Green for farmers
+            hero: '#00C2FF'    // Cyan for heroes
+        },
+        'premium': {
+            farmer: '#00C2FF', // Cyan for farmers premium
+            hero: '#9945FF'    // Purple for heroes premium
+        },
+        'legendary': {
+            farmer: '#9945FF',  // Purple for farmers legendary
+            hero: '#FFB800'     // Yellow for heroes legendary
+        }
+    };
+
+    const color = baseColors[packType][entityType];
+
+    // Extract RGB components for creating gradients and effects
+    const getRGB = (hex: string) => {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return { r, g, b };
+    };
+
+    const rgb = getRGB(color);
+
+    return {
+        primary: color,
+        background: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`,
+        border: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`,
+        rgb
+    };
+};
+
 const EntityPack: React.FC<EntityPackProps> = ({
                                                    id,
                                                    name,
@@ -39,46 +76,28 @@ const EntityPack: React.FC<EntityPackProps> = ({
                                                }) => {
     const [isHovered, setIsHovered] = useState(false);
 
-    // Determine colors based on pack type and entity type
-    const getColors = () => {
-        // Default colors for each pack type
-        const packColors = {
-            'basic': {
-                farmer: '#14F195', // Green for farmers
-                hero: '#00C2FF'    // Cyan for heroes
-            },
-            'premium': {
-                farmer: '#00C2FF', // Cyan for farmers premium
-                hero: '#9945FF'    // Purple for heroes premium
-            },
-            'legendary': {
-                farmer: '#9945FF',  // Purple for farmers legendary
-                hero: '#FFB800'     // Yellow for heroes legendary
-            }
-        };
+    // Memoize colors to prevent recalculation on every render
+    const colors = useMemo(() => getPackTypeColors(packType, entityType), [packType, entityType]);
 
-        return {
-            primary: packColors[packType][entityType],
-            background: `rgba(${packType === 'basic' ?
-                (entityType === 'farmer' ? '20, 241, 149' : '0, 194, 255') :
-                packType === 'premium' ?
-                    (entityType === 'farmer' ? '0, 194, 255' : '153, 69, 255') :
-                    (entityType === 'farmer' ? '153, 69, 255' : '255, 184, 0')}, 0.05)`,
-            border: `rgba(${packType === 'basic' ?
-                (entityType === 'farmer' ? '20, 241, 149' : '0, 194, 255') :
-                packType === 'premium' ?
-                    (entityType === 'farmer' ? '0, 194, 255' : '153, 69, 255') :
-                    (entityType === 'farmer' ? '153, 69, 255' : '255, 184, 0')}, 0.3)`
-        };
+    // Memoize rarity chances to prevent recalculation
+    const rarityPercentages = useMemo(() => ({
+        legendary: Math.round(rarityChances.legendary * 100),
+        epic: Math.round(rarityChances.epic * 100),
+        rare: Math.round(rarityChances.rare * 100),
+        common: Math.round(rarityChances.common * 100)
+    }), [rarityChances]);
+
+    // Use appropriate handler based on owned status
+    const handleAction = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (disabled) return;
+
+        if (owned) {
+            onOpen?.();
+        } else {
+            onBuy?.();
+        }
     };
-
-    const colors = getColors();
-
-    // Function to calculate the total chances of getting each rarity tier
-    const calculateLegendaryChance = () => Math.round(rarityChances.legendary * 100);
-    const calculateEpicChance = () => Math.round(rarityChances.epic * 100);
-    const calculateRareChance = () => Math.round(rarityChances.rare * 100);
-    const calculateCommonChance = () => Math.round(rarityChances.common * 100);
 
     return (
         <div
@@ -122,49 +141,61 @@ const EntityPack: React.FC<EntityPackProps> = ({
                     <div className="pack-rarity-chances">
                         <div className="chance-title" style={{ color: colors.primary }}>DROP RATES</div>
                         <div className="chance-grid">
-                            <div className="chance-item">
-                                <div className="chance-label" style={{ color: '#14F195' }}>COMMON</div>
-                                <div className="chance-bar">
-                                    <div
-                                        className="chance-fill"
-                                        style={{ width: `${calculateCommonChance()}%`, backgroundColor: '#14F195' }}
-                                    ></div>
+                            {/* Common */}
+                            {rarityPercentages.common > 0 && (
+                                <div className="chance-item">
+                                    <div className="chance-label" style={{ color: '#14F195' }}>COMMON</div>
+                                    <div className="chance-bar">
+                                        <div
+                                            className="chance-fill"
+                                            style={{ width: `${rarityPercentages.common}%`, backgroundColor: '#14F195' }}
+                                        ></div>
+                                    </div>
+                                    <div className="chance-value">{rarityPercentages.common}%</div>
                                 </div>
-                                <div className="chance-value">{calculateCommonChance()}%</div>
-                            </div>
+                            )}
 
-                            <div className="chance-item">
-                                <div className="chance-label" style={{ color: '#00C2FF' }}>RARE</div>
-                                <div className="chance-bar">
-                                    <div
-                                        className="chance-fill"
-                                        style={{ width: `${calculateRareChance()}%`, backgroundColor: '#00C2FF' }}
-                                    ></div>
+                            {/* Rare */}
+                            {rarityPercentages.rare > 0 && (
+                                <div className="chance-item">
+                                    <div className="chance-label" style={{ color: '#00C2FF' }}>RARE</div>
+                                    <div className="chance-bar">
+                                        <div
+                                            className="chance-fill"
+                                            style={{ width: `${rarityPercentages.rare}%`, backgroundColor: '#00C2FF' }}
+                                        ></div>
+                                    </div>
+                                    <div className="chance-value">{rarityPercentages.rare}%</div>
                                 </div>
-                                <div className="chance-value">{calculateRareChance()}%</div>
-                            </div>
+                            )}
 
-                            <div className="chance-item">
-                                <div className="chance-label" style={{ color: '#9945FF' }}>EPIC</div>
-                                <div className="chance-bar">
-                                    <div
-                                        className="chance-fill"
-                                        style={{ width: `${calculateEpicChance()}%`, backgroundColor: '#9945FF' }}
-                                    ></div>
+                            {/* Epic */}
+                            {rarityPercentages.epic > 0 && (
+                                <div className="chance-item">
+                                    <div className="chance-label" style={{ color: '#9945FF' }}>EPIC</div>
+                                    <div className="chance-bar">
+                                        <div
+                                            className="chance-fill"
+                                            style={{ width: `${rarityPercentages.epic}%`, backgroundColor: '#9945FF' }}
+                                        ></div>
+                                    </div>
+                                    <div className="chance-value">{rarityPercentages.epic}%</div>
                                 </div>
-                                <div className="chance-value">{calculateEpicChance()}%</div>
-                            </div>
+                            )}
 
-                            <div className="chance-item">
-                                <div className="chance-label" style={{ color: '#FFB800' }}>LEGENDARY</div>
-                                <div className="chance-bar">
-                                    <div
-                                        className="chance-fill"
-                                        style={{ width: `${calculateLegendaryChance()}%`, backgroundColor: '#FFB800' }}
-                                    ></div>
+                            {/* Legendary */}
+                            {rarityPercentages.legendary > 0 && (
+                                <div className="chance-item">
+                                    <div className="chance-label" style={{ color: '#FFB800' }}>LEGENDARY</div>
+                                    <div className="chance-bar">
+                                        <div
+                                            className="chance-fill"
+                                            style={{ width: `${rarityPercentages.legendary}%`, backgroundColor: '#FFB800' }}
+                                        ></div>
+                                    </div>
+                                    <div className="chance-value">{rarityPercentages.legendary}%</div>
                                 </div>
-                                <div className="chance-value">{calculateLegendaryChance()}%</div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 ) : (
@@ -204,7 +235,7 @@ const EntityPack: React.FC<EntityPackProps> = ({
                                 minWidth: '160px',
                                 boxShadow: `0 0 10px ${colors.primary}40`
                             }}
-                            onClick={onOpen}
+                            onClick={handleAction}
                             disabled={disabled}
                         >
                             {disabled ? "OPENING..." : "OPEN PACK"}
@@ -213,6 +244,9 @@ const EntityPack: React.FC<EntityPackProps> = ({
                 ) : (
                     /* Store Pack Display */
                     <>
+                        <div className="pack-price" style={{ color: colors.primary, marginBottom: '8px' }}>
+                            {cost > 0 ? `${cost} WLOS` : 'FREE'}
+                        </div>
                         <button
                             className="pack-action-button"
                             style={{
@@ -222,7 +256,7 @@ const EntityPack: React.FC<EntityPackProps> = ({
                                 minWidth: '160px',
                                 boxShadow: `0 0 10px ${colors.primary}40`
                             }}
-                            onClick={onBuy}
+                            onClick={handleAction}
                             disabled={disabled}
                         >
                             {disabled ? "PROCESSING..." : "BUY PACK"}
@@ -240,4 +274,4 @@ const EntityPack: React.FC<EntityPackProps> = ({
     );
 };
 
-export default EntityPack;
+export default React.memo(EntityPack);

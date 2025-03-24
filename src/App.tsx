@@ -10,6 +10,8 @@ import HeroPage from './pages/HeroPage';
 import { WalletContextProvider } from './context/WalletContext';
 import { WalletConnectionProvider } from './context/WalletConnectionProvider';
 import { MarketplaceProvider } from './context/MarketplaceContext';
+import { FarmerProvider } from './context/FarmerContext';
+import { HeroProvider } from './context/HeroContext';
 
 import './styles/farmers.css';
 import './styles/heroes.css';
@@ -31,22 +33,26 @@ function App() {
         <WalletContextProvider>
             <WalletConnectionProvider>
                 <MarketplaceProvider>
-                    <Router>
-                        <div className="app-container">
-                            <Routes>
-                                <Route path="/" element={<HomePage />} />
-                                <Route path="/stake" element={<StakingPage />} />
-                                <Route path="/battle" element={<Navigate to="/" />} /> {/* Placeholder for future Battle page */}
-                                <Route path="/marketplace" element={<MarketplacePage />} />
-                                <Route path="/wlos-token" element={<WlosTokenPage />} />
-                                <Route path="/farmers" element={<FarmerPage />} />
-                                <Route path="/heroes" element={<HeroPage />} />
-                                <Route path="/roadmap" element={<RoadmapPage />} />
-                                <Route path="/wallet" element={<WalletPage />} />
-                                <Route path="*" element={<Navigate to="/" />} /> {/* Redirect any unknown routes to home */}
-                            </Routes>
-                        </div>
-                    </Router>
+                    <FarmerProvider>
+                        <HeroProvider>
+                            <Router>
+                                <div className="app-container">
+                                    <Routes>
+                                        <Route path="/" element={<HomePage />} />
+                                        <Route path="/stake" element={<StakingPage />} />
+                                        <Route path="/battle" element={<Navigate to="/" />} /> {/* Placeholder for future Battle page */}
+                                        <Route path="/marketplace" element={<MarketplacePage />} />
+                                        <Route path="/wlos-token" element={<WlosTokenPage />} />
+                                        <Route path="/farmers" element={<FarmerPage />} />
+                                        <Route path="/heroes" element={<HeroPage />} />
+                                        <Route path="/roadmap" element={<RoadmapPage />} />
+                                        <Route path="/wallet" element={<WalletPage />} />
+                                        <Route path="*" element={<Navigate to="/" />} /> {/* Redirect any unknown routes to home */}
+                                    </Routes>
+                                </div>
+                            </Router>
+                        </HeroProvider>
+                    </FarmerProvider>
                 </MarketplaceProvider>
             </WalletConnectionProvider>
         </WalletContextProvider>
