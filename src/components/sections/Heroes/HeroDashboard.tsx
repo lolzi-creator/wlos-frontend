@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import EntityCard from '../../common/EntityCard';
+import Popup from '../../common/Popup';
 import { HEROES, getHeroPower } from '../../../types/HeroTypes';
 import { useHero } from '../../../context/HeroContext';
 import '../../../styles/entityCard.css';
@@ -9,25 +10,64 @@ const HeroDashboard: React.FC = () => {
     const { ownedHeroes, levelUpHero, isLoading, error } = useHero();
     const [selectedHero, setSelectedHero] = useState<string | null>(null);
 
+    // State for popups
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupType, setPopupType] = useState<'success' | 'error' | 'info'>('info');
+    const [popupMessage, setPopupMessage] = useState('');
+
     const handleSelect = (id: string) => {
         setSelectedHero(selectedHero === id ? null : id);
     };
 
-    const handleLevelUp = (id: string) => {
-        levelUpHero(id);
+    const handleLevelUp = async (id: string) => {
+        // Find the hero that will be leveled up
+        const hero = ownedHeroes.find(h => h.id === id);
+        if (!hero) return;
+
+        // Store the current level and power before level up
+        const previousLevel = hero.level;
+        const previousPower = hero.power || 0;
+
+        // Try to level up the hero
+        const success = await levelUpHero(id);
+
+        if (success) {
+            // Since the hero list will be refreshed, we can assume the level was increased by 1
+            const newLevel = previousLevel + 1;
+
+            // Estimate the new power (10% increase per level)
+            const estimatedNewPower = previousPower * 1.1;
+
+            // Show success popup with level up details
+            setPopupType('success');
+            setPopupMessage(
+                `Level up successful! Your hero is now level ${newLevel}. ` +
+                `Power increased from ${Math.round(previousPower)} to approximately ${Math.round(estimatedNewPower)}!`
+            );
+            setShowPopup(true);
+        }
     };
 
     const handleDeploy = (id: string) => {
-        console.log(`Deploy hero ${id} to battle`);
-        // Implementation would call your deployHero function
+        // This would be implemented when you add battle functionality
+        setPopupType('info');
+        setPopupMessage('Battle system is coming soon! Your hero is ready for deployment.');
+        setShowPopup(true);
     };
 
     // Calculate total power using the helper function
     const totalPower = ownedHeroes.reduce((total, hero) => {
-        const heroInfo = HEROES.find(h => h.id === hero.heroId);
-        if (!heroInfo) return total;
-        return total + getHeroPower(heroInfo, hero.level, hero.equippedItems || []);
+        return total + (hero.power || 0);
     }, 0);
+
+    // Show popup for backend errors
+    useEffect(() => {
+        if (error) {
+            setPopupType('error');
+            setPopupMessage(error);
+            setShowPopup(true);
+        }
+    }, [error]);
 
     return (
         <section className="hero-dashboard-section">
@@ -95,8 +135,6 @@ const HeroDashboard: React.FC = () => {
                 </div>
             </div>
 
-            {error && <div className="error-message">{error}</div>}
-
             {ownedHeroes.length > 0 ? (
                 <div className="entity-grid">
                     {ownedHeroes.map(ownedHero => {
@@ -106,13 +144,24 @@ const HeroDashboard: React.FC = () => {
                         // Get any equipped items
                         const equipment = ownedHero.equippedItems || [];
 
-                        // Get actual power using the utility function
-                        const heroPower = getHeroPower(heroInfo, ownedHero.level, equipment);
+                        // Use the hero's power from the backend, or fall back to the frontend calculation
+                        const heroPower = ownedHero.power ||
+                            (heroInfo ? getHeroPower(heroInfo, ownedHero.level, equipment) : 0);
 
                         return (
                             <EntityCard
                                 key={ownedHero.id}
-                                entity={heroInfo}
+                                entity={{
+                                    id: ownedHero.heroId,
+                                    name: ownedHero.name || heroInfo.name,
+                                    rarity: ownedHero.rarity || heroInfo.rarity,
+                                    type: ownedHero.type || heroInfo.type,
+                                    description: ownedHero.description || heroInfo.description,
+                                    imageSrc: ownedHero.imageSrc || heroInfo.imageSrc,
+                                    stats: ownedHero.stats || heroInfo.stats,
+                                    abilities: ownedHero.abilities || heroInfo.abilities,
+                                    power: heroPower
+                                }}
                                 owned={true}
                                 level={ownedHero.level}
                                 showPower={true}
@@ -120,7 +169,7 @@ const HeroDashboard: React.FC = () => {
                                 equipment={equipment}
                                 selected={selectedHero === ownedHero.id}
                                 statusLabel="POWER"
-                                statusValue={heroPower}
+                                statusValue={Math.round(heroPower)}
                                 primaryAction={{
                                     text: "DEPLOY",
                                     onClick: (e) => {
@@ -134,7 +183,7 @@ const HeroDashboard: React.FC = () => {
                                         e.stopPropagation();
                                         handleLevelUp(ownedHero.id);
                                     },
-                                    disabled: isLoading
+                                    disabled: isLoading || ownedHero.level >= 5 // Max level is 5
                                 }}
                                 onSelect={() => handleSelect(ownedHero.id)}
                             />
@@ -145,6 +194,15 @@ const HeroDashboard: React.FC = () => {
                 <div className="no-heroes-message">
                     <p>You don't own any heroes yet. Visit the pack store to buy some!</p>
                 </div>
+            )}
+
+            {/* Popup for messages */}
+            {showPopup && (
+                <Popup
+                    type={popupType}
+                    message={popupMessage}
+                    onClose={() => setShowPopup(false)}
+                />
             )}
 
             {isLoading && <div className="loading-overlay">Processing...</div>}

@@ -157,3 +157,20 @@ api.post('/farmers/harvest', { walletAddress }),
     levelUpFarmer: (walletAddress: string, farmerId: string): Promise<AxiosResponse<any>> =>
 api.post('/farmers/levelup', { walletAddress, farmerId })
 };
+
+// Add this at the end of your existing src/services/api.ts file
+
+// Hero endpoints
+export const heroService = {
+    getHeroes: (walletAddress: string): Promise<AxiosResponse<any>> =>
+        api.get(`/heroes/${walletAddress}`),
+
+    levelUpHero: (walletAddress: string, heroId: string): Promise<AxiosResponse<any>> =>
+        api.post('/heroes/levelup', { walletAddress, heroId }),
+
+    equipItem: (walletAddress: string, heroId: string, itemId: string): Promise<AxiosResponse<any>> =>
+        api.post('/heroes/equip', { walletAddress, heroId, itemId }),
+
+    unequipItem: (walletAddress: string, heroId: string, itemId: string): Promise<AxiosResponse<any>> =>
+        api.post('/heroes/unequip', { walletAddress, heroId, itemId })
+};
