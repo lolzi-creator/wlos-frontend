@@ -3,47 +3,44 @@ import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import EntityCard from '../../common/EntityCard';
 import SellItemPopup from './SellItemPopup';
-import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
-import { useMarketplace } from '../../../context/MarketplaceContext';
+import { MARKETPLACE_ITEMS, Item, OwnedItem } from '../../../types/ItemTypes';
+import { useMarketplace, MarketplaceListingItem } from '../../../context/MarketplaceContext';
+
+interface EnhancedItem extends Item {
+    ownedItemId: string;
+    equipped: boolean;
+    durability: number;
+    charges: number;
+    forSale: boolean;
+}
 
 interface InventoryItemsProps {
-    filterType: string;
+    filterType?: string;
 }
 
 const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
     const { ownedItems, myListings, useItem, equipItem, error, isLoading } = useMarketplace();
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
-    const [sellItem, setSellItem] = useState<any | null>(null);
+    const [sellItem, setSellItem] = useState<EnhancedItem | null>(null);
 
-    // Get the full item details for each owned item
-    const userItems = ownedItems.map(ownedItem => {
-        const itemDetails = MARKETPLACE_ITEMS.find(item => item.id === ownedItem.itemId);
-        if (!itemDetails) return null;
-
-        const isForSale = myListings.some(listing => listing.ownedItemId === ownedItem.id);
+    const userItems = ownedItems.map((ownedItem: OwnedItem) => {
+        const item = MARKETPLACE_ITEMS.find((marketplaceItem: Item) => marketplaceItem.id === ownedItem.itemId);
+        if (!item) return null;
 
         return {
-            ...itemDetails,
+            ...item,
             ownedItemId: ownedItem.id,
-            equipped: ownedItem.equipped,
-            durability: ownedItem.durability,
-            charges: ownedItem.charges,
-            forSale: isForSale
+            equipped: !!ownedItem.equipped,
+            durability: ownedItem.durability ?? 100,
+            charges: ownedItem.charges ?? 1,
+            forSale: myListings.some((listing: MarketplaceListingItem) => listing.ownedItemId === ownedItem.id)
         };
-    }).filter(item => item !== null);
-
-    // Filter by type if needed
-    const filteredItems = filterType === 'all'
-        ? userItems
-        : filterType === 'equipped'
-            ? userItems.filter(item => item?.equipped)
-            : filterType === 'for-sale'
-                ? userItems.filter(item => item?.forSale)
-                : userItems.filter(item => item?.type === filterType);
+    }).filter((item): item is EnhancedItem => item !== null)
+    .filter((item: EnhancedItem) => !filterType || item.type === filterType);
 
     // Handle item actions (equip/unequip/use)
     const handleItemAction = async (id: string) => {
-        const item = userItems.find(item => item?.ownedItemId === id);
+        const item = userItems.find(item => item.ownedItemId === id);
         if (!item) return;
 
         const isConsumable = item.type === 'consumable';
@@ -58,7 +55,7 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
     };
 
     // Handle selling an item
-    const handleSellItem = (item: any) => {
+    const handleSellItem = (item: EnhancedItem) => {
         setSellItem(item);
     };
 
@@ -95,9 +92,9 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
                 </div>
             </div>
 
-            {filteredItems.length > 0 ? (
+            {userItems.length > 0 ? (
                 <div className="entity-grid">
-                    {filteredItems.map(item => {
+                    {userItems.map((item: EnhancedItem) => {
                         const isConsumable = item.type === 'consumable';
                         const actionText = isConsumable ? 'USE' : (item.equipped ? 'UNEQUIP' : 'EQUIP');
 
@@ -106,7 +103,7 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({ filterType }) => {
                                 key={item.ownedItemId}
                                 entity={item}
                                 owned={true}
-                                equipped={Boolean(item.equipped)}
+                                equipped={item.equipped}
                                 forSale={item.forSale}
                                 selected={selectedItem === item.ownedItemId}
                                 onSelect={() => handleSelect(item.ownedItemId)}

@@ -21,6 +21,22 @@ interface FarmerContextType {
 
 const FarmerContext = createContext<FarmerContextType | undefined>(undefined);
 
+// Add interface for backend farmer type
+interface BackendFarmer {
+    id: number;
+    farmer_id: string;
+    name: string;
+    rarity: 'common' | 'rare' | 'epic' | 'legendary';
+    level: number;
+    base_yield_per_hour: number;
+    effectiveYield: number;
+    purchased_at: string;
+    last_harvested: string;
+    equipped_items?: string[];
+    image_src?: string;
+    description: string;
+}
+
 export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { walletAddress, isConnected, refreshBalance } = useWalletConnection();
     const [ownedFarmers, setOwnedFarmers] = useState<OwnedFarmer[]>([]);
@@ -52,7 +68,7 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const response = await farmerService.getFarmers(walletAddress);
 
             // Map the backend farmers to our frontend OwnedFarmer format
-            const mappedFarmers = response.data.farmers.map(backendFarmer => ({
+            const mappedFarmers = response.data.farmers.map((backendFarmer: BackendFarmer) => ({
                 id: backendFarmer.id.toString(),
                 farmerId: backendFarmer.farmer_id,
                 name: backendFarmer.name,
@@ -87,9 +103,8 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setIsLoading(true);
             setError(null);
 
-            const response = await packService.getPackInventory(walletAddress, 'farmer');
-
-            setOwnedPacks(response.data.packs || []);
+            const packResponse = await packService.getPackInventory(walletAddress, 'farmer');
+            setOwnedPacks(packResponse.data.packs || []);
 
         } catch (err) {
             console.error('Error fetching packs:', err);
@@ -105,7 +120,7 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setIsLoading(true);
             setError(null);
 
-            const response = await packService.buyPack(walletAddress, packId, 'farmer');
+            await packService.buyPack(walletAddress, packId, 'farmer');
 
             // Refresh packs and balance after purchase
             await fetchPacks();
@@ -128,14 +143,14 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setIsLoading(true);
             setError(null);
 
-            const response = await packService.openPack(walletAddress, packId);
+            const openResponse = await packService.openPack(walletAddress, packId);
 
             // Refresh farmers and packs after opening
             await fetchFarmers();
             await fetchPacks();
 
             // Return the farmer from the pack
-            const farmer = response.data.contents.farmers[0];
+            const farmer = openResponse.data.contents.farmers[0];
             return { success: true, farmer };
 
         } catch (err: any) {
@@ -153,7 +168,7 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setIsLoading(true);
             setError(null);
 
-            const response = await farmerService.harvestAll(walletAddress);
+            await farmerService.harvestAll(walletAddress);
 
             // Refresh farmers and balance after harvesting
             await fetchFarmers();
@@ -176,7 +191,7 @@ export const FarmerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setIsLoading(true);
             setError(null);
 
-            const response = await farmerService.levelUpFarmer(walletAddress, farmerId);
+            await farmerService.levelUpFarmer(walletAddress, farmerId);
 
             // Refresh farmers after leveling up
             await fetchFarmers();

@@ -1,6 +1,5 @@
 // src/components/sections/Marketplace/MarketplaceHero.tsx
 import React from 'react';
-import Button from '../../common/Button';
 import { useWalletConnection } from '../../../context/WalletConnectionProvider';
 
 const MarketplaceHero: React.FC = () => {

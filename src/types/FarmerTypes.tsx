@@ -69,10 +69,16 @@ export interface Farmer {
 export interface OwnedFarmer {
     id: string;
     farmerId: string;
+    name: string;
+    rarity: 'common' | 'rare' | 'epic' | 'legendary';
     level: number;
+    baseYieldPerHour: number;
+    effectiveYield: number;
     purchasedAt: number;
     lastHarvested: number;
     equippedItems?: string[];
+    imageSrc?: string;
+    description: string;
 }
 
 

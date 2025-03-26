@@ -5,7 +5,17 @@ import { useMarketplace } from '../../../context/MarketplaceContext';
 import { getRarityColor } from '../../common/PackOpeningAnimation';
 
 interface SellItemPopupProps {
-    item: any;
+    item: {
+        price: number;
+        name: string;
+        rarity: string;
+        type: string;
+        description: string;
+        imageSrc?: string;
+        stats: Record<string, number>;
+        effect?: string;
+        duration?: string;
+    };
     ownedItemId: string;
     onClose: () => void;
 }

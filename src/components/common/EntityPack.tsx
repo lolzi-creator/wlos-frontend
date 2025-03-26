@@ -24,8 +24,8 @@ export interface EntityPackProps {
 }
 
 // Colors and styles are calculated once and memoized
-const getPackTypeColors = (packType: string, entityType: string) => {
-    const baseColors = {
+const getPackTypeColors = (packType: 'basic' | 'premium' | 'legendary', entityType: 'hero' | 'farmer') => {
+    const baseColors: Record<'basic' | 'premium' | 'legendary', Record<'farmer' | 'hero', string>> = {
         'basic': {
             farmer: '#14F195', // Green for farmers
             hero: '#00C2FF'    // Cyan for heroes
@@ -61,7 +61,6 @@ const getPackTypeColors = (packType: string, entityType: string) => {
 };
 
 const EntityPack: React.FC<EntityPackProps> = ({
-                                                   id,
                                                    name,
                                                    description,
                                                    cost,

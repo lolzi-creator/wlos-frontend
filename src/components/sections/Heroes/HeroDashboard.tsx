@@ -49,7 +49,7 @@ const HeroDashboard: React.FC = () => {
     };
 
     const handleDeploy = (id: string) => {
-        // This would be implemented when you add battle functionality
+        console.log(`Deploying hero ${id}`); // Log the ID
         setPopupType('info');
         setPopupMessage('Battle system is coming soon! Your hero is ready for deployment.');
         setShowPopup(true);

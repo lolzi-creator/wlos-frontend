@@ -13,9 +13,24 @@ import '../../styles/entityPack.css';
 interface GenericPackStoreProps {
     entityType: 'farmer' | 'hero';
     title: string;
+    packs: Array<{
+        id: string;
+        name: string;
+        description: string;
+        cost: number;
+        rarityChances: {
+            common: number;
+            rare: number;
+            epic: number;
+            legendary: number;
+        };
+    }>;
+    buyPack: (packId: string) => Promise<boolean>;
+    isLoading: boolean;
+    error: string | null;
 }
 
-const GenericPackStore: React.FC<GenericPackStoreProps> = ({ entityType, title }) => {
+const GenericPackStore: React.FC<GenericPackStoreProps> = ({ entityType, title}) => {
     // Get the appropriate context based on entity type
     const farmerContext = useFarmer();
     const heroContext = useHero();

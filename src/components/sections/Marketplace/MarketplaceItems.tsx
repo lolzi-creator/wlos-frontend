@@ -203,7 +203,8 @@ const MarketplaceItems: React.FC<MarketplaceItemsProps> = ({
                 </div>
             )}
 
-            <style jsx>{`
+            <style>
+                {`
                 .warning-banner {
                     background-color: rgba(255, 77, 77, 0.2);
                     border: 1px solid rgba(255, 77, 77, 0.5);
@@ -229,7 +230,8 @@ const MarketplaceItems: React.FC<MarketplaceItemsProps> = ({
                     color: #ccc;
                     margin: 20px 0;
                 }
-            `}</style>
+                `}
+            </style>
         </section>
     );
 };

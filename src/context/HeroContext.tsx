@@ -1,7 +1,7 @@
 // src/context/HeroContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useWalletConnection } from './WalletConnectionProvider';
-import { Hero, OwnedHero, HEROES } from '../types/HeroTypes';
+import { Hero, OwnedHero } from '../types/HeroTypes';
 import { assetService, packService, heroService } from '../services/api';
 
 // Add new type for owned packs
@@ -129,7 +129,7 @@ export const HeroProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     // Buy a hero (not really needed as heroes primarily come from packs)
-    const buyHero = async (heroId: string): Promise<boolean> => {
+    const buyHero = async (): Promise<boolean> => {
         setIsLoading(true);
         setError(null);
 
@@ -154,9 +154,8 @@ export const HeroProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         try {
             // Call the backend API to level up the hero
-            const response = await heroService.levelUpHero(walletAddress, ownedHeroId);
-
-            // Refresh heroes to get updated data
+            await heroService.levelUpHero(walletAddress, ownedHeroId);
+// Refresh heroes to get updated data
             await fetchHeroes();
 
             // Refresh the wallet balance since leveling up costs WLOS
@@ -178,9 +177,8 @@ export const HeroProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setError(null);
 
         try {
-            const response = await packService.buyPack(walletAddress, packId, 'hero');
-
-            // Refresh packs and balance after purchase
+            await packService.buyPack(walletAddress, packId, 'hero');
+// Refresh packs and balance after purchase
             await fetchPacks();
             refreshBalance();
 

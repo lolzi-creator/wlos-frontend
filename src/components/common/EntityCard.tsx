@@ -1,13 +1,14 @@
 // src/components/common/EnhancedEntityCard.tsx
 import React from 'react';
 import { getRarityColor } from './PackOpeningAnimation';
+import { Rarity } from '../../types/ItemTypes';
 import '../../styles/entityCard.css';
 
 // Define a generic entity interface that all entities will extend
 export interface BaseEntity {
     id: string;
     name: string;
-    rarity: 'common' | 'rare' | 'epic' | 'legendary';
+    rarity: Rarity;
     imageSrc: string;
     description: string;
     type?: string;

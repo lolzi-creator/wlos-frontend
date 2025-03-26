@@ -2,6 +2,8 @@
 // src/types/ItemTypes.ts
 // Add to the existing file:
 
+export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+
 export interface OwnedItem {
     id: string;
     itemId: string;
@@ -58,7 +60,7 @@ export interface Item {
     id: string;
     name: string;
     type: 'weapon' | 'armor' | 'accessory' | 'consumable';
-    rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+    rarity: Rarity;
     price: number;
     stats: {
         [key: string]: number;  // Like attack: 10, defense: 5

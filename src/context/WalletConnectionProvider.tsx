@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { PublicKey } from '@solana/web3.js';
 import { authService, walletService, assetService } from '../services/api.ts';
 
 // Define types for our context
@@ -8,6 +7,11 @@ interface WalletContextProps {
     isConnected: boolean;
     walletAddress: string;
     balance: {
+        sol: number;
+        wlos: number;
+        usd: number;
+    };
+    walletBalance: {
         sol: number;
         wlos: number;
         usd: number;
@@ -32,6 +36,7 @@ const WalletConnectionContext = createContext<WalletContextProps>({
     isConnected: false,
     walletAddress: '',
     balance: { sol: 0, wlos: 0, usd: 0 },
+    walletBalance: { sol: 0, wlos: 0, usd: 0 },
     assets: { heroes: [], farmers: [], items: [] },
     transactions: [],
     isLoading: false,
@@ -48,7 +53,7 @@ interface WalletConnectionProviderProps {
 }
 
 export const WalletConnectionProvider: React.FC<WalletConnectionProviderProps> = ({ children }) => {
-    const { wallet, publicKey, disconnect, signMessage } = useWallet();
+    const { publicKey, disconnect } = useWallet();
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const [walletAddress, setWalletAddress] = useState<string>('');
     const [balance, setBalance] = useState<{ sol: number; wlos: number; usd: number }>({ sol: 0, wlos: 0, usd: 0 });
@@ -196,20 +201,6 @@ export const WalletConnectionProvider: React.FC<WalletConnectionProviderProps> =
         }
     };
 
-    // Request message for signature (authentication)
-    const requestMessage = async () => {
-        if (!walletAddress) return null;
-
-        try {
-            const response = await authService.getNonceMessage(walletAddress);
-            return response.data.message;
-        } catch (err) {
-            console.error('Error getting nonce message:', err);
-            setError('Failed to get authentication message');
-            throw err;
-        }
-    };
-
     // Disconnect wallet
     const handleDisconnect = async () => {
         if (disconnect) {
@@ -233,13 +224,14 @@ export const WalletConnectionProvider: React.FC<WalletConnectionProviderProps> =
                 isConnected,
                 walletAddress,
                 balance,
+                walletBalance: balance,
                 assets,
                 transactions,
                 isLoading,
                 error,
                 disconnect: handleDisconnect,
-                refreshBalance: (address: string = walletAddress) => fetchBalance(address),
-                refreshAssets: (address: string = walletAddress) => fetchAssets(address),
+                refreshBalance: (address?: string) => fetchBalance(address || walletAddress),
+                refreshAssets: (address?: string) => fetchAssets(address || walletAddress),
                 refreshTransactions: (page?: number, limit?: number) => fetchTransactions(walletAddress, page, limit),
                 refreshWallet
             }}

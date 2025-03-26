@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import { useWalletConnection } from '../../../context/WalletConnectionProvider';
-import Button from '../../common/Button';
 
-interface TransactionFilters {
-    category?: string;
-    type?: string;
-    page?: number;
-    limit?: number;
-}
 
 const WalletTransactions: React.FC = () => {
     const {
@@ -23,7 +16,6 @@ const WalletTransactions: React.FC = () => {
     const [filterCategory, setFilterCategory] = useState<string>('all');
     const [filterType, setFilterType] = useState<string>('all');
     const [expandedTx, setExpandedTx] = useState<string | null>(null);
-    const [txDetails, setTxDetails] = useState<any>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [uniqueTypes, setUniqueTypes] = useState<string[]>([]);

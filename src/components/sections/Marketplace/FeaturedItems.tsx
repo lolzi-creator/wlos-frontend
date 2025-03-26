@@ -3,39 +3,47 @@ import React from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import Button from '../../common/Button';
 import EntityCard from '../../common/EntityCard';
-import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
+import { MARKETPLACE_ITEMS, Item } from '../../../types/ItemTypes';
 import { useMarketplace } from '../../../context/MarketplaceContext';
 
 interface FeaturedItemsProps {
     onViewAll: () => void;
 }
 
+interface MarketListing {
+    id: string;
+    itemId: string;
+    price: number;
+    seller: string;
+}
+
+interface FormattedListing extends Item {
+    listingId: string;
+    price: number;
+    seller?: string;
+}
+
 const FeaturedItems: React.FC<FeaturedItemsProps> = ({ onViewAll }) => {
     const { marketListings } = useMarketplace();
 
     // Format listings to work with EntityCard
-    const formattedListings = marketListings.map(listing => {
-        const baseItem = MARKETPLACE_ITEMS.find(item => item.id === listing.itemId);
-        if (!baseItem) return null;
+    const formattedListings: FormattedListing[] = marketListings
+        .map((listing: MarketListing) => {
+            const baseItem = MARKETPLACE_ITEMS.find(item => item.id === listing.itemId);
+            if (!baseItem) return null;
 
-        // Return item formatted for EntityCard
-        return {
-            id: listing.id,
-            name: baseItem.name,
-            rarity: baseItem.rarity,
-            type: baseItem.type,
-            description: baseItem.description,
-            imageSrc: baseItem.imageSrc,
-            stats: baseItem.stats,
-            price: listing.price,
-            effect: baseItem.effect,
-            duration: baseItem.duration,
-            seller: listing.seller
-        };
-    }).filter(item => item !== null);
+            // Return item formatted for EntityCard
+            return {
+                ...baseItem,
+                listingId: listing.id,
+                price: listing.price,
+                seller: listing.seller
+            };
+        })
+        .filter((item): item is NonNullable<typeof item> => item !== null);
 
     // If there are not enough marketplace listings, add default items from catalog
-    const getCatalogItems = () => {
+    const getCatalogItems = (): FormattedListing[] => {
         return MARKETPLACE_ITEMS
             .filter(item => {
                 // Filter to get one of each rarity, prioritizing weapons
@@ -43,27 +51,20 @@ const FeaturedItems: React.FC<FeaturedItemsProps> = ({ onViewAll }) => {
                 return isWeapon;
             })
             .map(item => ({
-                id: item.id,
-                name: item.name,
-                rarity: item.rarity,
-                type: item.type,
-                description: item.description,
-                imageSrc: item.imageSrc,
-                stats: item.stats,
-                price: item.price,
-                effect: item.effect,
-                duration: item.duration
+                ...item,
+                listingId: item.id,
+                price: item.price
             }));
     };
 
     // Try to get one legendary, one epic, and one rare item
-    let featuredItems = [];
+    let featuredItems: FormattedListing[] = [];
 
     // First check if we have marketplace listings to feature
     if (formattedListings.length > 0) {
         const legendary = formattedListings.find(item => item.rarity === 'legendary');
-        const epic = formattedListings.find(item => item.rarity === 'epic' && item.id !== legendary?.id);
-        const rare = formattedListings.find(item => item.rarity === 'rare' && item.id !== legendary?.id && item.id !== epic?.id);
+        const epic = formattedListings.find(item => item.rarity === 'epic' && item.listingId !== legendary?.listingId);
+        const rare = formattedListings.find(item => item.rarity === 'rare' && item.listingId !== legendary?.listingId && item.listingId !== epic?.listingId);
 
         // Add any found items to featured
         if (legendary) featuredItems.push(legendary);
@@ -72,7 +73,7 @@ const FeaturedItems: React.FC<FeaturedItemsProps> = ({ onViewAll }) => {
 
         // If we don't have 3 items yet, add random ones
         while (featuredItems.length < 3 && formattedListings.length > featuredItems.length) {
-            const remainingItems = formattedListings.filter(item => !featuredItems.find(featured => featured.id === item.id));
+            const remainingItems = formattedListings.filter(item => !featuredItems.find(featured => featured.listingId === item.listingId));
             if (remainingItems.length === 0) break;
             featuredItems.push(remainingItems[0]);
         }
@@ -85,7 +86,7 @@ const FeaturedItems: React.FC<FeaturedItemsProps> = ({ onViewAll }) => {
 
         for (let i = 0; i < neededItems && i < catalogItems.length; i++) {
             // Ensure we're not duplicating items
-            if (!featuredItems.find(item => item.id === catalogItems[i].id)) {
+            if (!featuredItems.find(item => item.listingId === catalogItems[i].listingId)) {
                 featuredItems.push(catalogItems[i]);
             }
         }
@@ -101,19 +102,36 @@ const FeaturedItems: React.FC<FeaturedItemsProps> = ({ onViewAll }) => {
 
     return (
         <section className="featured-items-section">
+            <style>
+                {`
+                    .featured-items-grid {
+                        display: flex;
+                        justify-content: center;
+                        gap: 20px;
+                        margin: 24px 0;
+                    }
+                    
+                    .view-all-container {
+                        display: flex;
+                        justify-content: center;
+                        margin: 24px 0;
+                    }
+                `}
+            </style>
+
             <SectionTitle title="FEATURED ITEMS" />
 
             <div className="featured-items-grid">
                 {featuredItems.map(item => (
                     <EntityCard
-                        key={item.id}
+                        key={item.listingId}
                         entity={item}
                         showStats={true}
                         statusLabel="PRICE"
                         statusValue={`${item.price} WLOS`}
                         primaryAction={{
                             text: "BUY",
-                            onClick: () => handleBuyItem(item.id)
+                            onClick: () => handleBuyItem(item.listingId)
                         }}
                     />
                 ))}
@@ -127,21 +145,6 @@ const FeaturedItems: React.FC<FeaturedItemsProps> = ({ onViewAll }) => {
                     fullWidth={false}
                 />
             </div>
-
-            <style jsx>{`
-                .featured-items-grid {
-                    display: flex;
-                    justify-content: center;
-                    gap: 20px;
-                    margin: 24px 0;
-                }
-                
-                .view-all-container {
-                    display: flex;
-                    justify-content: center;
-                    margin: 24px 0;
-                }
-            `}</style>
         </section>
     );
 };

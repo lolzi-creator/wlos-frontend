@@ -82,10 +82,28 @@ export interface Hero {
 export interface OwnedHero {
     id: string;
     heroId: string;
+    name: string;
+    rarity: 'common' | 'rare' | 'epic' | 'legendary';
+    type: 'attack' | 'defense' | 'speed' | 'balanced' | 'magic';
+    power: number;
     level: number;
     purchasedAt: number;
     experience: number;
     equippedItems?: string[];
+    description: string;
+    imageSrc: string;
+    stats: {
+        attack: number;
+        defense: number;
+        speed: number;
+        energy: number;
+    };
+    abilities: {
+        name: string;
+        type: string;
+        cooldown: string;
+        description: string;
+    }[];
 }
 
 // Define your hero catalog based on the images provided

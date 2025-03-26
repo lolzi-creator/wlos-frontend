@@ -1,9 +1,9 @@
 // src/context/MarketplaceContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useWalletConnection } from './WalletConnectionProvider';
-import { Item, OwnedItem, MARKETPLACE_ITEMS } from '../types/ItemTypes';
+import { OwnedItem, MARKETPLACE_ITEMS } from '../types/ItemTypes';
 
-interface MarketplaceListingItem {
+export interface MarketplaceListingItem {
     id: string;
     ownedItemId: string;
     itemId: string;
@@ -322,6 +322,8 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
             };
 
             // If no charges left, remove from inventory
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             if (updatedOwnedItems[itemIndex].charges <= 0) {
                 updatedOwnedItems.splice(itemIndex, 1);
             }

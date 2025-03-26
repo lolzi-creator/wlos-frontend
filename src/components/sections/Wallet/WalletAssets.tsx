@@ -7,7 +7,7 @@ import { HEROES } from '../../../types/HeroTypes';
 import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
 
 const WalletAssets: React.FC = () => {
-    const { isConnected, assets, refreshAssets, isLoading } = useWalletConnection();
+    const { isConnected, assets, isLoading } = useWalletConnection();
     const [selectedCategory, setSelectedCategory] = useState<'all' | 'farmers' | 'heroes' | 'items'>('all');
     const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
     const [farmersWithDetails, setFarmersWithDetails] = useState<any[]>([]);
@@ -256,7 +256,6 @@ const WalletAssets: React.FC = () => {
                                 />
                             );
                         } else { // item
-                            const isConsumable = asset.details.type === 'consumable';
                             return (
                                 <EntityCard
                                     key={asset.id}
@@ -281,7 +280,7 @@ const WalletAssets: React.FC = () => {
                 </div>
             )}
 
-            <style jsx>{`
+            <style>{`
                 .loading-container {
                     display: flex;
                     flex-direction: column;

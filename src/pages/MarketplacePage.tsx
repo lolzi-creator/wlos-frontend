@@ -11,7 +11,6 @@ import InventoryItems from '../components/sections/Marketplace/InventoryItems';
 import MyListings from '../components/sections/Marketplace/MyListings';
 import { useWalletConnection } from '../context/WalletConnectionProvider';
 import WalletConnectButton from '../components/common/WalletConnectButton';
-import { MarketplaceProvider } from '../context/MarketplaceContext';
 
 const MarketplacePage: React.FC = () => {
     // Four main tabs (added My Listings tab)

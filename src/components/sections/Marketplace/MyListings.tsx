@@ -1,20 +1,35 @@
 // src/components/sections/Marketplace/MyListings.tsx
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import SectionTitle from '../../common/SectionTitle';
-import { MARKETPLACE_ITEMS } from '../../../types/ItemTypes';
+import { MARKETPLACE_ITEMS, Item } from '../../../types/ItemTypes';
 import { useMarketplace } from '../../../context/MarketplaceContext';
 import '../../../styles/listings.css';
 
-// Price Change Modal Component
-const PriceChangeModal = ({
-                              listingId,
-                              currentPrice,
-                              onClose,
-                              onUpdatePrice
-                          }) => {
-    const [newPrice, setNewPrice] = useState(currentPrice);
+interface PriceChangeModalProps {
+    listingId: string;
+    currentPrice: number;
+    onClose: () => void;
+    onUpdatePrice: (listingId: string, newPrice: number) => Promise<void>;
+}
 
-    const handlePriceChange = (e) => {
+interface Listing {
+    id: string;
+    itemId: string;
+    price: number;
+    listedAt: number;
+    details?: Item;
+}
+
+// Price Change Modal Component
+const PriceChangeModal: React.FC<PriceChangeModalProps> = ({
+    listingId,
+    currentPrice,
+    onClose,
+    onUpdatePrice
+}) => {
+    const [newPrice, setNewPrice] = useState<number>(currentPrice);
+
+    const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value);
         if (!isNaN(value) && value > 0) {
             setNewPrice(value);
@@ -58,9 +73,9 @@ const PriceChangeModal = ({
     );
 };
 
-const MyListings = () => {
+const MyListings: React.FC = () => {
     const { myListings, cancelListing, updateListingPrice, isLoading, error } = useMarketplace();
-    const [selectedListing, setSelectedListing] = useState(null);
+    const [selectedListing, setSelectedListing] = useState<string | null>(null);
     const [priceChangeModal, setPriceChangeModal] = useState({
         isOpen: false,
         listingId: '',
@@ -68,7 +83,7 @@ const MyListings = () => {
     });
 
     // Get full item details for each listing
-    const listingsWithDetails = myListings.map(listing => {
+    const listingsWithDetails = myListings.map((listing: Listing) => {
         const itemDetails = MARKETPLACE_ITEMS.find(item => item.id === listing.itemId);
         if (!itemDetails) return null;
 
@@ -76,9 +91,9 @@ const MyListings = () => {
             ...listing,
             details: itemDetails
         };
-    }).filter(listing => listing !== null);
+    }).filter((listing): listing is NonNullable<typeof listing> => listing !== null);
 
-    const handleCancelListing = async (listingId) => {
+    const handleCancelListing = async (listingId: string) => {
         try {
             const success = await cancelListing(listingId);
             if (success) {
@@ -89,7 +104,7 @@ const MyListings = () => {
         }
     };
 
-    const openPriceChangeModal = (listingId, currentPrice) => {
+    const openPriceChangeModal = (listingId: string, currentPrice: number) => {
         setPriceChangeModal({
             isOpen: true,
             listingId,
@@ -106,7 +121,7 @@ const MyListings = () => {
     };
 
     // Handle price update
-    const handleUpdatePrice = async (listingId, newPrice) => {
+    const handleUpdatePrice = async (listingId: string, newPrice: number) => {
         try {
             const success = await updateListingPrice(listingId, newPrice);
             if (success) {
@@ -118,14 +133,14 @@ const MyListings = () => {
     };
 
     // Format date from timestamp
-    const formatDate = (timestamp) => {
+    const formatDate = (timestamp: number) => {
         const date = new Date(timestamp);
         // Format as DD.MM.YYYY HH:MM:SS
         return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
     };
 
     // Get rarity color and letter
-    const getRarityInfo = (rarity) => {
+    const getRarityInfo = (rarity: string) => {
         switch(rarity) {
             case 'common':
                 return { color: '#14F195', letter: 'C' };
