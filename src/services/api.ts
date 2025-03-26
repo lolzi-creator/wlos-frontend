@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-const API_URL = 'http://localhost:3000'; // Change this to your deployed backend URL later
+const API_URL = import.meta.env.VITE_API_URL || 'wlos-backend-production.up.railway.app';
 
 export const api = axios.create({
     baseURL: API_URL,
