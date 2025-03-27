@@ -1,58 +1,264 @@
 /* StakingPage.css - Main container styles */
-.staking-content {
+.staking-page {
+  position: relative;
+  padding: 0 16px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
-  padding-top: 6rem; /* Further increased padding for navbar clearance */
-  position: relative;
-  z-index: 1;
+  color: white;
 }
 
-/* Add a nice border around the main content */
-.staking-hero,
-.staking-stats,
-.staking-pools {
-  position: relative;
+.staking-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
 }
 
-.staking-hero::before,
-.staking-stats::before,
-.staking-pools::before {
-  content: '';
+.grid-lines {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 10px;
-  padding: 2px; /* Thickness of the border */
-  background: linear-gradient(
-    135deg,
-    rgba(20, 241, 149, 0.3) 0%,
-    rgba(153, 69, 255, 0.1) 50%,
-    rgba(20, 241, 149, 0.2) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out;
-  mask-composite: exclude;
-  pointer-events: none;
-  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-/* Scanning line effect */
-.scanning-line {
-  position: fixed; /* Change to fixed from absolute */
-  left: 0;
+.grid-line {
   width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 241, 149, 0) 0%,
+    rgba(20, 241, 149, 0.1) 50%,
+    rgba(20, 241, 149, 0) 100%
+  );
+}
+
+.scanning-line {
+  position: absolute;
   height: 2px;
-  background: linear-gradient(90deg, 
-    rgba(20, 241, 149, 0) 0%, 
-    rgba(20, 241, 149, 0.5) 50%, 
-    rgba(20, 241, 149, 0) 100%);
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 241, 149, 0) 0%,
+    rgba(20, 241, 149, 0.5) 50%,
+    rgba(20, 241, 149, 0) 100%
+  );
+  box-shadow: 0 0 10px rgba(20, 241, 149, 0.5);
   opacity: 0.3;
-  z-index: 5;
-  pointer-events: none;
-  margin-top: 6rem; /* Add margin to position below navbar */
+  transition: top 0.03s linear;
+}
+
+.page-header {
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #14F195 0%, #32f5aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(20, 241, 149, 0.3);
+}
+
+.connect-wallet-prompt {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.staking-content {
+  width: 100%;
+}
+
+.staking-connected-content {
+  width: 100%;
+}
+
+.staking-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(20, 241, 149, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.staking-tab {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.staking-tab.active {
+  color: #14F195;
+}
+
+.tab-text {
+  position: relative;
+  z-index: 1;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 241, 149, 0.3) 0%,
+    rgba(20, 241, 149, 0.8) 50%,
+    rgba(20, 241, 149, 0.3) 100%
+  );
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(20, 241, 149, 0.5);
+}
+
+.staking-content-area {
+  padding: 1rem 0;
+}
+
+/* Wallet connection card */
+.wallet-connect-container {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.wallet-connect-card {
+  background: rgba(13, 14, 33, 0.7);
+  border: 1px solid rgba(20, 241, 149, 0.2);
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(20, 241, 149, 0.15),
+    transparent 70%
+  );
+  opacity: 0.7;
+}
+
+.wallet-connect-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.connect-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #14F195;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.connect-description {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.feature-icon {
+  font-size: 1.25rem;
+  color: #14F195;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .staking-tabs {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .staking-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .wallet-connect-card {
+    padding: 1.5rem;
+  }
+  
+  .connect-title {
+    font-size: 1.25rem;
+  }
+  
+  .connect-description {
+    font-size: 0.875rem;
+  }
+  
+  .feature {
+    font-size: 0.8rem;
+  }
 }
 
 /* Background animations */
@@ -164,129 +370,6 @@
   animation: particleFloat 32s infinite linear;
 }
 
-/* Tab navigation */
-.staking-tabs {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(20, 241, 149, 0.2);
-  position: relative;
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.staking-tabs::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-.staking-tab {
-  background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 0.75rem 0;
-  position: relative;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  white-space: nowrap;
-  min-width: max-content;
-}
-
-.staking-tab .tab-text {
-  display: block;
-  padding: 0 0.5rem;
-}
-
-.staking-tab.active {
-  color: var(--color-green);
-}
-
-.tab-indicator {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, 
-    rgba(20, 241, 149, 0.5) 0%, 
-    rgba(20, 241, 149, 1) 50%, 
-    rgba(20, 241, 149, 0.5) 100%);
-  box-shadow: 0 0 10px rgba(20, 241, 149, 0.5);
-}
-
-/* Connected wallet content */
-.staking-connected-content {
-  animation: fadeIn 0.5s ease;
-  position: relative;
-  z-index: 2;
-}
-
-.staking-content-area {
-  margin-top: 1rem;
-  position: relative;
-  z-index: 2;
-}
-
-/* Wallet connect styles */
-.wallet-connect-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  position: relative;
-  z-index: 2;
-}
-
-.wallet-connect-card {
-  background: rgba(13, 14, 33, 0.7);
-  border: 1px solid rgba(20, 241, 149, 0.3);
-  border-radius: 8px;
-  padding: 2.5rem;
-  max-width: 500px;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-}
-
-.card-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at 50% 0%, 
-    rgba(20, 241, 149, 0.1) 0%, 
-    transparent 70%
-  );
-  opacity: 0.5;
-  z-index: 0;
-}
-
-.wallet-connect-content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-}
-
-.connect-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-green);
-  margin-bottom: 1rem;
-  text-shadow: 0 0 8px rgba(20, 241, 149, 0.3);
-}
-
-.connect-description {
-  color: var(--color-text-secondary);
-  margin-bottom: 2rem;
-  line-height: 1.6;
-}
-
 /* Font family */
 .staking-content {
   font-family: 'Rajdhani', 'Orbitron', sans-serif;
@@ -328,47 +411,4 @@
   50% { transform: translate(50px, -50px); }
   75% { transform: translate(-25px, -25px); }
   100% { transform: translate(0, 0); }
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-  .staking-content {
-    padding: 0.75rem;
-    padding-top: 1.5rem;
-  }
-  
-  .wallet-connect-card {
-    padding: 1.5rem;
-  }
-  
-  .connect-title {
-    font-size: 1.25rem;
-  }
-  
-  .energy-orb {
-    filter: blur(40px);
-  }
-}
-
-@media (max-width: 480px) {
-  .staking-content {
-    padding: 0.75rem;
-    padding-top: 3.5rem;
-  }
-  
-  .scanning-line {
-    margin-top: 3.5rem;
-  }
-  
-  .staking-tabs {
-    padding-bottom: 0.5rem;
-  }
-  
-  .staking-tab {
-    font-size: 0.875rem;
-  }
-  
-  .energy-orb {
-    filter: blur(30px);
-  }
 } 

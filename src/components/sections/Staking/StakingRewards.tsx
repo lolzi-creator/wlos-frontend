@@ -1,176 +1,238 @@
-import React from 'react';
-import Button from '../../common/Button.tsx';
-import SectionTitle from '../../common/SectionTitle.tsx';
-
-const mockRewardsData = [
-  {
-    pool: 'Warrior Pool',
-    stakedAmount: '500 WLOS',
-    startDate: '2025-02-15',
-    endDate: '2025-02-22',
-    availableRewards: '5.32 WLOS',
-    status: 'Active',
-    timeRemaining: '3 days'
-  },
-  {
-    pool: 'Knight Pool',
-    stakedAmount: '1,000 WLOS',
-    startDate: '2025-01-20',
-    endDate: '2025-02-19',
-    availableRewards: '42.68 WLOS',
-    status: 'Completed',
-    timeRemaining: '0 days'
-  },
-  {
-    pool: 'Warlord Pool',
-    stakedAmount: '2,500 WLOS',
-    startDate: '2025-01-01',
-    endDate: '2025-04-01',
-    availableRewards: '128.45 WLOS',
-    status: 'Active',
-    timeRemaining: '41 days'
-  }
-];
+import React, { useState } from 'react';
+import { useStaking } from '../../../context/StakingContext';
+import '../../../styles/modules/staking/StakingRewards.css';
 
 const StakingRewards: React.FC = () => {
-  return (
-    <section className="staking-rewards-section">
-      <SectionTitle title="YOUR STAKING REWARDS" />
+    const { positions, stats, claimRewards, unstakeTokens, isLoading } = useStaking();
+    const [actionInProgress, setActionInProgress] = useState<{id: string, action: 'claim' | 'unstake'} | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-      <div className="rewards-summary clip-card border-green">
-        <div className="accent-border top green"></div>
+    // Format numbers with commas, handling potential undefined values
+    const formatNumber = (value: number | undefined): string => {
+        if (value === undefined) return '0';
+        return value.toLocaleString();
+    };
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="rewards-stats">
-            <h3 className="rewards-title">REWARDS SUMMARY</h3>
+    const handleClaimAll = async () => {
+        if (positions.length === 0 || stats.totalPendingRewards === 0) return;
+        
+        // Implement claiming all rewards in sequence
+        try {
+            setError(null);
+            
+            for (const position of positions) {
+                if (position.pendingRewards > 0) {
+                    setActionInProgress({ id: position.id, action: 'claim' });
+                    await claimRewards(position.id);
+                }
+            }
+        } catch (err: any) {
+            console.error('Error claiming all rewards:', err);
+            setError(err.message || 'Failed to claim all rewards');
+        } finally {
+            setActionInProgress(null);
+        }
+    };
 
-            <div className="rewards-grid">
-              <div className="reward-stat-box">
-                <div className="stat-label">Total Staked</div>
-                <div className="stat-value">4,000 WLOS</div>
-              </div>
+    const handleClaim = async (stakingId: string) => {
+        try {
+            setError(null);
+            setActionInProgress({ id: stakingId, action: 'claim' });
+            await claimRewards(stakingId);
+        } catch (err: any) {
+            console.error('Error claiming rewards:', err);
+            setError(err.message || 'Failed to claim rewards');
+        } finally {
+            setActionInProgress(null);
+        }
+    };
 
-              <div className="reward-stat-box">
-                <div className="stat-label">Active Pools</div>
-                <div className="stat-value">2</div>
-              </div>
+    const handleUnstake = async (stakingId: string) => {
+        try {
+            setError(null);
+            setActionInProgress({ id: stakingId, action: 'unstake' });
+            await unstakeTokens(stakingId);
+        } catch (err: any) {
+            console.error('Error unstaking:', err);
+            setError(err.message || 'Failed to unstake');
+        } finally {
+            setActionInProgress(null);
+        }
+    };
 
-              <div className="reward-stat-box">
-                <div className="stat-label">Available Rewards</div>
-                <div className="stat-value text-green-text">176.45 WLOS</div>
-              </div>
+    // Format date from ISO string
+    const formatDate = (dateString: string) => {
+        if (!dateString || dateString === "Invalid Date") return "N/A";
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return "N/A";
+            return date.toLocaleDateString();
+        } catch (err) {
+            return "N/A";
+        }
+    };
 
-              <div className="reward-stat-box">
-                <div className="stat-label">Claimed Rewards</div>
-                <div className="stat-value">68.92 WLOS</div>
-              </div>
+    // Calculate days left in staking period
+    const getDaysLeft = (endDate: string) => {
+        if (!endDate) return 0;
+        try {
+            const end = new Date(endDate);
+            if (isNaN(end.getTime())) return 0;
+            
+            const now = new Date();
+            const diffTime = end.getTime() - now.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays > 0 ? diffDays : 0;
+        } catch (err) {
+            return 0;
+        }
+    };
+
+    return (
+        <section className="rewards-dashboard">
+            <div className="dashboard-header">
+                <h2 className="section-title">YOUR STAKING REWARDS</h2>
+                <div className="accent-line"></div>
             </div>
-
-            <div className="rewards-actions">
-              <Button
-                text="CLAIM ALL REWARDS"
-                color="green"
-                onClick={() => console.log('Claim all rewards clicked')}
-                fullWidth={true}
-              />
-            </div>
-          </div>
-
-          <div className="rewards-chart">
-            <h3 className="chart-title">REWARDS GROWTH</h3>
-
-            <div className="growth-chart">
-              <svg className="growth-svg" viewBox="0 0 300 200">
-                {/* Chart Grid Lines */}
-                <line x1="0" y1="50" x2="300" y2="50" stroke="#333366" strokeWidth="1" strokeDasharray="5,5" />
-                <line x1="0" y1="100" x2="300" y2="100" stroke="#333366" strokeWidth="1" strokeDasharray="5,5" />
-                <line x1="0" y1="150" x2="300" y2="150" stroke="#333366" strokeWidth="1" strokeDasharray="5,5" />
-
-                {/* Rewards Growth Curve */}
-                <path
-                  d="M0,180 C25,170 50,150 75,120 C100,90 125,70 150,50 C175,30 200,25 225,20 C250,15 275,10 300,5"
-                  fill="none"
-                  stroke="#14F195"
-                  strokeWidth="2"
-                />
-
-                {/* Area Under Curve */}
-                <path
-                  d="M0,180 C25,170 50,150 75,120 C100,90 125,70 150,50 C175,30 200,25 225,20 C250,15 275,10 300,5 L300,200 L0,200 Z"
-                  fill="url(#rewardsGradient)"
-                  opacity="0.2"
-                />
-
-                <defs>
-                  <linearGradient id="rewardsGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#14F195" stopOpacity="0.8"/>
-                    <stop offset="100%" stopColor="#14F195" stopOpacity="0"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-
-            <div className="time-axis">
-              <div className="time-label">Week 1</div>
-              <div className="time-label">Week 4</div>
-              <div className="time-label">Week 8</div>
-              <div className="time-label">Week 12</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="active-stakes-section">
-        <h3 className="stakes-title">ACTIVE STAKES & REWARDS</h3>
-
-        <div className="stakes-table-container">
-          <table className="stakes-table">
-            <thead>
-              <tr>
-                <th>Pool</th>
-                <th>Amount Staked</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Available Rewards</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockRewardsData.map((stake, index) => (
-                <tr key={index} className={stake.status === 'Completed' ? 'completed' : ''}>
-                  <td>{stake.pool}</td>
-                  <td>{stake.stakedAmount}</td>
-                  <td>{stake.startDate}</td>
-                  <td>{stake.endDate}</td>
-                  <td className="rewards-cell">{stake.availableRewards}</td>
-                  <td>
-                    <span className={`status-badge ${stake.status.toLowerCase()}`}>
-                      {stake.status}
-                      {stake.status === 'Active' && ` (${stake.timeRemaining})`}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="stake-actions">
-                      <button className="action-button claim">CLAIM</button>
-                      {stake.status === 'Active' && (
-                        <button className="action-button unstake">UNSTAKE</button>
-                      )}
+            
+            <div className="rewards-summary">
+                <h3 className="summary-title">REWARDS SUMMARY</h3>
+                
+                <div className="summary-cards">
+                    <div className="summary-card">
+                        <div className="card-content">
+                            <div className="card-label">TOTAL STAKED</div>
+                            <div className="card-value">{isLoading ? '...' : formatNumber(stats.totalStaked)}</div>
+                            <div className="card-unit">WLOS</div>
+                        </div>
+                        <div className="card-glow"></div>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    
+                    <div className="summary-card">
+                        <div className="card-content">
+                            <div className="card-label">ACTIVE POOLS</div>
+                            <div className="card-value">{isLoading ? '...' : positions.filter(p => p.isActive).length}</div>
+                            <div className="card-unit">POOLS</div>
+                        </div>
+                        <div className="card-glow"></div>
+                    </div>
+                    
+                    <div className="summary-card">
+                        <div className="card-content">
+                            <div className="card-label">PENDING REWARDS</div>
+                            <div className="card-value">{isLoading ? '...' : formatNumber(stats.totalPendingRewards)}</div>
+                            <div className="card-unit">WLOS</div>
+                        </div>
+                        <div className="card-glow"></div>
+                    </div>
+                </div>
+                
+                <button 
+                    className="claim-all-button" 
+                    onClick={handleClaimAll}
+                    disabled={isLoading || positions.length === 0 || stats.totalPendingRewards === 0 || actionInProgress !== null}
+                >
+                    <span className="button-text">
+                        {actionInProgress && actionInProgress.action === 'claim' 
+                            ? 'CLAIMING...' 
+                            : 'CLAIM ALL REWARDS'}
+                    </span>
+                    <div className="button-glow"></div>
+                </button>
+            </div>
 
-        <div className="stakes-note">
-          <div className="note-dot"></div>
-          <p className="note-text">Early unstaking incurs a 5% fee. Completed stakes can be unstaked with no fee.</p>
-        </div>
-      </div>
-    </section>
-  );
+            {error && (
+                <div className="error-message">
+                    {error}
+                </div>
+            )}
+
+            <div className="active-stakes">
+                <h3 className="stakes-title">ACTIVE STAKES & REWARDS</h3>
+                
+                {positions.length === 0 ? (
+                    <div className="no-stakes-message">
+                        No active staking positions. Start staking to earn rewards!
+                    </div>
+                ) : (
+                    <div className="stakes-table-container">
+                        <table className="stakes-table">
+                            <thead>
+                                <tr>
+                                    <th>POOL</th>
+                                    <th>AMOUNT STAKED</th>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                    <th>PENDING REWARDS</th>
+                                    <th>STATUS</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {positions.map((position) => {
+                                    const daysLeft = getDaysLeft(position.endTime);
+                                    const isCompleted = daysLeft === 0;
+                                    
+                                    return (
+                                        <tr key={position.id} className="stake-row">
+                                            <td className="pool-cell">{position.poolName}</td>
+                                            <td>{formatNumber(position.amount)} WLOS</td>
+                                            <td>{formatDate(position.startTime)}</td>
+                                            <td>{formatDate(position.endTime)}</td>
+                                            <td className="rewards-cell">{formatNumber(position.pendingRewards)} WLOS</td>
+                                            <td>
+                                                {position.isActive ? (
+                                                    <div className="status-badge active">
+                                                        ACTIVE ({daysLeft} DAYS)
+                                                        <div className="status-pulse"></div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="status-badge completed">COMPLETED</div>
+                                                )}
+                                            </td>
+                                            <td className="actions-cell">
+                                                <button 
+                                                    className="action-button claim" 
+                                                    onClick={() => handleClaim(position.id)}
+                                                    disabled={position.pendingRewards <= 0 || 
+                                                        (actionInProgress !== null && 
+                                                        (actionInProgress.id !== position.id || 
+                                                        actionInProgress.action !== 'claim'))}
+                                                >
+                                                    {actionInProgress && 
+                                                    actionInProgress.id === position.id && 
+                                                    actionInProgress.action === 'claim' 
+                                                        ? 'CLAIMING...' 
+                                                        : 'CLAIM'}
+                                                </button>
+                                                <button 
+                                                    className="action-button unstake" 
+                                                    onClick={() => handleUnstake(position.id)}
+                                                    disabled={actionInProgress !== null && 
+                                                        (actionInProgress.id !== position.id || 
+                                                        actionInProgress.action !== 'unstake')}
+                                                >
+                                                    {actionInProgress && 
+                                                    actionInProgress.id === position.id && 
+                                                    actionInProgress.action === 'unstake' 
+                                                        ? 'UNSTAKING...' 
+                                                        : 'UNSTAKE'}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+                
+                <div className="unstake-note">
+                    <span className="note-icon">ⓘ</span> Early unstaking incurs a 5% fee. Completed stakes can be unstaked with no fee.
+                </div>
+            </div>
+        </section>
+    );
 };
 
 export default StakingRewards;

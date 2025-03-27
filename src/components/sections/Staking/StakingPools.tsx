@@ -1,76 +1,85 @@
 import React, { useState } from 'react';
 import Button from '../../common/Button';
 import SectionTitle from '../../common/SectionTitle';
+import { useStaking } from '../../../context/StakingContext';
+import { useWalletConnection } from '../../../context/WalletConnectionProvider';
 import '../../../styles/modules/staking/StakingPools.css';
 
-// Define a type for the pool data
-interface PoolData {
-    id: string;
-    name: string;
-    lockPeriod: string;
-    apy: string;
-    minStake: string;
-    totalStaked: string;
-    description: string;
-    battleBoost: string;
-}
-
-const poolData: PoolData[] = [
-    {
-        id: 'warrior',
-        name: 'WARRIOR POOL',
-        lockPeriod: '7 days',
-        apy: '15.2%',
-        minStake: '10 WLOS',
-        totalStaked: '124,532 WLOS',
-        description: 'Short-term staking pool with quick rewards and lower commitment.',
-        battleBoost: '+15% Battle Power'
-    },
-    {
-        id: 'knight',
-        name: 'KNIGHT POOL',
-        lockPeriod: '30 days',
-        apy: '22.4%',
-        minStake: '100 WLOS',
-        totalStaked: '458,910 WLOS',
-        description: 'Medium-term staking with balanced rewards and moderate lock period.',
-        battleBoost: '+30% Battle Power'
-    },
-    {
-        id: 'warlord',
-        name: 'WARLORD POOL',
-        lockPeriod: '90 days',
-        apy: '25.7%',
-        minStake: '500 WLOS',
-        totalStaked: '982,674 WLOS',
-        description: 'Long-term staking with highest rewards for committed players.',
-        battleBoost: '+50% Battle Power'
-    }
-];
-
 const StakingPools: React.FC = () => {
-    const [selectedPool, setSelectedPool] = useState<string>('warrior');
+    const { pools, stakeTokens, isLoading } = useStaking();
+    const { balance } = useWalletConnection();
+    const [selectedPoolId, setSelectedPoolId] = useState<string>('');
     const [stakeAmount, setStakeAmount] = useState<string>('');
+    const [isStaking, setIsStaking] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleStakeSubmit = () => {
-        console.log(`Staking ${stakeAmount} WLOS in ${selectedPool} pool`);
-        // This would later integrate with wallet connection
+    // Set first pool as selected when pools are loaded
+    React.useEffect(() => {
+        if (pools.length > 0 && !selectedPoolId) {
+            setSelectedPoolId(pools[0].id);
+        }
+    }, [pools, selectedPoolId]);
+
+    const handleStakeSubmit = async () => {
+        if (!stakeAmount || parseFloat(stakeAmount) <= 0) {
+            setError('Please enter a valid amount to stake');
+            return;
+        }
+        
+        if (parseFloat(stakeAmount) > balance.wlos) {
+            setError('Insufficient balance');
+            return;
+        }
+        
+        const selectedPool = pools.find(p => p.id === selectedPoolId);
+        if (!selectedPool) {
+            setError('No pool selected');
+            return;
+        }
+        
+        if (parseFloat(stakeAmount) < selectedPool.minStake) {
+            setError(`Minimum stake is ${selectedPool.minStake} WLOS`);
+            return;
+        }
+        
+        setError(null);
+        setIsStaking(true);
+        
+        try {
+            await stakeTokens(parseFloat(stakeAmount), selectedPoolId);
+            setStakeAmount('');
+            // Success notification could be added here
+        } catch (err: any) {
+            setError(err.message || 'Failed to stake tokens');
+        } finally {
+            setIsStaking(false);
+        }
     };
 
-    const getEstimatedReward = (amount: string, apy: string) => {
+    const handleMaxAmount = () => {
+        setStakeAmount(balance.wlos.toString());
+    };
+
+    const getEstimatedReward = (amount: string, apy: number) => {
         if (!amount) return '0';
-        const apyValue = parseFloat(apy.replace('%', '')) / 100;
-        return (parseFloat(amount) * apyValue).toFixed(2);
+        return (parseFloat(amount) * (apy / 100)).toFixed(2);
     };
 
-    const renderPoolDetails = (pool: PoolData) => {
-        // Parse pool data for proper display
-        const lockDays = pool.lockPeriod.split(' ')[0];
-        const apyValue = pool.apy.replace('%', '');
-        const minStakeValue = pool.minStake.split(' ')[0];
-        const totalStakedValue = pool.totalStaked.split(' ')[0];
-        const battleBoostValue = pool.battleBoost.replace('Battle Power', '');
+    // Render placeholder if still loading pools
+    if (isLoading || pools.length === 0) {
+        return (
+            <section className="staking-pools">
+                <SectionTitle title="STAKING POOLS" />
+                <div className="pools-container loading">
+                    <p>Loading staking pools...</p>
+                </div>
+            </section>
+        );
+    }
 
+    const selectedPool = pools.find(p => p.id === selectedPoolId) || pools[0];
+
+    const renderPoolDetails = (pool: any) => {
         return (
             <div className="pool-info">
                 <div className="pool-header">
@@ -81,32 +90,32 @@ const StakingPools: React.FC = () => {
                 <div className="pool-stats-grid">
                     <div className="pool-stat-box">
                         <div className="stat-box-label">LOCK PERIOD</div>
-                        <div className="stat-box-value">{lockDays}</div>
+                        <div className="stat-box-value">{pool.lockPeriod}</div>
                         <div className="stat-box-unit">days</div>
                     </div>
                     
                     <div className="pool-stat-box">
                         <div className="stat-box-label">APY</div>
-                        <div className="stat-box-value highlight">{apyValue}</div>
+                        <div className="stat-box-value highlight">{pool.apy}</div>
                         <div className="stat-box-unit">%</div>
                     </div>
                     
                     <div className="pool-stat-box">
                         <div className="stat-box-label">MIN STAKE</div>
-                        <div className="stat-box-value">{minStakeValue}</div>
+                        <div className="stat-box-value">{pool.minStake}</div>
                         <div className="stat-box-unit">WLOS</div>
                     </div>
                     
                     <div className="pool-stat-box">
                         <div className="stat-box-label">TOTAL STAKED</div>
-                        <div className="stat-box-value">{totalStakedValue}</div>
+                        <div className="stat-box-value">{pool.totalStaked.toLocaleString()}</div>
                         <div className="stat-box-unit">WLOS</div>
                     </div>
                     
                     <div className="pool-stat-box">
                         <div className="stat-box-label">BATTLE BOOST</div>
-                        <div className="stat-box-value highlight">{battleBoostValue}</div>
-                        <div className="stat-box-unit">Battle Power</div>
+                        <div className="stat-box-value highlight">{pool.battlePowerBoost}</div>
+                        <div className="stat-box-unit">%</div>
                     </div>
                 </div>
             </div>
@@ -119,23 +128,23 @@ const StakingPools: React.FC = () => {
 
             <div className="pools-container">
                 <div className="pools-tabs">
-                    {poolData.map(pool => (
+                    {pools.map(pool => (
                         <button
                             key={pool.id}
-                            className={`pool-tab ${selectedPool === pool.id ? 'active' : ''}`}
-                            onClick={() => setSelectedPool(pool.id)}
+                            className={`pool-tab ${selectedPoolId === pool.id ? 'active' : ''}`}
+                            onClick={() => setSelectedPoolId(pool.id)}
                         >
                             {pool.name}
-                            {selectedPool === pool.id && <div className="tab-active-indicator"></div>}
+                            {selectedPoolId === pool.id && <div className="tab-active-indicator"></div>}
                         </button>
                     ))}
                 </div>
 
                 <div className="pool-details-container">
-                    {poolData.map(pool => (
+                    {pools.map(pool => (
                         <div 
                             key={pool.id} 
-                            className={`pool-details ${selectedPool === pool.id ? 'active' : ''}`}
+                            className={`pool-details ${selectedPoolId === pool.id ? 'active' : ''}`}
                         >
                             {renderPoolDetails(pool)}
 
@@ -150,15 +159,21 @@ const StakingPools: React.FC = () => {
                                             placeholder="0.00"
                                             className="amount-input"
                                         />
-                                        <button className="max-button">MAX</button>
+                                        <button 
+                                            className="max-button"
+                                            onClick={handleMaxAmount}
+                                        >
+                                            MAX
+                                        </button>
                                     </div>
-                                    <div className="balance-info">Balance: 0 WLOS</div>
+                                    <div className="balance-info">Balance: {balance.wlos.toLocaleString()} WLOS</div>
+                                    {error && <div className="error-message">{error}</div>}
                                 </div>
 
                                 <div className="stake-summary">
                                     <div className="summary-row">
                                         <div className="summary-label">Lock Period</div>
-                                        <div className="summary-value">{pool.lockPeriod}</div>
+                                        <div className="summary-value">{pool.lockPeriod} days</div>
                                     </div>
                                     <div className="summary-row">
                                         <div className="summary-label">Estimated Rewards</div>
@@ -168,21 +183,22 @@ const StakingPools: React.FC = () => {
                                     </div>
                                     <div className="summary-row">
                                         <div className="summary-label">Battle Power Boost</div>
-                                        <div className="summary-value highlight">{pool.battleBoost}</div>
+                                        <div className="summary-value highlight">+{pool.battlePowerBoost}%</div>
                                     </div>
                                 </div>
 
                                 <div className="stake-button-container">
                                     <Button
-                                        text="STAKE NOW"
+                                        text={isStaking ? "STAKING..." : "STAKE NOW"}
                                         color="green"
                                         onClick={handleStakeSubmit}
                                         fullWidth={true}
+                                        disabled={isStaking || !stakeAmount}
                                     />
                                 </div>
 
                                 <p className="unstake-notice">
-                                    Early unstaking available with 5% fee. No fee after lock period.
+                                    Early unstaking available with {pool.earlyUnstakeFee}% fee. No fee after lock period.
                                 </p>
                             </div>
                         </div>

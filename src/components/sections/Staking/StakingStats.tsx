@@ -1,102 +1,129 @@
 import React from 'react';
-import Card from '../../common/Card.tsx';
+import { useStaking } from '../../../context/StakingContext';
+import '../../../styles/modules/staking/StakingStats.css';
 
 const StakingStats: React.FC = () => {
+    const { stats, pools, isLoading } = useStaking();
+    
+    // Format numbers with commas, handling potential undefined values
+    const formatNumber = (value: number | undefined): string => {
+        if (value === undefined) return '0';
+        return value.toLocaleString();
+    };
+    
+    // Use real data or placeholders if loading
+    const totalStaked = isLoading ? '1,566,116' : formatNumber(stats.totalStaked);
+    const activePositions = isLoading ? '4,237' : formatNumber(stats.activePositions);
+    const pendingRewards = isLoading ? '246,892' : formatNumber(stats.totalPendingRewards);
+
     return (
-        <section className="staking-stats-section">
-            <div className="stats-grid">
-                <Card color="green">
-                    <h3 className="card-title green-text">TOTAL WLOS STAKED</h3>
-                    <div className="stat-value glow-text">1,566,116</div>
-                    <div className="stat-trend green-text">+124,532 this week</div>
-                </Card>
+        <section className="staking-stats">
+            <div className="stats-cards">
+                <div className="stat-card-wrapper">
+                    <div className="stat-card-content">
+                        <h3 className="stat-title">TOTAL WLOS STAKED</h3>
+                        <div className="stat-digit-value">{totalStaked}</div>
+                        <div className="stat-trend">Platform-wide staking</div>
+                    </div>
+                    <div className="card-glow"></div>
+                    <div className="card-border"></div>
+                </div>
 
-                <Card color="green">
-                    <h3 className="card-title green-text">ACTIVE STAKERS</h3>
-                    <div className="stat-value glow-text">4,237</div>
-                    <div className="stat-trend green-text">+342 new stakers</div>
-                </Card>
+                <div className="stat-card-wrapper">
+                    <div className="stat-card-content">
+                        <h3 className="stat-title">ACTIVE STAKERS</h3>
+                        <div className="stat-digit-value">{activePositions}</div>
+                        <div className="stat-trend">Active staking positions</div>
+                    </div>
+                    <div className="card-glow"></div>
+                    <div className="card-border"></div>
+                </div>
 
-                <Card color="green">
-                    <h3 className="card-title green-text">REWARDS DISTRIBUTED</h3>
-                    <div className="stat-value glow-text">246,892 WLOS</div>
-                    <div className="stat-trend green-text">Since launch</div>
-                </Card>
+                <div className="stat-card-wrapper">
+                    <div className="stat-card-content">
+                        <h3 className="stat-title">REWARDS DISTRIBUTED</h3>
+                        <div className="stat-digit-value">{pendingRewards} <span className="token-name">WLOS</span></div>
+                        <div className="stat-trend">Current pending rewards</div>
+                    </div>
+                    <div className="card-glow"></div>
+                    <div className="card-border"></div>
+                </div>
             </div>
 
-            {/* APY Chart */}
-            <div className="apy-chart-container clip-card border-green">
-                <div className="accent-border top green"></div>
-                <h3 className="chart-title">APY HISTORY</h3>
-
+            <div className="apy-chart-container">
+                <h3 className="chart-title">APY COMPARISON</h3>
+                
                 <div className="chart-content">
                     <div className="chart-labels">
-                        <div className="chart-label">30%</div>
-                        <div className="chart-label">20%</div>
-                        <div className="chart-label">10%</div>
-                        <div className="chart-label">0%</div>
+                        <div className="label">30%</div>
+                        <div className="label">25%</div>
+                        <div className="label">20%</div>
+                        <div className="label">15%</div>
+                        <div className="label">10%</div>
+                        <div className="label">5%</div>
+                        <div className="label">0%</div>
                     </div>
-
+                    
                     <div className="chart-area">
-                        <svg className="apy-chart" viewBox="0 0 720 200">
-                            {/* Chart Grid Lines */}
-                            <line x1="0" y1="50" x2="720" y2="50" stroke="#333366" strokeWidth="1" strokeDasharray="5,5" />
-                            <line x1="0" y1="100" x2="720" y2="100" stroke="#333366" strokeWidth="1" strokeDasharray="5,5" />
-                            <line x1="0" y1="150" x2="720" y2="150" stroke="#333366" strokeWidth="1" strokeDasharray="5,5" />
-
-                            {/* Warrior Pool Line (15.2% APY) */}
+                        <svg className="chart-svg" viewBox="0 0 800 200">
+                            {/* Warrior Pool Line */}
                             <path
                                 d="M0,132 C60,135 120,130 180,132 C240,134 300,128 360,125 C420,122 480,120 540,118 C600,116 660,115 720,114"
-                                fill="none"
-                                stroke="#9945FF"
-                                strokeWidth="2"
+                                className="chart-line warrior"
                             />
 
-                            {/* Knight Pool Line (22.4% APY) */}
+                            {/* Knight Pool Line */}
                             <path
                                 d="M0,92 C60,95 120,90 180,88 C240,86 300,82 360,80 C420,78 480,75 540,72 C600,69 660,68 720,66"
-                                fill="none"
-                                stroke="#14F195"
-                                strokeWidth="2"
+                                className="chart-line knight"
                             />
 
-                            {/* Warlord Pool Line (25.7% APY) */}
+                            {/* Warlord Pool Line */}
                             <path
                                 d="M0,82 C60,80 120,78 180,75 C240,72 300,70 360,67 C420,64 480,60 540,58 C600,56 660,55 720,53"
-                                fill="none"
-                                stroke="#FFB800"
-                                strokeWidth="2"
+                                className="chart-line warlord"
                             />
 
                             {/* Data Points */}
-                            <circle cx="180" cy="88" r="4" fill="#14F195" />
-                            <circle cx="360" cy="80" r="4" fill="#14F195" />
-                            <circle cx="540" cy="72" r="4" fill="#14F195" />
-                            <circle cx="720" cy="66" r="4" fill="#14F195" />
+                            <circle cx="180" cy="88" r="5" className="data-point knight" />
+                            <circle cx="360" cy="80" r="5" className="data-point knight" />
+                            <circle cx="540" cy="72" r="5" className="data-point knight" />
+                            <circle cx="720" cy="66" r="5" className="data-point knight" />
                         </svg>
-                    </div>
-
-                    <div className="chart-timeline">
-                        <div className="time-label">3 Months Ago</div>
-                        <div className="time-label">2 Months Ago</div>
-                        <div className="time-label">1 Month Ago</div>
-                        <div className="time-label">Current</div>
                     </div>
                 </div>
 
+                <div className="chart-timeline">
+                    <div className="time-label">3 Months Ago</div>
+                    <div className="time-label">2 Months Ago</div>
+                    <div className="time-label">1 Month Ago</div>
+                    <div className="time-label">Current</div>
+                </div>
+
                 <div className="chart-legend">
-                    <div className="legend-item">
-                        <div className="legend-color purple"></div>
-                        <div className="legend-label">Warrior Pool</div>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-color green"></div>
-                        <div className="legend-label">Knight Pool</div>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-color yellow"></div>
-                        <div className="legend-label">Warlord Pool</div>
-                    </div>
+                    {pools.length > 0 ? (
+                        pools.map((pool, index) => (
+                            <div className="legend-item" key={pool.id}>
+                                <div className={`legend-color ${index === 0 ? 'warrior' : index === 1 ? 'knight' : 'warlord'}`}></div>
+                                <div className="legend-label">{pool.name} Pool</div>
+                            </div>
+                        ))
+                    ) : (
+                        <>
+                            <div className="legend-item">
+                                <div className="legend-color warrior"></div>
+                                <div className="legend-label">Warrior Pool</div>
+                            </div>
+                            <div className="legend-item">
+                                <div className="legend-color knight"></div>
+                                <div className="legend-label">Knight Pool</div>
+                            </div>
+                            <div className="legend-item">
+                                <div className="legend-color warlord"></div>
+                                <div className="legend-label">Warlord Pool</div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </section>
