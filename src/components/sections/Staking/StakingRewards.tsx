@@ -171,7 +171,6 @@ const StakingRewards: React.FC = () => {
                             <tbody>
                                 {positions.map((position) => {
                                     const daysLeft = getDaysLeft(position.endTime);
-                                    const isCompleted = daysLeft === 0;
                                     
                                     return (
                                         <tr key={position.id} className="stake-row">

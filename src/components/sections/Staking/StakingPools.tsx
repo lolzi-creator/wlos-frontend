@@ -77,8 +77,6 @@ const StakingPools: React.FC = () => {
         );
     }
 
-    const selectedPool = pools.find(p => p.id === selectedPoolId) || pools[0];
-
     const renderPoolDetails = (pool: any) => {
         return (
             <div className="pool-info">
