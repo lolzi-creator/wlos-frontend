@@ -3,13 +3,45 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
+  padding-top: 6rem; /* Further increased padding for navbar clearance */
   position: relative;
   z-index: 1;
 }
 
+/* Add a nice border around the main content */
+.staking-hero,
+.staking-stats,
+.staking-pools {
+  position: relative;
+}
+
+.staking-hero::before,
+.staking-stats::before,
+.staking-pools::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  padding: 2px; /* Thickness of the border */
+  background: linear-gradient(
+    135deg,
+    rgba(20, 241, 149, 0.3) 0%,
+    rgba(153, 69, 255, 0.1) 50%,
+    rgba(20, 241, 149, 0.2) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* Scanning line effect */
 .scanning-line {
-  position: absolute;
+  position: fixed; /* Change to fixed from absolute */
   left: 0;
   width: 100%;
   height: 2px;
@@ -20,6 +52,116 @@
   opacity: 0.3;
   z-index: 5;
   pointer-events: none;
+  margin-top: 6rem; /* Add margin to position below navbar */
+}
+
+/* Background animations */
+.background-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0; /* Keep background behind content */
+  pointer-events: none;
+}
+
+.bg-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(20, 241, 149, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 241, 149, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: center center;
+  opacity: 0.3;
+  animation: gridPulse 8s infinite alternate;
+}
+
+.energy-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.15;
+  z-index: 1;
+}
+
+.green-orb {
+  width: 300px;
+  height: 300px;
+  background-color: rgba(20, 241, 149, 0.3);
+  animation: orbFloat 15s infinite ease-in-out;
+}
+
+.purple-orb {
+  width: 250px;
+  height: 250px;
+  background-color: rgba(153, 69, 255, 0.3);
+  animation: orbFloat 18s infinite ease-in-out reverse;
+}
+
+/* Floating particles */
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(20, 241, 149, 0.4);
+  border-radius: 50%;
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+.particle:nth-child(1) {
+  width: 8px;
+  height: 8px;
+  top: 10%;
+  left: 20%;
+  animation: particleFloat 30s infinite linear;
+}
+
+.particle:nth-child(2) {
+  width: 12px;
+  height: 12px;
+  top: 30%;
+  left: 80%;
+  animation: particleFloat 25s infinite linear;
+}
+
+.particle:nth-child(3) {
+  width: 6px;
+  height: 6px;
+  top: 70%;
+  left: 40%;
+  animation: particleFloat 35s infinite linear;
+}
+
+.particle:nth-child(4) {
+  width: 10px;
+  height: 10px;
+  top: 50%;
+  left: 10%;
+  animation: particleFloat 28s infinite linear;
+}
+
+.particle:nth-child(5) {
+  width: 7px;
+  height: 7px;
+  top: 85%;
+  left: 75%;
+  animation: particleFloat 32s infinite linear;
 }
 
 /* Tab navigation */
@@ -77,10 +219,14 @@
 /* Connected wallet content */
 .staking-connected-content {
   animation: fadeIn 0.5s ease;
+  position: relative;
+  z-index: 2;
 }
 
 .staking-content-area {
   margin-top: 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 /* Wallet connect styles */
@@ -89,6 +235,8 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .wallet-connect-card {
@@ -139,16 +287,54 @@
   line-height: 1.6;
 }
 
+/* Font family */
+.staking-content {
+  font-family: 'Rajdhani', 'Orbitron', sans-serif;
+}
+
+.hero-title,
+.stat-title,
+.pool-name,
+.connect-title,
+.stat-digit-value,
+.tab-text {
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  letter-spacing: 1px;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes gridPulse {
+  0% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.2; }
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-20px, 15px); }
+  50% { transform: translate(10px, -15px); }
+  75% { transform: translate(-10px, -10px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes particleFloat {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-50px, 50px); }
+  50% { transform: translate(50px, -50px); }
+  75% { transform: translate(-25px, -25px); }
+  100% { transform: translate(0, 0); }
+}
+
 /* Media Queries */
 @media (max-width: 768px) {
   .staking-content {
-    padding: 0.5rem;
+    padding: 0.75rem;
+    padding-top: 1.5rem;
   }
   
   .wallet-connect-card {
@@ -158,14 +344,31 @@
   .connect-title {
     font-size: 1.25rem;
   }
+  
+  .energy-orb {
+    filter: blur(40px);
+  }
 }
 
 @media (max-width: 480px) {
+  .staking-content {
+    padding: 0.75rem;
+    padding-top: 3.5rem;
+  }
+  
+  .scanning-line {
+    margin-top: 3.5rem;
+  }
+  
   .staking-tabs {
     padding-bottom: 0.5rem;
   }
   
   .staking-tab {
     font-size: 0.875rem;
+  }
+  
+  .energy-orb {
+    filter: blur(30px);
   }
 } 

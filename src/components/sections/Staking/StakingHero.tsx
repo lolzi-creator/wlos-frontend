@@ -1,71 +1,80 @@
 // src/components/sections/Staking/StakingHero.tsx
 import React from 'react';
 import { useWalletConnection } from '../../../context/WalletConnectionProvider';
+import '../../../styles/modules/staking/StakingHero.css';
 
 const StakingHero: React.FC = () => {
     const { isConnected } = useWalletConnection();
 
     return (
-        <section className="staking-hero-section">
-            <div className="staking-hero-content clip-banner">
-                <div className="accent-line top-left"></div>
-                <div className="accent-line bottom-right"></div>
-
-                <div className="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h2 className="hero-title glow-text">STAKE YOUR WARLORDS</h2>
-                        <p className="hero-subtitle">EARN PASSIVE REWARDS | INCREASE BATTLE POWER | UNLOCK SPECIAL ABILITIES</p>
-
+        <section className="staking-hero">
+            <div className="hero-container">
+                <div className="hero-content">
+                    <div className="hero-text">
+                        <h1 className="hero-title">STAKE YOUR WARLORDS</h1>
+                        <p className="hero-subtitle">
+                            EARN PASSIVE REWARDS | INCREASE BATTLE POWER | UNLOCK SPECIAL ABILITIES
+                        </p>
+                        
                         <div className="feature-list">
                             <div className="feature-item">
-                                <div className="feature-dot green"></div>
-                                <span className="feature-text">Up to 25.7% APY rewards</span>
+                                <div className="feature-icon">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 0L10.9282 5.07179L16 8L10.9282 10.9282L8 16L5.07179 10.9282L0 8L5.07179 5.07179L8 0Z" fill="#14F195" />
+                                    </svg>
+                                </div>
+                                <span>Up to 25.7% APY rewards</span>
                             </div>
                             <div className="feature-item">
-                                <div className="feature-dot green"></div>
-                                <span className="feature-text">Boost battle performance by 50%</span>
+                                <div className="feature-icon">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 0L10.9282 5.07179L16 8L10.9282 10.9282L8 16L5.07179 10.9282L0 8L5.07179 5.07179L8 0Z" fill="#14F195" />
+                                    </svg>
+                                </div>
+                                <span>Boost battle performance by 50%</span>
                             </div>
                             <div className="feature-item">
-                                <div className="feature-dot green"></div>
-                                <span className="feature-text">Early unstaking available with 5% fee</span>
+                                <div className="feature-icon">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 0L10.9282 5.07179L16 8L10.9282 10.9282L8 16L5.07179 10.9282L0 8L5.07179 5.07179L8 0Z" fill="#14F195" />
+                                    </svg>
+                                </div>
+                                <span>Early unstaking available with 5% fee</span>
                             </div>
                         </div>
-
-
                     </div>
 
-                    <div className="staking-info-panel clip-panel">
-                        <div className="h-px w-48 bg-green-text/50 mb-4"></div>
-
-                        {isConnected ? (
-                            <>
-                                <div className="staking-stats-grid">
-                                    <div className="stat-box">
-                                        <div className="stat-label">Available WLOS</div>
-                                        <div className="stat-value">0</div>
-                                    </div>
-
-                                    <div className="stat-box">
-                                        <div className="stat-label">Staked WLOS</div>
-                                        <div className="stat-value">0</div>
-                                    </div>
-
-                                    <div className="stat-box">
-                                        <div className="stat-label">Current APY</div>
-                                        <div className="stat-value text-green-text">25.7%</div>
-                                    </div>
-
-                                    <div className="stat-box">
-                                        <div className="stat-label">Rewards Earned</div>
-                                        <div className="stat-value">0 WLOS</div>
-                                    </div>
+                    {isConnected && (
+                        <div className="hero-stats">
+                            <div className="stats-grid-hero">
+                                <div className="stat-box">
+                                    <div className="stat-box-header">AVAILABLE</div>
+                                    <div className="stat-box-value">0</div>
+                                    <div className="stat-box-unit">WLOS</div>
                                 </div>
-                            </>
-                        ) : (
-                            <div className="text-center">
+                                <div className="stat-box">
+                                    <div className="stat-box-header">STAKED</div>
+                                    <div className="stat-box-value">0</div>
+                                    <div className="stat-box-unit">WLOS</div>
+                                </div>
+                                <div className="stat-box">
+                                    <div className="stat-box-header">CURRENT APY</div>
+                                    <div className="stat-box-value highlight">25.7%</div>
+                                    <div className="stat-box-unit">&nbsp;</div>
+                                </div>
+                                <div className="stat-box">
+                                    <div className="stat-box-header">REWARDS</div>
+                                    <div className="stat-box-value">0</div>
+                                    <div className="stat-box-unit">WLOS</div>
+                                </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
+                </div>
+                
+                <div className="hero-decoration">
+                    <div className="glow-line top-left"></div>
+                    <div className="glow-line bottom-right"></div>
                 </div>
             </div>
         </section>
