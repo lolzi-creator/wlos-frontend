@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
-import StakingHero from '../components/sections/Staking/StakingHero.tsx';
-import StakingPools from '../components/sections/Staking/StakingPools.tsx';
-import StakingStats from '../components/sections/Staking/StakingStats.tsx';
-import StakingRewards from '../components/sections/Staking/StakingRewards.tsx';
+import StakingHero from '../components/sections/Staking/StakingHero';
+import StakingPools from '../components/sections/Staking/StakingPools';
+import StakingStats from '../components/sections/Staking/StakingStats';
+import StakingRewards from '../components/sections/Staking/StakingRewards';
 import { useWalletConnection } from '../context/WalletConnectionProvider';
 import WalletConnectButton from '../components/common/WalletConnectButton';
+import '../styles/modules/staking/StakingPage.css';
 
 const StakingPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'staking' | 'rewards'>('staking');
@@ -23,19 +24,7 @@ const StakingPage: React.FC = () => {
     return (
         <Layout>
             {/* Scanning line effect */}
-            <div
-                style={{
-                    position: "absolute",
-                    top: `${activeLine}%`,
-                    left: 0,
-                    width: "100%",
-                    height: "2px",
-                    background: "linear-gradient(90deg, rgba(20, 241, 149, 0) 0%, rgba(20, 241, 149, 0.5) 50%, rgba(20, 241, 149, 0) 100%)",
-                    opacity: 0.3,
-                    zIndex: 5,
-                    pointerEvents: "none"
-                }}
-            />
+            <div className="scanning-line" style={{ top: `${activeLine}%` }} />
 
             {/* Background effects */}
             <div className="background-effects">
@@ -44,45 +33,50 @@ const StakingPage: React.FC = () => {
                 <div className="energy-orb purple-orb" style={{ right: '10%', top: '40%', opacity: '0.1' }}></div>
             </div>
 
-            <main className="main-content">
+            <main className="staking-content">
                 <StakingHero />
+                
                 {isConnected ? (
-                    <>
-                        <div className="page-tabs">
+                    <div className="staking-connected-content">
+                        <div className="staking-tabs">
                             <button
-                                className={`tab-button ${activeTab === 'staking' ? 'active' : ''}`}
+                                className={`staking-tab ${activeTab === 'staking' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('staking')}
                             >
-                                STAKING VAULT
+                                <span className="tab-text">STAKING VAULT</span>
+                                {activeTab === 'staking' && <span className="tab-indicator"></span>}
                             </button>
                             <button
-                                className={`tab-button ${activeTab === 'rewards' ? 'active' : ''}`}
+                                className={`staking-tab ${activeTab === 'rewards' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('rewards')}
                             >
-                                REWARDS DASHBOARD
+                                <span className="tab-text">REWARDS DASHBOARD</span>
+                                {activeTab === 'rewards' && <span className="tab-indicator"></span>}
                             </button>
-                            <div className="tab-line"></div>
                         </div>
 
-                        {activeTab === 'staking' ? (
-                            <>
-                                <StakingStats />
-                                <StakingPools />
-                            </>
-                        ) : (
-                            <StakingRewards />
-                        )}
-                    </>
+                        <div className="staking-content-area">
+                            {activeTab === 'staking' ? (
+                                <>
+                                    <StakingStats />
+                                    <StakingPools />
+                                </>
+                            ) : (
+                                <StakingRewards />
+                            )}
+                        </div>
+                    </div>
                 ) : (
-                    <div className="wallet-connect-prompt clip-card border-green">
-                        <div className="accent-border top green"></div>
-
-                        <div className="wallet-connect-content text-center p-10">
-                            <h3 className="prompt-title text-xl font-bold mb-4 green-text">CONNECT WALLET TO STAKE</h3>
-                            <p className="prompt-description text-gray-400 mb-6">
-                                Connect your wallet to stake your WLOS tokens and earn rewards.
-                            </p>
-                            <WalletConnectButton color="green" />
+                    <div className="wallet-connect-container">
+                        <div className="wallet-connect-card">
+                            <div className="card-glow"></div>
+                            <div className="wallet-connect-content">
+                                <h3 className="connect-title">CONNECT WALLET TO STAKE</h3>
+                                <p className="connect-description">
+                                    Connect your wallet to stake your WLOS tokens and earn rewards.
+                                </p>
+                                <WalletConnectButton color="green" />
+                            </div>
                         </div>
                     </div>
                 )}
