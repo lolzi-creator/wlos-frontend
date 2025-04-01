@@ -37,10 +37,12 @@ interface StakingStats {
     activePositions: number;
 }
 
-interface StakingContextProps {
+// Define the context props
+export interface StakingContextProps {
     pools: StakingPool[];
     positions: StakingPosition[];
     stats: StakingStats;
+    rewards?: any[];
     isLoading: boolean;
     error: string | null;
     fetchPools: () => Promise<void>;
@@ -291,4 +293,6 @@ export const StakingProvider: React.FC<StakingProviderProps> = ({ children }) =>
     );
 };
 
-export const useStaking = () => useContext(StakingContext); 
+export const useStaking = () => useContext(StakingContext);
+
+export default StakingProvider; 

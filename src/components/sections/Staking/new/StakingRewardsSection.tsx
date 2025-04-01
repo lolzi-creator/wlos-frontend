@@ -3,22 +3,32 @@ import { useStaking } from '../../../../context/StakingContext';
 import Button from '../../../common/Button';
 import '../../../../styles/modules/staking/new/StakingRewardsSection.css';
 
+// Define reward type
+interface StakingReward {
+    id: string;
+    poolName: string;
+    amount: number;
+    claimable: boolean;
+    nextClaim: Date | null;
+}
+
 export const StakingRewardsSection: React.FC = () => {
-    const { rewards, claimRewards, isLoading } = useStaking();
+    // Create a safe fallback for rewards if not in context
+    const stakingContext = useStaking();
     const [visible, setVisible] = useState(false);
     
-    // Dummy data for development
-    const userRewards = isLoading || !rewards 
+    // Use the rewards from context if available, otherwise use dummy data
+    const userRewards: StakingReward[] = stakingContext.isLoading || !stakingContext.rewards
         ? [
             { id: '1', poolName: 'Warrior', amount: 238.45, claimable: true, nextClaim: null },
             { id: '2', poolName: 'Knight', amount: 726.19, claimable: true, nextClaim: null },
             { id: '3', poolName: 'Warlord', amount: 1284.72, claimable: false, nextClaim: new Date(Date.now() + 86400000) }
         ] 
-        : rewards;
+        : stakingContext.rewards as StakingReward[];
     
     const totalClaimable = userRewards
-        .filter(reward => reward.claimable)
-        .reduce((sum, reward) => sum + reward.amount, 0);
+        .filter((reward: StakingReward) => reward.claimable)
+        .reduce((sum: number, reward: StakingReward) => sum + reward.amount, 0);
     
     useEffect(() => {
         // Animate in after a delay
@@ -30,13 +40,17 @@ export const StakingRewardsSection: React.FC = () => {
     }, []);
     
     const handleClaim = (rewardId: string) => {
-        claimRewards(rewardId);
+        if (stakingContext.claimRewards) {
+            stakingContext.claimRewards(rewardId);
+        }
     };
     
     const handleClaimAll = () => {
-        userRewards
-            .filter(reward => reward.claimable)
-            .forEach(reward => claimRewards(reward.id));
+        if (stakingContext.claimRewards) {
+            userRewards
+                .filter((reward: StakingReward) => reward.claimable)
+                .forEach((reward: StakingReward) => stakingContext.claimRewards(reward.id));
+        }
     };
     
     const formatDate = (date: Date | null) => {

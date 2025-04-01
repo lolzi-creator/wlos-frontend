@@ -5,9 +5,17 @@ interface ButtonProps {
     onClick: () => void;
     fullWidth?: boolean;
     disabled?: boolean; // Add this line to support the disabled prop
+    className?: string; // Add optional className prop
 }
 
-const Button: React.FC<ButtonProps> = ({ text, color, onClick, fullWidth = false, disabled = false }) => {
+const Button: React.FC<ButtonProps> = ({ 
+    text, 
+    color, 
+    onClick, 
+    fullWidth = false, 
+    disabled = false,
+    className = '' // Default to empty string
+}) => {
     let colorClasses = '';
 
     switch (color) {
@@ -33,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({ text, color, onClick, fullWidth = false
 
     return (
         <button
-            className={`futuristic-button ${colorClasses} ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`futuristic-button ${colorClasses} ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
             onClick={onClick}
             disabled={disabled}
         >

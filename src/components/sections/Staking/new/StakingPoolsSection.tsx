@@ -21,13 +21,10 @@ export const StakingPoolsSection: React.FC = () => {
             color: index === 0 ? 'purple' : index === 1 ? 'green' : 'yellow'
         }));
     
-    const handleStake = (poolId: string, e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent event from bubbling up
-        if (!stakeAmount) return;
-        // Call the stake function from context when it's implemented
-        console.log(`Staking ${stakeAmount} WLOS in pool ${poolId}`);
-        setStakeAmount('');
-        setActivePool(null);
+    const handleStake = (poolId: string) => {
+        console.log('Staking in pool:', poolId);
+        console.log('Amount:', stakeAmount);
+        // Implement staking logic
     };
     
     const handlePoolSelect = (poolId: string) => {
@@ -110,7 +107,7 @@ export const StakingPoolsSection: React.FC = () => {
                                         <Button 
                                             text="STAKE WLOS" 
                                             color={pool.color as any} 
-                                            onClick={(e) => handleStake(pool.id, e)}
+                                            onClick={() => handleStake(pool.id)}
                                         />
                                     </div>
                                 </div>

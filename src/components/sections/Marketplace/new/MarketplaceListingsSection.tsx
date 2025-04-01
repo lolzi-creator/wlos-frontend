@@ -1,6 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import Button from '../../../common/Button';
-import EntityCard from '../../../common/EntityCard';
 import MarketplaceActionModal from '../../../common/MarketplaceActionModal';
 import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
 import { marketplaceService } from '../../../../services/api';
@@ -27,7 +25,6 @@ const MarketplaceListingsSection: React.FC = () => {
     const [listings, setListings] = useState<ListedItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [selectedListing, setSelectedListing] = useState<string | null>(null);
     
     // Modal state
     const [modalOpen, setModalOpen] = useState(false);
@@ -261,11 +258,6 @@ const MarketplaceListingsSection: React.FC = () => {
         if (inventoryTab) {
             (inventoryTab as HTMLElement).click();
         }
-    };
-
-    // Handle card selection
-    const handleSelect = (id: string) => {
-        setSelectedListing(selectedListing === id ? null : id);
     };
 
     return (

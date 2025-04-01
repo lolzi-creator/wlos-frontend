@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import EntityCard from '../../../common/EntityCard';
 import MarketplaceActionModal from '../../../common/MarketplaceActionModal';
 import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
 import { marketplaceService } from '../../../../services/api';
@@ -20,24 +19,20 @@ interface MarketplaceItem {
 }
 
 interface MarketplaceItemsSectionProps {
-    category?: string;
     sortOrder?: 'price_asc' | 'price_desc' | 'newest' | 'oldest';
     onChangeSortOrder?: (order: 'price_asc' | 'price_desc' | 'newest' | 'oldest') => void;
 }
 
 const MarketplaceItemsSection: React.FC<MarketplaceItemsSectionProps> = ({ 
-    category, 
     sortOrder = 'newest',
     onChangeSortOrder
 }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategories, setSelectedCategories] = useState<string[]>(category ? [category] : []);
     const [selectedRarities, setSelectedRarities] = useState<string[]>([]);
     const [marketplaceItems, setMarketplaceItems] = useState<MarketplaceItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [selectedItem, setSelectedItem] = useState<string | null>(null);
     
     // Modal state
     const [modalOpen, setModalOpen] = useState(false);
@@ -169,12 +164,6 @@ const MarketplaceItemsSection: React.FC<MarketplaceItemsSectionProps> = ({
         return matchesSearch && matchesRarity;
     });
 
-    // Format date string to human readable format
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    };
-
     // Open the buy modal
     const openBuyModal = (item: MarketplaceItem) => {
         if (!isConnected || !walletAddress) {
@@ -258,11 +247,6 @@ const MarketplaceItemsSection: React.FC<MarketplaceItemsSectionProps> = ({
         } finally {
             setProcessingAction(false);
         }
-    };
-
-    // Handle card selection
-    const handleSelect = (id: string) => {
-        setSelectedItem(selectedItem === id ? null : id);
     };
 
     // Get asset type for an item

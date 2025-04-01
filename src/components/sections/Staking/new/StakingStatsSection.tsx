@@ -5,7 +5,12 @@ import '../../../../styles/modules/staking/new/StakingStatsSection.css';
 export const StakingStatsSection: React.FC = () => {
     const [visible, setVisible] = useState(false);
     const sectionRef = useRef<HTMLDivElement>(null);
-    const { stats, isLoading } = useStaking();
+    const { stats = {
+        totalStaked: 0,
+        totalPendingRewards: 0,
+        totalBattlePower: 0,
+        activePositions: 0
+    }, isLoading } = useStaking();
 
     // Format numbers with commas, handling potential undefined values
     const formatNumber = (value: number | undefined): string => {

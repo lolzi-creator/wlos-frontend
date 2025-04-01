@@ -11,7 +11,7 @@ import '../../../../styles/modules/marketplace/new/MarketplacePage.css';
 
 const MarketplacePage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'browse' | 'inventory' | 'listings'>('browse');
-    const [sortOrder, setSortOrder] = useState<'price_asc' | 'price_desc' | 'recent'>('recent');
+    const [sortOrder, setSortOrder] = useState<'price_asc' | 'price_desc' | 'newest' | 'oldest'>('newest');
     const { isConnected } = useWalletConnection();
 
     const handleViewAllItems = () => {

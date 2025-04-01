@@ -10,13 +10,6 @@ const MarketplaceHeroSection: React.FC<MarketplaceHeroSectionProps> = ({ onViewA
   const [particles, setParticles] = useState<Array<{ id: number, x: number, y: number, size: number, color: string, delay: number }>>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Market statistics - updated to match mockup
-  const marketStats = {
-    itemsListed: 8723,
-    totalVolume: 5245890,
-    averagePrice: 16420,
-  };
-
   // Generate particles on component mount
   useEffect(() => {
     const colors = ['#9945FF', '#14F195', '#FFB800'];

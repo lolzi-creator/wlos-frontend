@@ -17,7 +17,8 @@ interface ItemCardProps {
 }
 
 const ItemCard: React.FC<ItemCardProps> = ({
-  id,
+                                             // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  id: _id,
   name,
   type,
   image,

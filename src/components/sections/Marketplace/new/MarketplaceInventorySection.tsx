@@ -1,9 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
-import Button from '../../../common/Button';
-import EntityCard from '../../../common/EntityCard';
+import React, { useState } from 'react';
 import MarketplaceActionModal from '../../../common/MarketplaceActionModal';
 import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
-import { marketplaceService, heroService } from '../../../../services/api';
+import { marketplaceService } from '../../../../services/api';
 import { Rarity } from '../../../../types/ItemTypes';
 import '../../../../styles/modules/marketplace/new/MarketplaceInventorySection.css';
 import { toast } from 'react-toastify';
@@ -12,220 +10,43 @@ interface InventoryItem {
     id: string;
     name: string;
     type: string;
-    subType?: string;
+    subType: string;
     category: string;
     rarity: Rarity;
     image?: string;
-    acquired: string;
-    equipped: boolean;
     level?: number;
     yield?: number;
     assetType: 'item' | 'hero' | 'farmer';
-    price?: number;
-    listed: boolean;
 }
 
 const MarketplaceInventorySection: React.FC = () => {
-    const [isVisible, setIsVisible] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('all');
     const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedItem, setSelectedItem] = useState<string | null>(null);
+    const [isLoading] = useState(false);
+    const [error] = useState<string | null>(null);
     
     // Modal state
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalAction, setModalAction] = useState<'list' | 'cancel' | 'changePrice' | 'buy' | 'sellNow'>('list');
+    const [modalAction, setModalAction] = useState<'sellNow' | 'list'>('sellNow');
     const [activeItem, setActiveItem] = useState<InventoryItem | null>(null);
-    const [estimatedValue, setEstimatedValue] = useState<number | undefined>(undefined);
     const [processingAction, setProcessingAction] = useState(false);
+    const [estimatedValue, setEstimatedValue] = useState<number | undefined>(undefined);
     
-    const sectionRef = useRef<HTMLDivElement>(null);
     const { isConnected, walletAddress, refreshWallet } = useWalletConnection();
-
-    // Define inventory categories
-    const categories = [
-        { id: 'heroes', name: 'HEROES' },
-        { id: 'farmers', name: 'FARMERS' }
-    ];
-
-    // Fetch inventory data
-    useEffect(() => {
-        if (isConnected && walletAddress) {
-            fetchInventory();
-        }
-    }, [isConnected, walletAddress]);
     
-    const fetchInventory = async () => {
-        setIsLoading(true);
-        setError(null);
-        
-        try {
-            console.log('Fetching inventory for wallet:', walletAddress);
-            
-            // Get user's inventory from the assets endpoint
-            const response = await marketplaceService.getUserInventory(walletAddress);
-            
-            console.log('Raw inventory response:', response); 
-            
-            // Check if we have items in the expected format
-            if (response?.data?.items) {
-                // Map the API response to our required format
-                const items = response.data.items;
-                
-                // Log the first few items with their detailed structure
-                if (items.length > 0) {
-                    console.log('First 3 inventory items (or fewer if less available):');
-                    items.slice(0, 3).forEach((item: InventoryItem, index: number) => {
-                        console.log(`Item ${index + 1}:`, item);
-                        console.log(`- ID: ${item.id} (type: ${typeof item.id})`);
-                        console.log(`- Name: ${item.name}`);
-                        console.log(`- Type: ${item.type} / AssetType: ${item.assetType}`);
-                    });
-                }
-                
-                if (items.length > 0) {
-                    console.log(`Found ${items.length} inventory items`);
-                    setInventoryItems(items);
-                } else {
-                    setInventoryItems([]);
-                    setError('Your inventory is empty. Purchase items from the marketplace to see them here.');
-                }
-            } else {
-                console.error('Unexpected response format:', response?.data);
-                setError('Could not load inventory data. The API response format is unexpected.');
-            }
-        } catch (err: any) {
-            console.error('Error fetching inventory:', err);
-            
-            // Extract error message from API response if available
-            let errorMessage = 'Failed to load your inventory. Please try again later.';
-            if (err.response?.data?.message) {
-                errorMessage = err.response.data.message;
-            } else if (err.message) {
-                errorMessage = `Error: ${err.message}`;
-            }
-            
-            setError(errorMessage);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    
-    // Get estimated value for an item
-    const getEstimatedValue = async (itemId: string, assetType: string) => {
-        try {
-            const response = await marketplaceService.getEstimatedValue(itemId, assetType);
-            if (response?.data?.estimatedValue) {
-                return response.data.estimatedValue;
-            }
-            // Fallback estimated values if API doesn't return one
-            return assetType === 'hero' ? 5000 : assetType === 'farmer' ? 3000 : 1000;
-        } catch (error) {
-            console.error('Error getting estimated value:', error);
-            // Fallback estimated values
-            return assetType === 'hero' ? 5000 : assetType === 'farmer' ? 3000 : 1000;
-        }
-    };
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.disconnect();
-                }
-            },
-            { threshold: 0.1 }
-        );
-
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
-
-        return () => {
-            if (sectionRef.current) {
-                observer.unobserve(sectionRef.current);
-            }
-        };
-    }, []);
-
-    // Filter items based on search and category
+    // Filter items based on search term
     const filteredItems = inventoryItems.filter(item => {
-        const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                             item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                             (item.subType && item.subType.toLowerCase().includes(searchTerm.toLowerCase()));
+        const matchesSearch = searchTerm === '' || 
+            item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.type.toLowerCase().includes(searchTerm.toLowerCase());
         
-        let matchesCategory = false;
-        if (selectedCategory === 'all') {
-            matchesCategory = true;
-        } else if (selectedCategory === 'items') {
-            matchesCategory = item.assetType === 'item';
-        } else if (selectedCategory === 'heroes') {
-            matchesCategory = item.assetType === 'hero';
-        } else if (selectedCategory === 'farmers') {
-            matchesCategory = item.assetType === 'farmer';
-        } else {
-            // For specific item categories (weapons, armor, etc.)
-            matchesCategory = item.category === selectedCategory;
-        }
-        
-        return matchesSearch && matchesCategory;
+        return matchesSearch;
     });
-
-    // Format date string to human readable format
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    };
-
-    // Handle equip/unequip item
-    const handleEquipToggle = async (itemId: string, equipped: boolean, assetType: string) => {
-        if (!isConnected || !walletAddress) {
-            setError("Please connect your wallet to equip/unequip items");
-            return;
-        }
-        
-        // Only items can be equipped for now
-        if (assetType !== 'item') {
-            return;
-        }
-        
-        setIsLoading(true);
-        
-        try {
-            if (equipped) {
-                // Use the heroService to unequip
-                await heroService.unequipItem(walletAddress, "default-hero", itemId);
-            } else {
-                // Use the heroService to equip
-                await heroService.equipItem(walletAddress, "default-hero", itemId);
-            }
-            
-            // Optimistically update UI for better UX
-            setInventoryItems(items => 
-                items.map(item => 
-                    item.id === itemId 
-                        ? { ...item, equipped: !equipped } 
-                        : item
-                )
-            );
-            
-            // Refresh inventory after equip/unequip
-            fetchInventory();
-        } catch (error) {
-            console.error('Error toggling equip status:', error);
-            setError('Failed to equip/unequip item. Please try again later.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
+    
     // Open the listing modal
-    const openListingModal = async (item: InventoryItem) => {
+    const openListingModal = (item: InventoryItem) => {
         if (!isConnected || !walletAddress) {
-            setError("Please connect your wallet to list items");
+            toast.error("Please connect your wallet to list items");
             return;
         }
         
@@ -233,25 +54,30 @@ const MarketplaceInventorySection: React.FC = () => {
             id: item.id,
             name: item.name,
             type: item.type,
-            assetType: item.assetType
+            assetType: item.assetType,
+            idType: typeof item.id
         });
         
+        // Set an estimated value based on rarity
+        let value = 3000; // Default value
+        if (item.rarity === 'rare') value = 5000;
+        if (item.rarity === 'epic') value = 10000;
+        if (item.rarity === 'legendary') value = 25000;
+        
+        setEstimatedValue(value);
         setActiveItem(item);
         setModalAction('list');
-        // Get estimated value for the item
-        const value = await getEstimatedValue(item.id, item.assetType);
-        setEstimatedValue(value);
         setModalOpen(true);
     };
     
-    // Open the instant sell modal
-    const openSellNowModal = async (item: InventoryItem) => {
+    // Open the sell now modal
+    const openSellNowModal = (item: InventoryItem) => {
         if (!isConnected || !walletAddress) {
-            setError("Please connect your wallet to sell items");
+            toast.error("Please connect your wallet to sell items");
             return;
         }
         
-        console.log('Opening instant sell modal for item:', {
+        console.log('Opening sell now modal for item:', {
             id: item.id,
             name: item.name,
             type: item.type,
@@ -259,16 +85,20 @@ const MarketplaceInventorySection: React.FC = () => {
             idType: typeof item.id
         });
         
+        // Set an estimated value based on rarity
+        let value = 3000; // Default value
+        if (item.rarity === 'rare') value = 5000;
+        if (item.rarity === 'epic') value = 10000;
+        if (item.rarity === 'legendary') value = 25000;
+        
+        setEstimatedValue(value);
         setActiveItem(item);
         setModalAction('sellNow');
-        // Get estimated value for the item
-        const value = await getEstimatedValue(item.id, item.assetType);
-        setEstimatedValue(value);
         setModalOpen(true);
     };
     
     // Handle modal confirmation
-    const handleModalConfirm = async (price?: number, instantSell?: boolean) => {
+    const handleModalConfirm = async (price?: number) => {
         if (!activeItem || !isConnected || !walletAddress) return;
         
         setProcessingAction(true);
@@ -280,7 +110,6 @@ const MarketplaceInventorySection: React.FC = () => {
                 
                 // Handle instant sell for "Sell Now" button
                 const sellPrice = Math.round((estimatedValue || 0) * 0.8);
-                // Use the original ID directly
                 const response = await marketplaceService.instantSell(walletAddress, activeItem.id, activeItem.assetType);
                 
                 // Log the full response for debugging
@@ -417,21 +246,6 @@ const MarketplaceInventorySection: React.FC = () => {
         }
     };
 
-    // Handle card selection
-    const handleSelect = (id: string) => {
-        setSelectedItem(selectedItem === id ? null : id);
-    };
-
-    // Get info message based on asset type
-    const getInfoMessage = (item: InventoryItem) => {
-        if (item.assetType === 'hero') {
-            return `Level ${item.level || 1} ${item.subType || 'Hero'}`;
-        } else if (item.assetType === 'farmer') {
-            return `Level ${item.level || 1} - Yield: ${item.yield || 0}/day`;
-        }
-        return undefined;
-    };
-
     return (
         <div className="inventory-section">
             <input
@@ -503,25 +317,24 @@ const MarketplaceInventorySection: React.FC = () => {
                     </p>
                 </div>
             )}
-
+            
+            {/* Modal */}
             {activeItem && (
-                <div className="modal-container">
-                    <MarketplaceActionModal
-                        isOpen={modalOpen}
-                        onClose={() => {
-                            setModalOpen(false);
-                            setActiveItem(null);
-                        }}
-                        actionType={modalAction}
-                        assetName={activeItem.name}
-                        assetType={activeItem.assetType}
-                        assetRarity={activeItem.rarity}
-                        assetImage={activeItem.image}
-                        estimatedValue={estimatedValue}
-                        onConfirm={handleModalConfirm}
-                        isProcessing={processingAction}
-                    />
-                </div>
+                <MarketplaceActionModal
+                    isOpen={modalOpen}
+                    onClose={() => {
+                        setModalOpen(false);
+                        setActiveItem(null);
+                    }}
+                    actionType={modalAction}
+                    assetName={activeItem.name}
+                    assetType={activeItem.assetType}
+                    assetRarity={activeItem.rarity}
+                    assetImage={activeItem.image}
+                    estimatedValue={estimatedValue}
+                    onConfirm={handleModalConfirm}
+                    isProcessing={processingAction}
+                />
             )}
         </div>
     );
