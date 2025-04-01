@@ -88,22 +88,6 @@ export const HeroSection: React.FC = () => {
                             <WalletConnectButton color="purple" />
                         )}
                     </div>
-                    
-                    {/* Stats Preview */}
-                    <div className="stats-preview">
-                        <div className="stat-item">
-                            <div className="value">3,724+</div>
-                            <div className="label">NEURAL WARLORDS</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="value">1,873+</div>
-                            <div className="label">QUANTUM BATTLES</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="value">45K+</div>
-                            <div className="label">SOL MATRIX</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
