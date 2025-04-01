@@ -1,0 +1,453 @@
+/* WLOS Token Section Styles */
+.wlos-token-section {
+    position: relative;
+    padding: 80px 40px;
+    overflow: hidden;
+    margin-bottom: 80px;
+}
+
+/* Section title with enhanced styling */
+.section-title-container {
+    position: relative;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: white;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-purple), transparent);
+}
+
+/* Background elements */
+.token-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.token-circuit-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 200 200'%3E%3Cpath d='M20,20 L100,20 L100,100 L180,100 L180,180' stroke='%239945FF' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3Cpath d='M180,20 L100,100 L20,180' stroke='%2314F195' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3Ccircle cx='20' cy='20' r='3' fill='%2314F195' opacity='0.2'/%3E%3Ccircle cx='100' cy='100' r='2' fill='%239945FF' opacity='0.2'/%3E%3Ccircle cx='180' cy='180' r='3' fill='%23FFB800' opacity='0.2'/%3E%3C/svg%3E");
+    opacity: 0.5;
+}
+
+.token-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(153, 69, 255, 0.1) 0%, rgba(153, 69, 255, 0) 70%);
+    filter: blur(50px);
+    pointer-events: none;
+}
+
+/* Token content layout */
+.token-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Token info panel */
+.token-info {
+    background: rgba(8, 8, 30, 0.4);
+    border: 1px solid rgba(153, 69, 255, 0.2);
+    border-radius: 12px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    min-height: 400px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.token-info:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Hexagon background decoration */
+.hexagon-bg {
+    position: absolute;
+    bottom: -80px;
+    right: -80px;
+    width: 250px;
+    height: 250px;
+    opacity: 0.1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Cpolygon points='50,0 93.3,25 93.3,75 50,100 6.7,75 6.7,25' stroke='%239945FF' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+    background-size: cover;
+    transform: rotate(30deg);
+}
+
+.token-heading {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    position: relative;
+    display: inline-block;
+}
+
+.token-heading::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 40px;
+    height: 2px;
+    background: var(--color-purple);
+}
+
+.token-description {
+    color: #B3B3B3;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 90%;
+}
+
+/* Token features list */
+.token-features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.token-feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.feature-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.feature-dot.purple {
+    background-color: var(--color-purple);
+    box-shadow: 0 0 10px rgba(153, 69, 255, 0.7);
+}
+
+.feature-dot::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--color-purple);
+    opacity: 0.5;
+    animation: dotPulse 2s infinite;
+}
+
+@keyframes dotPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0.5;
+    }
+    70% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0;
+    }
+}
+
+.feature-text {
+    font-size: 16px;
+    color: white;
+}
+
+/* Token metrics panel */
+.token-metrics {
+    background: rgba(8, 8, 30, 0.4);
+    border: 1px solid rgba(153, 69, 255, 0.2);
+    border-radius: 12px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.token-metrics:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Token waveform animation */
+.token-waveform {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+}
+
+.wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 50px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='none' stroke='%239945FF' stroke-width='2' opacity='0.3' d='M0,160L40,149.3C80,139,160,117,240,128C320,139,400,181,480,176C560,171,640,117,720,96C800,75,880,85,960,117.3C1040,149,1120,203,1200,202.7C1280,203,1360,149,1400,122.7L1440,96'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    animation: waveAnimation 20s linear infinite;
+}
+
+@keyframes waveAnimation {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Metric rows */
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.metric-row:after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(153, 69, 255, 0.2), transparent);
+}
+
+.metric-row:last-of-type {
+    margin-bottom: 40px;
+}
+
+.metric-row:last-of-type:after {
+    display: none;
+}
+
+.metric-label {
+    font-size: 14px;
+    color: #B3B3B3;
+}
+
+.metric-value {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Token button */
+.token-button-container {
+    margin-top: 30px;
+}
+
+/* Token logo/icon */
+.token-logo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(153, 69, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(153, 69, 255, 0.2);
+}
+
+.token-logo-inner {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-purple), rgba(153, 69, 255, 0.5));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.token-logo-inner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: rotate(45deg);
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: rotate(45deg) translateX(-100%);
+    }
+    100% {
+        transform: rotate(45deg) translateX(100%);
+    }
+}
+
+/* Media queries */
+@media (max-width: 992px) {
+    .wlos-token-section {
+        padding: 60px 30px;
+    }
+    
+    .section-title {
+        font-size: 28px;
+    }
+    
+    .token-content {
+        gap: 30px;
+    }
+    
+    .token-info, .token-metrics {
+        padding: 30px;
+    }
+    
+    .token-heading {
+        font-size: 20px;
+    }
+    
+    .token-description {
+        font-size: 14px;
+    }
+    
+    .feature-text {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wlos-token-section {
+        padding: 50px 20px;
+    }
+    
+    .section-title-container {
+        margin-bottom: 40px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+    }
+    
+    .token-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .token-info, .token-metrics {
+        min-height: auto;
+        padding: 25px;
+    }
+    
+    .token-description {
+        margin-bottom: 20px;
+    }
+    
+    .token-features {
+        margin-top: 20px;
+    }
+    
+    .metric-value {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .wlos-token-section {
+        padding: 40px 15px;
+    }
+    
+    .section-title {
+        font-size: 20px;
+    }
+    
+    .token-info, .token-metrics {
+        padding: 20px;
+    }
+    
+    .token-heading {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    
+    .metric-row {
+        margin-bottom: 15px;
+    }
+    
+    .metric-label {
+        font-size: 12px;
+    }
+    
+    .metric-value {
+        font-size: 16px;
+    }
+    
+    .token-logo {
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .token-logo-inner {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+} 
