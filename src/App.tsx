@@ -18,7 +18,6 @@ import './styles/farmers.css';
 import './styles/heroes.css';
 import './styles/index.css';
 import './styles/animations.css';
-import './styles/staking.css';
 import './styles/marketplace.css';
 import './styles/token.css';
 import './styles/roadmap.css';
