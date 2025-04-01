@@ -30,6 +30,12 @@ import './styles/listings.css';
 import './styles/wallet-assets.css';
 import './styles/wallet-overview.css';
 
+// Import new staking CSS files
+import './styles/modules/staking/new/StakingPage.css';
+import './styles/modules/staking/new/StakingHeroSection.css';
+import './styles/modules/staking/new/StakingStatsSection.css';
+import './styles/modules/staking/new/StakingPoolsSection.css';
+import './styles/modules/staking/new/StakingRewardsSection.css';
 
 function App() {
     return (

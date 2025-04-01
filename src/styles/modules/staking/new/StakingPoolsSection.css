@@ -1,0 +1,441 @@
+/* Staking Pools Section Styles */
+.staking-pools-section {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, #14F195, #9945FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-subtitle {
+    font-size: 14px;
+    color: #B3B3B3;
+}
+
+/* Pools grid */
+.pools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Pool card */
+.pool-card {
+    background: rgba(8, 8, 30, 0.5);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    min-height: 280px;
+}
+
+.pool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.pool-card.active {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Card themes */
+.pool-card.purple {
+    border-top: 3px solid var(--color-purple);
+}
+
+.pool-card.green {
+    border-top: 3px solid var(--color-green);
+}
+
+.pool-card.yellow {
+    border-top: 3px solid var(--color-yellow);
+}
+
+/* Card background */
+.card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.glow-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+}
+
+.pool-card.purple .glow-effect {
+    background: radial-gradient(circle at top right, rgba(153, 69, 255, 0.2), transparent 70%);
+}
+
+.pool-card.green .glow-effect {
+    background: radial-gradient(circle at top right, rgba(20, 241, 149, 0.2), transparent 70%);
+}
+
+.pool-card.yellow .glow-effect {
+    background: radial-gradient(circle at top right, rgba(255, 184, 0, 0.2), transparent 70%);
+}
+
+.grid-pattern {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60%;
+    height: 60%;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                     linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.5;
+}
+
+/* Pool header */
+.pool-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.pool-name {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.pool-card.purple .pool-name {
+    color: var(--color-purple);
+}
+
+.pool-card.green .pool-name {
+    color: var(--color-green);
+}
+
+.pool-card.yellow .pool-name {
+    color: var(--color-yellow);
+}
+
+.pool-apy {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.pool-card.purple .pool-apy {
+    color: var(--color-purple);
+    background: rgba(153, 69, 255, 0.1);
+}
+
+.pool-card.green .pool-apy {
+    color: var(--color-green);
+    background: rgba(20, 241, 149, 0.1);
+}
+
+.pool-card.yellow .pool-apy {
+    color: var(--color-yellow);
+    background: rgba(255, 184, 0, 0.1);
+}
+
+/* Pool content */
+.pool-content {
+    margin-bottom: 25px;
+}
+
+.pool-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.info-label {
+    font-size: 14px;
+    color: #B3B3B3;
+}
+
+.info-value {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Pool capacity */
+.pool-capacity {
+    margin-top: 20px;
+}
+
+.capacity-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.pool-card.purple .capacity-fill {
+    background: var(--color-purple);
+}
+
+.pool-card.green .capacity-fill {
+    background: var(--color-green);
+}
+
+.pool-card.yellow .capacity-fill {
+    background: var(--color-yellow);
+}
+
+.capacity-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0;
+    transition: width 1s ease-in-out;
+    animation: fillBar 1s forwards ease-out;
+}
+
+@keyframes fillBar {
+    from { width: 0; }
+    to { width: var(--width); }
+}
+
+.capacity-text {
+    font-size: 12px;
+    color: #999;
+    text-align: right;
+}
+
+/* Pool actions */
+.pool-actions {
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 20px;
+    animation: fadeIn 0.3s ease;
+    z-index: 5;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.stake-form {
+    width: 100%;
+}
+
+.stake-form-header {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #fff;
+    text-align: center;
+}
+
+.stake-input-container {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0 15px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: text;
+}
+
+/* Color-specific focus styles */
+.pool-card.purple .stake-input-container:focus-within {
+    border-color: var(--color-purple);
+    box-shadow: 0 0 10px rgba(153, 69, 255, 0.3);
+}
+
+.pool-card.green .stake-input-container:focus-within {
+    border-color: var(--color-green);
+    box-shadow: 0 0 10px rgba(20, 241, 149, 0.3);
+}
+
+.pool-card.yellow .stake-input-container:focus-within {
+    border-color: var(--color-yellow);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.3);
+}
+
+.stake-input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    height: 100%;
+    width: 100%;
+    padding-right: 60px;
+    outline: none;
+    cursor: text;
+    font-family: var(--font-main);
+}
+
+.stake-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.token-symbol {
+    position: absolute;
+    right: 15px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    font-weight: 600;
+    user-select: none;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.action-buttons button {
+    padding: 12px 24px;
+    font-weight: 600;
+    width: 100%;
+    max-width: 200px;
+    transition: all 0.2s ease;
+}
+
+/* Style input type number to remove arrows */
+.stake-input::-webkit-outer-spin-button,
+.stake-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.stake-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Color styles for buttons */
+.pool-card.purple .action-buttons button {
+    background: linear-gradient(90deg, rgba(119, 0, 255, 0.7), rgba(153, 69, 255, 0.7));
+    border: 1px solid #9945FF;
+}
+
+.pool-card.green .action-buttons button {
+    background: linear-gradient(90deg, rgba(0, 204, 102, 0.7), rgba(20, 241, 149, 0.7));
+    border: 1px solid #14F195;
+}
+
+.pool-card.yellow .action-buttons button {
+    background: linear-gradient(90deg, rgba(204, 153, 0, 0.7), rgba(255, 184, 0, 0.7));
+    border: 1px solid #FFB800;
+}
+
+/* Hover effects for buttons */
+.pool-card.purple .action-buttons button:hover {
+    background: linear-gradient(90deg, rgba(119, 0, 255, 0.9), rgba(153, 69, 255, 0.9));
+    box-shadow: 0 0 15px rgba(153, 69, 255, 0.5);
+}
+
+.pool-card.green .action-buttons button:hover {
+    background: linear-gradient(90deg, rgba(0, 204, 102, 0.9), rgba(20, 241, 149, 0.9));
+    box-shadow: 0 0 15px rgba(20, 241, 149, 0.5);
+}
+
+.pool-card.yellow .action-buttons button:hover {
+    background: linear-gradient(90deg, rgba(204, 153, 0, 0.9), rgba(255, 184, 0, 0.9));
+    box-shadow: 0 0 15px rgba(255, 184, 0, 0.5);
+}
+
+/* Media queries */
+@media (max-width: 992px) {
+    .pools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .pool-card {
+        padding: 25px;
+    }
+    
+    .pool-actions {
+        margin: -25px;
+        margin-top: 20px;
+        padding: 15px 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 22px;
+    }
+    
+    .section-subtitle {
+        font-size: 13px;
+    }
+    
+    .pool-card {
+        padding: 20px;
+    }
+    
+    .pool-header {
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+    }
+    
+    .pool-name {
+        font-size: 18px;
+    }
+    
+    .pool-apy {
+        font-size: 16px;
+    }
+    
+    .pool-actions {
+        margin: -20px;
+        margin-top: 15px;
+        padding: 15px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 20px;
+    }
+    
+    .pools-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pool-card {
+        padding: 15px;
+    }
+    
+    .pool-actions {
+        margin: -15px;
+        margin-top: 15px;
+        padding: 15px;
+    }
+    
+    .stake-input {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+} 
