@@ -1,0 +1,275 @@
+/* Marketplace Featured Section Styles */
+.featured-section {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 60px;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.featured-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Section Header */
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-yellow);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.section-subtitle {
+    font-size: 16px;
+    color: var(--color-text-secondary);
+}
+
+/* Featured Grid */
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+/* Item Cards */
+.item-card {
+    background: rgba(8, 8, 30, 0.5);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.item-card.legendary {
+    border-top: 3px solid var(--color-yellow);
+}
+
+.item-card.epic {
+    border-top: 3px solid var(--color-purple);
+}
+
+.item-card.rare {
+    border-top: 3px solid var(--color-blue);
+}
+
+.item-card.common {
+    border-top: 3px solid var(--color-text-secondary);
+}
+
+/* Item Image */
+.item-image-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+
+.item-rarity-indicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.item-rarity-indicator.legendary {
+    background-color: var(--color-yellow);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+}
+
+.item-rarity-indicator.epic {
+    background-color: var(--color-purple);
+    box-shadow: 0 0 10px rgba(153, 69, 255, 0.5);
+}
+
+.item-rarity-indicator.rare {
+    background-color: var(--color-blue);
+    box-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+}
+
+.item-rarity-indicator.common {
+    background-color: var(--color-text-secondary);
+    box-shadow: 0 0 10px rgba(179, 179, 179, 0.5);
+}
+
+.item-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.placeholder-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    opacity: 0.7;
+}
+
+/* Item Info */
+.item-info {
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.item-name-container {
+    margin-bottom: 15px;
+}
+
+.item-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #fff;
+}
+
+.item-type {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+.item-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.item-price, .item-seller {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label, .seller-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.price-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-yellow);
+}
+
+.seller-value {
+    font-size: 14px;
+    color: #fff;
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.view-item-btn {
+    width: 100%;
+}
+
+/* Card Background Effects */
+.card-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.grid-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                     linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.5;
+}
+
+.glow-effect {
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    top: -25%;
+    left: -25%;
+    background: radial-gradient(circle, rgba(20, 241, 149, 0.1) 0%, rgba(20, 241, 149, 0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.item-card:hover .glow-effect {
+    opacity: 0.5;
+}
+
+.item-card.legendary:hover .glow-effect {
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.1) 0%, rgba(255, 184, 0, 0) 70%);
+}
+
+.item-card.epic:hover .glow-effect {
+    background: radial-gradient(circle, rgba(153, 69, 255, 0.1) 0%, rgba(153, 69, 255, 0) 70%);
+}
+
+.item-card.rare:hover .glow-effect {
+    background: radial-gradient(circle, rgba(0, 136, 255, 0.1) 0%, rgba(0, 136, 255, 0) 70%);
+}
+
+/* View All Container */
+.view-all-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* Media queries */
+@media (max-width: 992px) {
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 28px;
+    }
+    
+    .section-subtitle {
+        font-size: 14px;
+    }
+    
+    .featured-grid {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .item-image-container {
+        height: 200px;
+    }
+    
+    .item-info {
+        padding: 15px;
+    }
+} 

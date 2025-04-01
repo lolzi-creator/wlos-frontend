@@ -13,6 +13,8 @@ import { MarketplaceProvider } from './context/MarketplaceContext';
 import { FarmerProvider } from './context/FarmerContext';
 import { HeroProvider } from './context/HeroContext';
 import { StakingProvider } from './context/StakingContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './styles/farmers.css';
 import './styles/heroes.css';
@@ -35,6 +37,14 @@ import './styles/modules/staking/new/StakingHeroSection.css';
 import './styles/modules/staking/new/StakingStatsSection.css';
 import './styles/modules/staking/new/StakingPoolsSection.css';
 import './styles/modules/staking/new/StakingRewardsSection.css';
+
+// Import new marketplace CSS files
+import './styles/modules/marketplace/new/MarketplacePage.css';
+import './styles/modules/marketplace/new/MarketplaceHeroSection.css';
+import './styles/modules/marketplace/new/MarketplaceStatsSection.css';
+import './styles/modules/marketplace/new/MarketplaceItemsSection.css';
+import './styles/modules/marketplace/new/MarketplaceInventorySection.css';
+import './styles/modules/marketplace/new/MarketplaceListingsSection.css';
 
 function App() {
     return (
@@ -60,6 +70,18 @@ function App() {
                                         </Routes>
                                     </div>
                                 </Router>
+                                <ToastContainer
+                                    position="top-right"
+                                    autoClose={3000}
+                                    hideProgressBar={false}
+                                    newestOnTop
+                                    closeOnClick
+                                    rtl={false}
+                                    pauseOnFocusLoss
+                                    draggable
+                                    pauseOnHover
+                                    theme="dark"
+                                />
                             </StakingProvider>
                         </HeroProvider>
                     </FarmerProvider>

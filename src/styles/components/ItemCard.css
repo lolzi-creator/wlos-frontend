@@ -1,0 +1,200 @@
+.item-card {
+  position: relative;
+  width: 100%;
+  background-color: rgba(5, 10, 25, 0.9);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Equipped badge */
+.equipped-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #14F195;
+  color: #000;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  transform: rotate(45deg) translateX(30px) translateY(-10px);
+  width: 150px;
+  text-align: center;
+  z-index: 10;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+/* Item header */
+.item-header {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.rarity-badge {
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Item image */
+.item-image-container {
+  width: 100%;
+  padding-bottom: 100%; /* Square aspect ratio */
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.item-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.item-card:hover .item-image {
+  transform: scale(1.05);
+}
+
+.item-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Item details */
+.item-details {
+  padding: 15px;
+  text-align: left;
+}
+
+.item-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+.item-type {
+  font-size: 14px;
+  color: #B3B3B3;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.acquired-date {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #888888;
+  margin-top: 15px;
+}
+
+.calendar-icon {
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+/* Item actions */
+.item-actions {
+  display: flex;
+  padding: 15px;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.action-button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  flex: 1;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+  background-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.action-button.green {
+  background-color: rgba(20, 241, 149, 0.2);
+  color: #14F195;
+  border: 1px solid #14F195;
+}
+
+.action-button.yellow {
+  background-color: rgba(255, 184, 0, 0.2);
+  color: #FFB800;
+  border: 1px solid #FFB800;
+}
+
+.action-button.purple {
+  background-color: rgba(153, 69, 255, 0.2);
+  color: #9945FF;
+  border: 1px solid #9945FF;
+}
+
+.action-button.blue {
+  background-color: rgba(0, 136, 255, 0.2);
+  color: #0088FF;
+  border: 1px solid #0088FF;
+}
+
+.action-button.cyan {
+  background-color: rgba(0, 255, 255, 0.2);
+  color: #00FFFF;
+  border: 1px solid #00FFFF;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .item-name {
+    font-size: 16px;
+  }
+  
+  .item-type {
+    font-size: 12px;
+  }
+  
+  .action-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+} 

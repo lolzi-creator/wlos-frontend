@@ -1,0 +1,309 @@
+/* Marketplace Inventory Section Styles - Dark Theme */
+.inventory-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+.inventory-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: #00E676;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 2px solid #00E676;
+    border-radius: 0;
+    color: #fff;
+    margin-bottom: 25px;
+    font-size: 14px;
+    font-family: 'Chakra Petch', sans-serif;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: #0A0E1A;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+    font-family: 'Chakra Petch', sans-serif;
+}
+
+.inventory-table thead {
+    background: #000000;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.inventory-table th {
+    padding: 15px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.inventory-table tbody tr {
+    transition: all 0.2s;
+    background: #0A1527;
+}
+
+.inventory-table tbody tr:nth-child(odd) {
+    background: #07101E;
+}
+
+.inventory-table td {
+    padding: 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: #fff;
+    text-align: left;
+}
+
+/* Level and Price styling */
+.inventory-table td:nth-child(2),
+.inventory-table td:nth-child(3) {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Item name styling */
+.item-name {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Chakra Petch', sans-serif;
+    color: #eaeaea;
+    position: relative;
+    display: inline-block;
+}
+
+.item-name::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #00E676;
+    margin-left: 8px;
+    vertical-align: middle;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+/* Change diamond color based on rarity */
+.inventory-table tr.type-hero .item-name::after {
+    background: #FFB800;
+}
+
+.inventory-table tr.type-farmer .item-name::after {
+    background: #00E676;
+}
+
+.inventory-table tr.type-item .item-name::after {
+    background: #00A3FF;
+}
+
+.mobile-details {
+    display: none;
+    margin-top: 6px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.action-btn {
+    min-width: 100px;
+    padding: 8px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Chakra Petch', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.list-btn {
+    background: #00E676;
+    color: #000;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+}
+
+.list-btn:hover {
+    background: #00ff85;
+}
+
+.sell-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.loading-indicator {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.error-message {
+    text-align: center;
+    padding: 30px;
+    color: #ff4d4d;
+    font-size: 14px;
+}
+
+.no-items {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+/* Modal Container */
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+}
+
+@media (max-width: 768px) {
+    .hide-mobile {
+        display: none;
+    }
+
+    .mobile-details {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .inventory-table td {
+        padding: 14px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-btn {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 11px;
+    }
+}
+
+/* Update rarity-based row styling to type-based styling */
+.inventory-table tr.type-hero {
+    background-color: rgba(255, 162, 0, 0.1);
+}
+
+.inventory-table tr.type-farmer {
+    background-color: rgba(0, 229, 160, 0.1);
+}
+
+.inventory-table tr.type-item {
+    background-color: rgba(0, 163, 255, 0.1);
+}
+
+/* Remove any old rarity-based styling */
+.inventory-table tr.rarity-common,
+.inventory-table tr.rarity-uncommon,
+.inventory-table tr.rarity-rare,
+.inventory-table tr.rarity-epic,
+.inventory-table tr.rarity-legendary {
+    background-color: transparent;
+}
+
+/* Add styles for the empty inventory message */
+.no-inventory-items {
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: rgba(10, 15, 30, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 200, 255, 0.2);
+}
+
+.no-items-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.no-items-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 24px;
+    color: #00c8ff;
+    margin-bottom: 16px;
+}
+
+.no-items-message {
+    color: #b0b8c1;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.test-instructions {
+    background-color: rgba(255, 200, 0, 0.1);
+    border: 1px solid rgba(255, 200, 0, 0.3);
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #ffc800;
+    text-align: left;
+}
+
+.loading-indicator {
+    text-align: center;
+    padding: 30px;
+    color: #00c8ff;
+    font-family: 'Chakra Petch', sans-serif;
+    background-color: rgba(10, 15, 30, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 200, 255, 0.2);
+    margin: 20px 0;
+}
+
+.error-message {
+    text-align: center;
+    padding: 20px;
+    color: #ff5252;
+    background-color: rgba(255, 82, 82, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    margin: 20px 0;
+    font-family: 'Chakra Petch', sans-serif;
+} 

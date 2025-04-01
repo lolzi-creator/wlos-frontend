@@ -1,7 +1,7 @@
 // src/components/common/Button.tsx
 interface ButtonProps {
     text: string;
-    color: 'purple' | 'green' | 'yellow' | 'blue' | 'cyan';
+    color: 'purple' | 'green' | 'yellow' | 'blue' | 'cyan' | 'transparent';
     onClick: () => void;
     fullWidth?: boolean;
     disabled?: boolean; // Add this line to support the disabled prop
@@ -25,6 +25,9 @@ const Button: React.FC<ButtonProps> = ({ text, color, onClick, fullWidth = false
             break;
         case 'cyan':
             colorClasses = 'bg-cyan-glow border-cyan';
+            break;
+        case 'transparent':
+            colorClasses = 'bg-transparent border-white hover:bg-white/10';
             break;
     }
 

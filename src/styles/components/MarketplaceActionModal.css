@@ -1,0 +1,955 @@
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Modal container */
+.marketplace-modal {
+    width: 450px;
+    max-width: 90%;
+    background: rgba(15, 17, 39, 0.95);
+    border: 2px solid #00C2FF;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 194, 255, 0.3);
+    overflow: hidden;
+    position: relative;
+    animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Cyberpunk glow effects */
+.marketplace-modal::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    background: linear-gradient(45deg, #00C2FF, transparent, #00C2FF, transparent);
+    background-size: 400% 400%;
+    z-index: -1;
+    animation: glowBorder 8s ease infinite;
+    border-radius: 10px;
+    opacity: 0.6;
+}
+
+@keyframes glowBorder {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Modal header */
+.modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0, 194, 255, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 12, 34, 0.7);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-shadow: 0 0 5px rgba(0, 194, 255, 0.7);
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-button:hover {
+    color: #00C2FF;
+    background: rgba(0, 194, 255, 0.1);
+}
+
+.close-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Modal content */
+.modal-content {
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Asset info section */
+.asset-info {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 194, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 194, 255, 0.2);
+}
+
+.asset-image-container {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    margin-right: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.asset-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rarity-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.rarity-indicator.common {
+    background: #9BA0AA;
+}
+
+.rarity-indicator.uncommon {
+    background: #1AE084;
+}
+
+.rarity-indicator.rare {
+    background: #1AA7EC;
+}
+
+.rarity-indicator.epic {
+    background: #A359DF;
+}
+
+.rarity-indicator.legendary {
+    background: #FF9B21;
+}
+
+.asset-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.asset-details h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+}
+
+.asset-type {
+    margin: 2px 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.asset-rarity {
+    margin: 2px 0;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.asset-rarity.common {
+    color: #9BA0AA;
+}
+
+.asset-rarity.uncommon {
+    color: #1AE084;
+}
+
+.asset-rarity.rare {
+    color: #1AA7EC;
+}
+
+.asset-rarity.epic {
+    color: #A359DF;
+}
+
+.asset-rarity.legendary {
+    color: #FF9B21;
+}
+
+/* Listing options */
+.listing-options {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.listing-option {
+    flex: 1;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+}
+
+.listing-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.listing-option.marketplace {
+    border-left: 3px solid #00C2FF;
+}
+
+.listing-option.sell-now {
+    border-left: 3px solid #FFCD00;
+}
+
+.listing-option h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: white;
+}
+
+.listing-option p {
+    margin: 0 0 15px 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+}
+
+/* Price input */
+.price-input-container {
+    margin-bottom: 15px;
+}
+
+.price-input-container label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.price-input-container input {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 194, 255, 0.4);
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.price-input-container input:focus {
+    outline: none;
+    border-color: #00C2FF;
+    box-shadow: 0 0 0 2px rgba(0, 194, 255, 0.2);
+}
+
+.price-input-container input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Fee breakdown */
+.fee-breakdown {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.fee-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.fee-row span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.fee-row span:last-child {
+    font-weight: 500;
+    color: white;
+}
+
+.fee-row.total {
+    margin-top: 10px;
+    padding-top: 5px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+}
+
+.fee-row.total span:first-child {
+    color: white;
+}
+
+.fee-row.total span:last-child {
+    color: #00C2FF;
+}
+
+/* Instant sell value */
+.instant-value {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.instant-value span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.instant-value .value {
+    font-weight: 600;
+    color: #FFCD00;
+}
+
+/* Action button */
+.action-button {
+    margin-top: 15px;
+}
+
+/* Price change specific */
+.price-change-container {
+    margin-bottom: 20px;
+}
+
+.current-price {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.current-price span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.current-price .value {
+    font-weight: 600;
+    color: #00C2FF;
+}
+
+/* Cancel listing specific */
+.cancel-listing-container {
+    margin-bottom: 20px;
+}
+
+.cancel-message {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.item-name {
+    font-weight: 600;
+    color: #00C2FF;
+}
+
+.listing-info {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.info-row span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.info-row .value {
+    font-weight: 600;
+    color: #00C2FF;
+}
+
+/* Buy item specific */
+.buy-container {
+    margin-bottom: 20px;
+}
+
+.buy-message {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.price-info {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.note {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+    margin-top: 15px;
+}
+
+/* Error message */
+.error-message {
+    color: #ff4b6b;
+    background: rgba(255, 75, 107, 0.1);
+    border: 1px solid rgba(255, 75, 107, 0.3);
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+/* Modal footer */
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid rgba(0, 194, 255, 0.3);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    background: rgba(10, 12, 34, 0.7);
+}
+
+/* Processing indicator */
+.processing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 194, 255, 0.3);
+    border-top: 2px solid #00C2FF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 500px) {
+    .listing-options {
+        flex-direction: column;
+    }
+}
+
+.marketplace-action-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: modalOverlayAppear 0.3s ease;
+}
+
+@keyframes modalOverlayAppear {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.marketplace-action-modal {
+    width: 500px;
+    max-width: 90vw;
+    max-height: 90vh;
+    background-color: rgba(6, 10, 20, 0.95);
+    border: 1px solid rgba(0, 190, 255, 0.4);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 40px rgba(0, 190, 255, 0.2), 0 0 15px rgba(0, 190, 255, 0.2);
+    animation: modalAppear 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Modal border glow effect */
+.marketplace-action-modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 190, 255, 0.3) 0%, rgba(6, 10, 20, 0) 50%);
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Modal top accent lines */
+.marketplace-action-modal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 70px;
+    height: 3px;
+    background-color: #00BEFF;
+    box-shadow: 0 0 10px #00BEFF;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    background-color: rgba(255, 0, 76, 0.2);
+    color: #fff;
+    border-color: rgba(255, 0, 76, 0.4);
+    box-shadow: 0 0 10px rgba(255, 0, 76, 0.3);
+}
+
+.modal-title {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    padding: 25px 20px 15px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    text-align: center;
+}
+
+.modal-content {
+    padding: 20px;
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+}
+
+/* Asset Preview Section */
+.asset-preview {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.asset-preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 190, 255, 0.05) 0%, rgba(0, 0, 0, 0) 50%);
+    pointer-events: none;
+}
+
+.asset-image-container {
+    width: 90px;
+    height: 90px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid;
+}
+
+.asset-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.asset-details {
+    flex: 1;
+}
+
+.asset-name {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 5px;
+}
+
+.asset-type {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 5px;
+}
+
+.asset-rarity {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Price Input Styles */
+.price-input-container {
+    margin-bottom: 20px;
+}
+
+.price-input-container label {
+    display: block;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 10px;
+}
+
+.price-input-wrapper {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 190, 255, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.price-input-wrapper input {
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    border: none;
+    padding: 0 15px;
+    color: #fff;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 16px;
+}
+
+.price-input-wrapper input:focus {
+    outline: none;
+}
+
+.currency-label {
+    padding: 0 15px;
+    background-color: rgba(0, 190, 255, 0.1);
+    color: rgba(255, 184, 0, 0.9);
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid rgba(0, 190, 255, 0.3);
+}
+
+.error-message {
+    color: #ff3d71;
+    font-size: 13px;
+    margin-top: 8px;
+    font-family: 'Chakra Petch', sans-serif;
+}
+
+/* Price Comparison */
+.price-comparison {
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    background-color: rgba(0, 190, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid rgba(0, 190, 255, 0.4);
+}
+
+.estimate-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.estimate-value {
+    font-weight: 600;
+    color: #FFB800;
+}
+
+/* Fee Info */
+.fee-info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fee-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fee-row.total {
+    border-bottom: none;
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 190, 255, 0.2);
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Instant Sell */
+.instant-sell-info {
+    margin-bottom: 20px;
+}
+
+.instant-sell-description {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.instant-sell-price {
+    color: #00e5a0;
+    font-weight: bold;
+}
+
+.instant-sell-note {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: rgba(255, 184, 0, 0.1);
+    border: 1px solid rgba(255, 184, 0, 0.3);
+    font-size: 14px;
+    color: #ffb800;
+    line-height: 1.5;
+}
+
+.instant-sell-note strong {
+    color: #ffda55;
+}
+
+/* Change Price */
+.current-price-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.current-price-value {
+    font-weight: 600;
+    color: #FFB800;
+    font-size: 16px;
+}
+
+/* Cancel Listing */
+.cancel-listing-info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(255, 0, 76, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid rgba(255, 0, 76, 0.4);
+}
+
+.cancel-listing-info p {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Buy Info */
+.buy-info {
+    margin-bottom: 20px;
+}
+
+.price-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: rgba(0, 190, 255, 0.05);
+    border-radius: 8px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.price-value {
+    font-weight: 600;
+    color: #FFB800;
+}
+
+.buy-confirmation {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    padding: 0 5px;
+}
+
+/* Modal Actions */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .marketplace-action-modal {
+        width: 100%;
+        margin: 20px;
+        max-height: 85vh;
+    }
+    
+    .asset-preview {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .asset-image-container {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .asset-details {
+        text-align: center;
+    }
+    
+    .price-input-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .currency-label {
+        width: 100%;
+        padding: 10px;
+        justify-content: center;
+        border-left: none;
+        border-top: 1px solid rgba(0, 190, 255, 0.3);
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+    
+    .modal-close-btn {
+        top: 10px;
+        right: 10px;
+    }
+} 
