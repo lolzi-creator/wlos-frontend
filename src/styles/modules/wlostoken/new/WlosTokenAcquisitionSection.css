@@ -1,0 +1,231 @@
+.wlostoken-acquisition-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 1s ease;
+}
+
+.wlostoken-acquisition-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.section-description {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Acquisition methods grid */
+.acquisition-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.acquisition-card {
+    background: rgba(8, 8, 30, 0.6);
+    border-radius: 16px;
+    padding: 30px;
+    border: 1px solid rgba(153, 69, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.acquisition-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(153, 69, 255, 0.3);
+    box-shadow: 0 15px 30px rgba(153, 69, 255, 0.1);
+}
+
+.acquisition-icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(153, 69, 255, 0.1);
+    border-radius: 14px;
+    color: var(--color-purple);
+}
+
+.acquisition-content {
+    flex: 1;
+}
+
+.acquisition-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--color-text-primary);
+}
+
+.acquisition-description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-bottom: 20px;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(90deg, #9945FF 0%, #B365FF 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(153, 69, 255, 0.3);
+}
+
+.action-button svg {
+    transition: transform 0.2s ease;
+}
+
+.action-button:hover svg {
+    transform: translateX(3px);
+}
+
+/* Resources section */
+.resources-container {
+    margin-top: 50px;
+}
+
+.resources-card {
+    background: rgba(8, 8, 30, 0.6);
+    border-radius: 16px;
+    padding: 30px;
+    border: 1px solid rgba(153, 69, 255, 0.1);
+}
+
+.resources-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.resources-links {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.resource-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    background: rgba(153, 69, 255, 0.05);
+}
+
+.resource-link:hover {
+    background: rgba(153, 69, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.resource-link svg {
+    color: var(--color-purple);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Media queries for responsive design */
+@media (max-width: 992px) {
+    .acquisition-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .resources-links {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .section-description {
+        font-size: 16px;
+    }
+    
+    .acquisition-card {
+        padding: 24px;
+    }
+    
+    .acquisition-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .acquisition-title {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-title {
+        font-size: 30px;
+    }
+    
+    .acquisition-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .resources-card {
+        padding: 20px;
+    }
+} 

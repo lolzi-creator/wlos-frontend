@@ -1,0 +1,274 @@
+.wlostoken-distribution-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 1s ease;
+}
+
+.wlostoken-distribution-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.section-description {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.distribution-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.chart-container {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.distribution-chart {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    overflow: hidden;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+}
+
+.chart-slice {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.chart-slice.selected {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.chart-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: rgba(8, 8, 30, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.chart-value {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.percentage {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-purple);
+    margin-bottom: 4px;
+}
+
+.allocation-name {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.allocations-container {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.allocations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.allocation-item {
+    background: rgba(8, 8, 30, 0.6);
+    border-radius: 12px;
+    padding: 16px 20px;
+    border: 1px solid rgba(153, 69, 255, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.allocation-item:hover {
+    border-color: rgba(153, 69, 255, 0.3);
+    background: rgba(8, 8, 30, 0.7);
+}
+
+.allocation-item.selected {
+    border-color: rgba(153, 69, 255, 0.5);
+    background: rgba(8, 8, 30, 0.8);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.allocation-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.color-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.allocation-name {
+    flex: 1;
+    font-weight: 600;
+}
+
+.allocation-percentage {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-text-primary);
+}
+
+.allocation-description {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+}
+
+.distribution-details {
+    margin-top: 40px;
+}
+
+.details-card {
+    background: rgba(8, 8, 30, 0.6);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(153, 69, 255, 0.1);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.detail-item {
+    text-align: center;
+}
+
+.detail-label {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.detail-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+/* Media queries for responsive design */
+@media (max-width: 992px) {
+    .distribution-container {
+        justify-content: center;
+    }
+    
+    .chart-container, .allocations-container {
+        flex: initial;
+    }
+    
+    .section-title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .details-card {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .distribution-chart {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .chart-inner {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .percentage {
+        font-size: 20px;
+    }
+    
+    .section-description {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    .distribution-chart {
+        width: 220px;
+        height: 220px;
+    }
+    
+    .chart-inner {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .percentage {
+        font-size: 18px;
+    }
+    
+    .allocation-item {
+        padding: 12px 16px;
+    }
+    
+    .details-card {
+        padding: 16px;
+    }
+    
+    .detail-value {
+        font-size: 16px;
+    }
+} 
