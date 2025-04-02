@@ -1,0 +1,228 @@
+/* FarmersShowcaseSection.css */
+.farmers-showcase-section {
+    position: relative;
+    padding: 40px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.farmers-showcase-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(20, 241, 149, 0.3);
+    letter-spacing: 1px;
+}
+
+.section-description {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 10px;
+}
+
+.info-banner {
+    background: rgba(6, 10, 20, 0.8);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.info-banner-icon {
+    background: rgba(20, 241, 149, 0.1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.info-banner p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Filter and Sort components */
+.filter-sort-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    gap: 15px;
+    background: rgba(6, 10, 20, 0.6);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid rgba(20, 241, 149, 0.2);
+}
+
+.filter-group, .sort-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-group {
+    flex: 1 1 60%;
+}
+
+.sort-group {
+    flex: 1 1 30%;
+}
+
+.filter-label, .sort-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 1px;
+}
+
+.filter-buttons, .sort-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filter-button, .sort-button {
+    background: rgba(6, 10, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-button:hover, .sort-button:hover {
+    background: rgba(6, 10, 20, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.filter-button.active {
+    background: rgba(var(--rarity-color, 20, 241, 149), 0.1);
+    border-color: var(--rarity-color, rgba(20, 241, 149, 0.5));
+    color: var(--rarity-color, #14F195);
+    box-shadow: 0 0 10px rgba(var(--rarity-color, 20, 241, 149), 0.2);
+}
+
+.sort-button.active {
+    background: rgba(20, 241, 149, 0.1);
+    border-color: rgba(20, 241, 149, 0.5);
+    color: #14F195;
+    box-shadow: 0 0 10px rgba(20, 241, 149, 0.2);
+}
+
+.filter-button:first-child.active {
+    background: rgba(20, 241, 149, 0.1);
+    border-color: rgba(20, 241, 149, 0.5);
+    color: #14F195;
+    box-shadow: 0 0 10px rgba(20, 241, 149, 0.2);
+}
+
+.entity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.available-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(20, 241, 149, 0.1);
+    border: 1px solid rgba(20, 241, 149, 0.4);
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 6px;
+    color: #14F195;
+    z-index: 2;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .entity-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+    }
+    
+    .section-title {
+        font-size: 28px;
+    }
+    
+    .section-description {
+        font-size: 14px;
+    }
+    
+    .filter-sort-container {
+        flex-direction: column;
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .filter-group, .sort-group {
+        width: 100%;
+    }
+    
+    .filter-buttons, .sort-buttons {
+        overflow-x: auto;
+        padding-bottom: 5px;
+        -webkit-overflow-scrolling: touch;
+        display: flex;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+    
+    .filter-button, .sort-button {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .farmers-showcase-section {
+        padding: 30px 10px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+    }
+    
+    .entity-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+} 
