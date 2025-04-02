@@ -72,9 +72,19 @@ const GenericPackInventory: React.FC<GenericPackInventoryProps> = ({
             console.log(`Opening ${entityType} pack with ID:`, packId);
 
             const result = await openPack(packId);
-            if (result.success && result.farmer) {
-                setAnimationEntity(result.farmer);
-                setShowAnimation(true);
+            if (result.success) {
+                if (entityType === 'farmer' && result.farmer) {
+                    setAnimationEntity(result.farmer);
+                    setShowAnimation(true);
+                } else if (entityType === 'hero' && result.hero) {
+                    setAnimationEntity(result.hero);
+                    setShowAnimation(true);
+                } else {
+                    // Show error popup
+                    setPopupType('error');
+                    setPopupMessage(`Failed to open ${entityType} pack: No ${entityType} found`);
+                    setShowPopup(true);
+                }
             } else {
                 // Show error popup
                 setPopupType('error');
@@ -92,13 +102,20 @@ const GenericPackInventory: React.FC<GenericPackInventoryProps> = ({
 
     const closeAnimation = useCallback(() => {
         setShowAnimation(false);
-        setAnimationEntity(null);
-
+        
         // Show success popup after animation closes
         if (animationEntity) {
+            const entityName = animationEntity.name;
+            const entityRarity = animationEntity.rarity;
+            
             setPopupType('success');
-            setPopupMessage(`Successfully obtained a ${animationEntity.rarity} ${animationEntity.name}!`);
+            setPopupMessage(`Successfully obtained a ${entityRarity} ${entityName}!`);
             setShowPopup(true);
+            
+            // Reset animation entity after showing popup
+            setTimeout(() => {
+                setAnimationEntity(null);
+            }, 100);
         }
     }, [animationEntity]);
 

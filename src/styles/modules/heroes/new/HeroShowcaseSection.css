@@ -1,0 +1,214 @@
+.hero-showcase-section {
+    width: 100%;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto 3rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.hero-showcase-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-showcase-section .section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.hero-showcase-section .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #00C2FF;
+    text-shadow: 0 0 10px rgba(0, 194, 255, 0.4);
+}
+
+.hero-showcase-section .section-description {
+    font-size: 1.1rem;
+    color: #c7d3e3;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.marketplace-info-banner {
+    background: rgba(0, 194, 255, 0.1);
+    border: 1px solid rgba(0, 194, 255, 0.3);
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin: 1.5rem auto 2rem;
+    display: flex;
+    align-items: center;
+    max-width: 900px;
+}
+
+.marketplace-info-banner .info-icon {
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.marketplace-info-banner p {
+    color: #c7d3e3;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.filter-sort-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    padding: 1.5rem;
+    background: rgba(13, 25, 40, 0.5);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.filter-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #00C2FF;
+    letter-spacing: 1px;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.filter-button {
+    background: rgba(0, 194, 255, 0.1);
+    border: 1px solid rgba(0, 194, 255, 0.2);
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    color: #c7d3e3;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-button:hover {
+    background: rgba(0, 194, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.filter-button.active {
+    background: rgba(0, 194, 255, 0.3);
+    border-color: rgba(0, 194, 255, 0.5);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(0, 194, 255, 0.3);
+}
+
+/* Apply rarity colors for rarity filter buttons */
+.filter-button.active[style*="--rarity-color"] {
+    background: rgba(var(--rarity-color), 0.3);
+    border-color: var(--rarity-color);
+    box-shadow: 0 0 10px rgba(var(--rarity-color), 0.3);
+}
+
+.entity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(6, 14, 26, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid transparent;
+    border-top: 5px solid #00C2FF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+.loading-text {
+    color: #00C2FF;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .hero-showcase-section {
+        padding: 1.5rem;
+    }
+
+    .hero-showcase-section .section-title {
+        font-size: 2rem;
+    }
+
+    .hero-showcase-section .section-description {
+        font-size: 1rem;
+    }
+
+    .entity-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .hero-showcase-section {
+        padding: 1rem;
+    }
+
+    .hero-showcase-section .section-title {
+        font-size: 1.75rem;
+    }
+
+    .filter-buttons {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+
+    .filter-button {
+        flex-shrink: 0;
+    }
+
+    .entity-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animations */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+} 

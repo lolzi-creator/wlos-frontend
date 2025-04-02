@@ -1,14 +1,16 @@
 // src/pages/HeroPage.tsx
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
-import HeroDashboard from '../components/sections/Heroes/HeroDashboard';
-import HeroShowcase from '../components/sections/Heroes/HeroShowcase';
+import HeroDashboardSection from '../components/sections/Heroes/new/HeroDashboardSection';
+import HeroShowcaseSection from '../components/sections/Heroes/new/HeroShowcaseSection';
+import HeroHeroSection from '../components/sections/Heroes/new/HeroHeroSection';
 import GenericPackStore from '../components/common/GenericPackStore';
 import GenericPackInventory from '../components/common/GenericPackInventory';
 import { useWalletConnection } from '../context/WalletConnectionProvider';
 import WalletConnectButton from '../components/common/WalletConnectButton';
 import { HeroProvider, useHero } from '../context/HeroContext';
 import { HERO_PACKS } from '../types/HeroTypes';
+import '../styles/modules/heroes/new/HeroesPage.css';
 
 // Inner component that uses the Hero context
 const HeroPageContent: React.FC = () => {
@@ -52,6 +54,9 @@ const HeroPageContent: React.FC = () => {
             <main className="main-content">
                 {isConnected ? (
                     <>
+                        {/* Hero Hero Section - Always visible */}
+                        <HeroHeroSection />
+                        
                         <div className="page-tabs">
                             <button
                                 className={`tab-button ${activeTab === 'dashboard' ? 'active' : ''}`}
@@ -80,8 +85,8 @@ const HeroPageContent: React.FC = () => {
                             <div className="tab-line"></div>
                         </div>
 
-                        {activeTab === 'dashboard' && <HeroDashboard />}
-                        {activeTab === 'showcase' && <HeroShowcase />}
+                        {activeTab === 'dashboard' && <HeroDashboardSection />}
+                        {activeTab === 'showcase' && <HeroShowcaseSection />}
                         {activeTab === 'packs' && (
                             <GenericPackStore
                                 packs={HERO_PACKS}

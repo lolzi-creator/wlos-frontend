@@ -1,0 +1,206 @@
+.main-content {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    z-index: 10;
+}
+
+/* Background effects */
+.background-effects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.bg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: 50px 50px;
+    background-image: 
+        linear-gradient(to right, rgba(0, 194, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 194, 255, 0.05) 1px, transparent 1px);
+    opacity: 0.2;
+}
+
+.energy-orb {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    animation: pulse 8s ease-in-out infinite;
+}
+
+.cyan-orb {
+    background: radial-gradient(circle, rgba(0, 194, 255, 0.6) 0%, rgba(0, 194, 255, 0) 70%);
+}
+
+.purple-orb {
+    background: radial-gradient(circle, rgba(105, 30, 255, 0.6) 0%, rgba(105, 30, 255, 0) 70%);
+    animation-delay: 3s;
+}
+
+/* Tabs styles */
+.page-tabs {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+    margin: 0 auto 2rem;
+    position: relative;
+    background: rgba(10, 20, 35, 0.5);
+    border-radius: 10px 10px 0 0;
+    padding: 0 1rem;
+    max-width: 1200px;
+    overflow-x: auto;
+}
+
+.tab-button {
+    position: relative;
+    padding: 1rem 1.5rem;
+    color: #c7d3e3;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    color: #ffffff;
+}
+
+.tab-button.active {
+    color: #00C2FF;
+}
+
+.tab-button::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #00C2FF;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.tab-button.active::after {
+    transform: scaleX(1);
+}
+
+/* Wallet connect prompt styles */
+.wallet-connect-prompt {
+    background: rgba(6, 14, 26, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin: 6rem auto;
+    max-width: 500px;
+    box-shadow: 0 0 30px rgba(0, 194, 255, 0.15);
+    border: 1px solid rgba(0, 194, 255, 0.3);
+}
+
+.wallet-connect-prompt .accent-border {
+    position: absolute;
+    height: 3px;
+    left: 0;
+    right: 0;
+}
+
+.wallet-connect-prompt .accent-border.top {
+    top: 0;
+}
+
+.wallet-connect-prompt .accent-border.cyan {
+    background: linear-gradient(90deg, rgba(0, 194, 255, 0) 0%, rgba(0, 194, 255, 1) 50%, rgba(0, 194, 255, 0) 100%);
+}
+
+.wallet-connect-content {
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.prompt-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #00C2FF;
+}
+
+.prompt-description {
+    color: #c7d3e3;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+/* Utility classes */
+.cyan-text {
+    color: #00C2FF;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.border-cyan {
+    border-color: rgba(0, 194, 255, 0.3);
+}
+
+.clip-card {
+    position: relative;
+    background: rgba(6, 14, 26, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 0 1rem;
+    }
+    
+    .page-tabs {
+        padding: 0 0.5rem;
+        justify-content: flex-start;
+    }
+    
+    .tab-button {
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .wallet-connect-prompt {
+        margin: 3rem auto;
+    }
+    
+    .wallet-connect-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .prompt-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.15; }
+    50% { transform: scale(1.1); opacity: 0.2; }
+    100% { transform: scale(1); opacity: 0.15; }
+} 
