@@ -68,11 +68,8 @@ export const HeroSection: React.FC = () => {
 
             {/* Main Content */}
             <div className="hero-content">
-                <div className={`hero-text-container ${isLoaded ? 'loaded' : ''}`}>
+                <div className={`hero-text-container fullscreen ${isLoaded ? 'loaded' : ''}`}>
                     <div className="digital-code">SYSTEM::INITIALIZING...WARLORDS_NEURAL_MATRIX_V2.5.7</div>
-                    
-                    <div className="accent-line top-left"></div>
-                    <div className="accent-line bottom-right"></div>
                     
                     <h2 className="hero-title">BUILD YOUR WARLORD EMPIRE</h2>
                     <p className="hero-subtitle">BATTLE | STAKE | EARN BLOCKCHAIN REWARDS</p>

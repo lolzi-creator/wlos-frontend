@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { useHero } from '../../../../context/HeroContext';
-import { HEROES } from '../../../../types/HeroTypes';
 import '../../../../styles/modules/heroes/new/HeroHeroSection.css';
 
 // Notification Portal Component
@@ -96,9 +95,6 @@ const HeroHeroSection: React.FC = () => {
 
     // Data for the stats
     const totalPower = ownedHeroes.reduce((total, hero) => total + (hero.power || 0), 0);
-    const topHero = ownedHeroes.length > 0 
-        ? ownedHeroes.reduce((prev, current) => (current.power > prev.power) ? current : prev) 
-        : null;
     const highestLevel = ownedHeroes.length > 0 
         ? Math.max(...ownedHeroes.map(hero => hero.level))
         : 0;

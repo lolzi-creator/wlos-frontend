@@ -29,6 +29,25 @@ const WalletOverview: React.FC = () => {
     } = useWalletConnection();
 
     const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([]);
+    const [isMobileView, setIsMobileView] = useState<boolean>(false);
+
+    // Check screen size for responsive layout
+    useEffect(() => {
+        const checkIfMobile = () => {
+            setIsMobileView(window.innerWidth <= 768);
+        };
+        
+        // Check initially
+        checkIfMobile();
+        
+        // Add resize listener
+        window.addEventListener('resize', checkIfMobile);
+        
+        // Cleanup
+        return () => {
+            window.removeEventListener('resize', checkIfMobile);
+        };
+    }, []);
 
     // Update recent activity when transactions change
     useEffect(() => {
@@ -91,6 +110,11 @@ const WalletOverview: React.FC = () => {
         refreshAssets(walletAddress);  // Add this to refresh assets as well
     };
 
+    // Truncate wallet address for display
+    const displayAddress = isMobileView 
+        ? `${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}`
+        : `${walletAddress.substring(0, 8)}...${walletAddress.substring(walletAddress.length - 6)}`;
+
     return (
         <section className="wallet-overview-section">
             <SectionTitle title="NEURAL WALLET" />
@@ -102,7 +126,7 @@ const WalletOverview: React.FC = () => {
                         <div className="address-label">WALLET ADDRESS</div>
                         <div className="address-value">
                             <span className="address-text">
-                                {walletAddress.substring(0, 8)}...{walletAddress.substring(walletAddress.length - 6)}
+                                {displayAddress}
                             </span>
                             <button className="copy-button" onClick={() => {
                                 navigator.clipboard.writeText(walletAddress);

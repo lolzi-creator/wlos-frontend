@@ -67,6 +67,8 @@
     font-family: monospace;
     font-size: 1rem;
     color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .copy-button {
@@ -74,6 +76,8 @@
     border: none;
     color: #00C2FF;
     cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 8px;
 }
 
 .copy-icon {
@@ -166,159 +170,118 @@
     overflow: hidden;
 }
 
-.token-balance::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-            45deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.05) 50%,
-            rgba(255, 255, 255, 0) 100%
-    );
-    transform: rotate(30deg);
-    animation: hologram 6s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes hologram {
-    0% {
-        transform: rotate(30deg) translateX(-30%);
-    }
-    100% {
-        transform: rotate(30deg) translateX(30%);
-    }
-}
-
 .token-icon {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     margin-right: 12px;
+    flex-shrink: 0;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
-    position: relative;
-    overflow: hidden;
 }
 
 .token-icon.sol {
-    background-color: #14F195;
-    color: #000000;
+    background-color: #00FFB9;
 }
 
 .token-icon.wlos {
     background-color: #9945FF;
-    color: #000000;
 }
 
 .token-info {
-    display: flex;
-    flex-direction: column;
+    flex: 1;
 }
 
 .token-amount {
     font-size: 1.25rem;
     font-weight: bold;
-    color: #ffffff;
+    margin-bottom: 4px;
 }
 
 .token-name {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: #8B8DA0;
 }
 
 .wallet-actions {
     display: flex;
-    gap: 12px;
+    gap: 10px;
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 12px;
 }
 
 .stat-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
-    padding: 16px;
+    padding: 16px 10px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
-.stat-item::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-            45deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.03) 50%,
-            rgba(255, 255, 255, 0) 100%
-    );
-    transform: rotate(30deg);
-    animation: hologram 8s linear infinite;
-    pointer-events: none;
+.stat-item:hover {
+    transform: translateY(-3px);
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .stat-icon {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
+    position: relative;
+}
+
+.stat-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
 }
 
 .stat-icon.heroes {
-    background-color: #9945FF;
-    color: #000000;
+    background-color: #00C2FF;
 }
 
 .stat-icon.farmers {
     background-color: #14F195;
-    color: #000000;
 }
 
 .stat-icon.items {
     background-color: #9945FF;
-    color: #000000;
 }
 
 .stat-value {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
+    margin-bottom: 5px;
 }
 
 .stat-label {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: #8B8DA0;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .activity-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 10px;
 }
 
 .activity-item {
@@ -327,53 +290,51 @@
     padding: 12px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
-    transition: all 0.3s ease;
+    position: relative;
 }
 
 .activity-item:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-    transform: translateX(3px);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .activity-type-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
+    width: 35px;
+    height: 35px;
     margin-right: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-shrink: 0;
 }
 
-/* Custom icons for different transaction types */
-.type-icon.purchase {
-    background-color: #00C2FF;
-}
-
-.type-icon.battle-reward {
-    background-color: #9945FF;
-}
-
-.type-icon.staking-reward {
-    background-color: #14F195;
+.type-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: rgba(0, 194, 255, 0.1);
+    border: 1px solid #00C2FF;
 }
 
 .activity-details {
-    flex-grow: 1;
+    flex: 1;
+    overflow: hidden;
 }
 
 .activity-primary {
     display: flex;
-    gap: 8px;
+    gap: 6px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
 }
 
 .activity-type {
-    font-weight: bold;
-    color: #ffffff;
+    color: #00C2FF;
+    font-size: 0.875rem;
+    font-weight: 600;
 }
 
 .activity-item-name {
-    color: #8B8DA0;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .activity-time {
@@ -383,11 +344,14 @@
 
 .activity-amount {
     text-align: right;
+    flex-shrink: 0;
+    margin-left: 8px;
 }
 
 .amount-value {
+    font-size: 1rem;
     font-weight: bold;
-    font-size: 1.125rem;
+    margin-bottom: 2px;
 }
 
 .amount-value.positive {
@@ -403,117 +367,95 @@
     color: #8B8DA0;
 }
 
-.view-all-container {
-    margin-top: 16px;
-}
-
-/* Button styles */
-.futuristic-button {
-    background-color: transparent;
-    border: 1px solid #00C2FF;
-    color: #00C2FF;
-    padding: 10px 20px;
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border-radius: 4px;
-}
-
-.futuristic-button:hover {
-    background-color: rgba(0, 194, 255, 0.1);
-    box-shadow: 0 0 15px rgba(0, 194, 255, 0.5);
-}
-
-.futuristic-button:after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-            45deg,
-            rgba(0, 194, 255, 0) 0%,
-            rgba(0, 194, 255, 0.1) 50%,
-            rgba(0, 194, 255, 0) 100%
-    );
-    transform: rotate(30deg);
-    transition: transform 0.6s ease;
-    pointer-events: none;
-}
-
-.futuristic-button:hover:after {
-    transform: rotate(30deg) translate(10%, 0%);
-}
-
-/* Additional wallet overview styles - add these to wallet-overview.css */
-
-/* Error message styling */
-.error-message {
-    padding: 8px 12px;
-    background-color: rgba(255, 77, 77, 0.1);
-    border: 1px solid rgba(255, 77, 77, 0.3);
-    color: #FF4D4D;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    margin-bottom: 16px;
-}
-
-/* No activity display */
 .no-activity {
-    text-align: center;
     padding: 20px;
+    text-align: center;
     color: #8B8DA0;
-    font-size: 0.875rem;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 6px;
 }
 
-/* Loading state styling */
-.loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 0;
-    background-color: rgba(8, 8, 30, 0.7);
-    border-radius: 8px;
-    border: 1px solid rgba(0, 194, 255, 0.3);
+.error-message {
+    padding: 10px;
+    text-align: center;
+    color: #FF4D4D;
+    background-color: rgba(255, 77, 77, 0.1);
+    border: 1px solid rgba(255, 77, 77, 0.3);
+    border-radius: 6px;
+    margin-bottom: 15px;
 }
 
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(0, 194, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #00C2FF;
-    animation: spin 1s infinite linear;
-    margin-bottom: 16px;
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .token-balances {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .wallet-actions {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .wallet-actions button {
+        width: 100%;
+    }
+    
+    .wallet-address-container, .network-info, .wallet-balance-header,
+    .token-balances, .wallet-actions, .stats-card, .activity-card {
+        padding: 14px;
+    }
+    
+    .activity-primary {
+        flex-direction: column;
+        gap: 2px;
+    }
+    
+    .activity-details {
+        margin-right: 8px;
+    }
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Transaction type icons with different colors */
-.type-icon.purchase {
-    background-color: rgba(0, 194, 255, 0.2);
-}
-
-.type-icon.staking, .type-icon.unstaking, .type-icon.staking-reward {
-    background-color: rgba(20, 241, 149, 0.2);
-}
-
-.type-icon.battle-reward {
-    background-color: rgba(153, 69, 255, 0.2);
-}
-
-.type-icon.swap {
-    background-color: rgba(255, 184, 0, 0.2);
+@media (max-width: 576px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .wallet-balance-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .balance-usd {
+        font-size: 1.25rem;
+    }
+    
+    .network-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .disconnect-button {
+        align-self: flex-end;
+    }
+    
+    .address-label, .stats-title, .activity-title, .balance-title {
+        font-size: 0.875rem;
+    }
+    
+    .activity-item {
+        flex-wrap: wrap;
+    }
+    
+    .activity-amount {
+        margin-left: 47px; /* Align with activity details */
+        margin-top: 5px;
+        width: 100%;
+        text-align: left;
+    }
 }

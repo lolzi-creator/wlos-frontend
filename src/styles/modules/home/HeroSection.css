@@ -83,6 +83,20 @@
     animation: float 12s ease-in-out infinite alternate;
 }
 
+/* Add a third orb for enhanced effect */
+.hero-bg::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.15) 0%, rgba(255, 184, 0, 0) 70%);
+    filter: blur(40px);
+    top: 40%;
+    left: 40%;
+    animation: float 10s ease-in-out infinite reverse;
+    opacity: 0.3;
+}
+
 @keyframes float {
     0% {
         transform: translateY(0) scale(1);
@@ -126,23 +140,38 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0 20px;
 }
 
 .hero-text-container {
     position: relative;
     margin-bottom: 40px;
     width: 100%;
+    max-width: 800px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.hero-text-container.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-text-container.fullscreen {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
 }
 
 /* Digital code effect on load */
 .digital-code {
-    position: absolute;
-    top: -30px;
-    left: 0;
-    width: 100%;
+    position: relative;
+    margin-bottom: 20px;
     font-family: 'Courier New', monospace;
     font-size: 12px;
     color: rgba(153, 69, 255, 0.6);
@@ -163,7 +192,7 @@
 
 /* Title and subtitle */
 .hero-title {
-    font-size: 52px;
+    font-size: 64px;
     font-weight: 900;
     letter-spacing: 2px;
     margin-bottom: 20px;
@@ -175,6 +204,27 @@
     animation: glowPulse 3s infinite alternate;
     width: 100%;
     text-align: center;
+    line-height: 1.2;
+}
+
+/* Add highlight lines above and below the title for a subtle emphasis */
+.hero-title::before,
+.hero-title::after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(153, 69, 255, 0) 0%, rgba(153, 69, 255, 0.6) 50%, rgba(153, 69, 255, 0) 100%);
+    width: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hero-title::before {
+    top: -15px;
+}
+
+.hero-title::after {
+    bottom: -15px;
 }
 
 .hero-subtitle {
@@ -185,36 +235,7 @@
     position: relative;
     width: 100%;
     text-align: center;
-}
-
-/* Animated accent line */
-.accent-line {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, var(--color-purple), transparent);
-    height: 1px;
-}
-
-.accent-line.top-left {
-    width: 30%;
-    top: 0;
-    left: 0;
-    animation: lineGrow 2s ease-out forwards;
-}
-
-.accent-line.bottom-right {
-    width: 30%;
-    bottom: 0;
-    right: 0;
-    animation: lineGrow 2s ease-out forwards;
-}
-
-@keyframes lineGrow {
-    from {
-        width: 0;
-    }
-    to {
-        width: 30%;
-    }
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Button container */
@@ -222,8 +243,47 @@
     display: flex;
     gap: 20px;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-top: 20px;
     width: 100%;
+}
+
+/* Add shine effect to buttons */
+.hero-buttons-container button {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-buttons-container button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(30deg);
+    animation: buttonShine 6s linear infinite;
+    opacity: 0;
+}
+
+@keyframes buttonShine {
+    0% {
+        opacity: 0;
+        transform: translate(-30%, -30%) rotate(30deg);
+    }
+    15% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.5;
+    }
+    25% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(30%, 30%) rotate(30deg);
+    }
 }
 
 /* Animated background particles */
@@ -249,77 +309,87 @@
 
 @keyframes particleFade {
     0% {
+        transform: translateY(0) scale(1);
         opacity: 0;
-        transform: translateY(0) scale(0);
     }
     50% {
         opacity: 0.8;
     }
     100% {
+        transform: translateY(-100px) scale(0);
         opacity: 0;
-        transform: translateY(-100px) scale(1);
     }
 }
 
 @keyframes glowPulse {
     0% {
-        text-shadow: 0 0 10px rgba(153, 69, 255, 0.5);
+        text-shadow: 0 0 20px rgba(153, 69, 255, 0.2);
     }
     100% {
-        text-shadow: 0 0 20px rgba(153, 69, 255, 0.8), 0 0 40px rgba(153, 69, 255, 0.4);
+        text-shadow: 0 0 30px rgba(153, 69, 255, 0.7), 0 0 40px rgba(20, 241, 149, 0.4);
     }
 }
 
-/* Media queries for responsive design */
+/* Media Queries */
 @media (max-width: 992px) {
     .hero-section {
         padding: 80px 30px;
-        min-height: 550px;
+        min-height: 600px;
     }
     
     .hero-title {
-        font-size: 42px;
+        font-size: 48px;
     }
     
     .hero-subtitle {
         font-size: 16px;
+    }
+    
+    .hero-title::before,
+    .hero-title::after {
+        width: 150px;
     }
 }
 
 @media (max-width: 768px) {
     .hero-section {
         padding: 60px 20px;
-        min-height: 450px;
+        min-height: 500px;
     }
     
     .hero-title {
-        font-size: 32px;
-        margin-bottom: 15px;
+        font-size: 40px;
+        letter-spacing: 1px;
     }
     
     .hero-subtitle {
         font-size: 14px;
-        margin-bottom: 30px;
+        letter-spacing: 3px;
     }
     
     .hero-buttons-container {
         flex-direction: column;
-        gap: 15px;
+        align-items: center;
     }
     
     .hero-grid {
-        background-size: 15px 15px;
+        opacity: 0.2;
+    }
+    
+    .hero-title::before,
+    .hero-title::after {
+        width: 120px;
     }
 }
 
 @media (max-width: 480px) {
     .hero-section {
-        padding: 50px 15px;
-        min-height: 400px;
+        padding: 40px 15px;
+        min-height: 450px;
     }
     
     .hero-title {
-        font-size: 28px;
+        font-size: 32px;
     }
     
     .hero-subtitle {
@@ -329,5 +399,10 @@
     
     .digital-code {
         font-size: 10px;
+    }
+    
+    .hero-title::before,
+    .hero-title::after {
+        width: 100px;
     }
 } 

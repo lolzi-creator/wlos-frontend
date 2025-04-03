@@ -44,10 +44,10 @@ const WalletPage: React.FC = () => {
                 <div className="energy-orb cyan-orb" style={{ right: '15%', top: '20%', opacity: '0.2' }}></div>
             </div>
 
-            <main className="main-content">
+            <main className="main-content wallet-page-content">
                 {isConnected ? (
                     <>
-                        <div className="page-tabs">
+                        <div className="page-tabs wallet-tabs">
                             <button
                                 className={`tab-button ${activeTab === 'overview' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('overview')}
@@ -69,9 +69,11 @@ const WalletPage: React.FC = () => {
                             <div className="tab-line"></div>
                         </div>
 
-                        {activeTab === 'overview' && <WalletOverview />}
-                        {activeTab === 'assets' && <WalletAssets />}
-                        {activeTab === 'transactions' && <WalletTransactions />}
+                        <div className="wallet-content-container">
+                            {activeTab === 'overview' && <WalletOverview />}
+                            {activeTab === 'assets' && <WalletAssets />}
+                            {activeTab === 'transactions' && <WalletTransactions />}
+                        </div>
                     </>
                 ) : (
                     <div className="wallet-connect-prompt clip-card border-cyan">
