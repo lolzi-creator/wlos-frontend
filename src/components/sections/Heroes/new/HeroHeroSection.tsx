@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { useHero } from '../../../../context/HeroContext';
+// import HEROES from '../../../../constants/heroes';
 import '../../../../styles/modules/heroes/new/HeroHeroSection.css';
 
 // Notification Portal Component
@@ -92,6 +93,7 @@ const HeroHeroSection: React.FC = () => {
     const [isClosing, setIsClosing] = useState(false);
     const [heroImage, setHeroImage] = useState<string | null>(null);
     const [heroRarity, setHeroRarity] = useState<string | null>(null);
+    // const topHero = ownedHeroes.length > 0 ? ownedHeroes[0] : null;
 
     // Data for the stats
     const totalPower = ownedHeroes.reduce((total, hero) => total + (hero.power || 0), 0);
