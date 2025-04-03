@@ -81,36 +81,50 @@ const MarketplaceHeroSection: React.FC<MarketplaceHeroSectionProps> = ({ onViewA
           
           {/* Stats layout matching the screenshots */}
           <div className="marketplace-stats-container">
-            <div className="stat-card">
-              <div className="stat-icon-wrapper">
-                <img src="/images/icons/items-icon.svg" alt="Items" className="stat-icon-img" />
+            <div className="hero-stat-card">
+              <div className="hero-stat-icon">
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+                <div className="icon-glow"></div>
               </div>
-              <div className="stat-content">
-                <div className="stat-value">8.7k</div>
-                <div className="stat-label">ITEMS<br />LISTED</div>
+              <div className="hero-stat-info">
+                <div className="hero-stat-value">8.7k</div>
+                <div className="hero-stat-label">ITEMS LISTED</div>
               </div>
             </div>
             
-            <div className="stat-card">
-              <div className="stat-icon-wrapper">
-                <img src="/images/icons/volume-icon.svg" alt="Volume" className="stat-icon-img" />
+            <div className="hero-stat-divider"></div>
+            
+            <div className="hero-stat-card">
+              <div className="hero-stat-icon">
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <div className="icon-glow"></div>
               </div>
-              <div className="stat-content">
-                <div className="stat-value">5.2M</div>
-                <div className="stat-label">TOTAL<br />VOLUME</div>
+              <div className="hero-stat-info">
+                <div className="hero-stat-value">5.2M</div>
+                <div className="hero-stat-label">TOTAL VOLUME</div>
               </div>
-              <div className="stat-unit">WLO</div>
+              <div className="hero-stat-unit">WLO</div>
             </div>
             
-            <div className="stat-card">
-              <div className="stat-icon-wrapper">
-                <img src="/images/icons/price-icon.svg" alt="Price" className="stat-icon-img" />
+            <div className="hero-stat-divider"></div>
+            
+            <div className="hero-stat-card">
+              <div className="hero-stat-icon">
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <div className="icon-glow"></div>
               </div>
-              <div className="stat-content">
-                <div className="stat-value">16.4k</div>
-                <div className="stat-label">AVG<br />PRICE</div>
+              <div className="hero-stat-info">
+                <div className="hero-stat-value">16.4k</div>
+                <div className="hero-stat-label">AVG PRICE</div>
               </div>
-              <div className="stat-unit">WLO</div>
+              <div className="hero-stat-unit">WLO</div>
             </div>
           </div>
           
