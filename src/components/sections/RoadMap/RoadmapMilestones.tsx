@@ -5,27 +5,29 @@ import SectionTitle from '../../common/SectionTitle';
 const milestones = [
     {
         id: 'milestone1',
-        title: 'PLATFORM GENESIS',
+        title: 'INITIAL LAUNCH',
         date: 'August 15, 2024',
         status: 'completed',
-        description: 'Initial platform launch with core functionality',
+        phase: 'foundation',
+        description: 'Initial platform launch with foundation systems',
         achievements: [
             'Core platform infrastructure deployment',
-            'Basic battle system implementation',
-            'User account system',
+            'Website and dApp launch',
+            'Smart contract deployment',
             'Initial UI/UX design'
         ],
         metrics: [
             { label: 'Initial Users', value: '1,245' },
-            { label: 'Battles Conducted', value: '8,732' }
+            { label: 'Contract Interactions', value: '8,732' }
         ],
         icon: 'genesis'
     },
     {
         id: 'milestone2',
-        title: 'TOKEN GENERATION EVENT',
+        title: 'WLOS TOKEN LAUNCH',
         date: 'September 5, 2024',
         status: 'completed',
+        phase: 'foundation',
         description: 'Launch of the WLOS token with initial distribution',
         achievements: [
             'WLOS token smart contract deployment',
@@ -41,60 +43,103 @@ const milestones = [
     },
     {
         id: 'milestone3',
-        title: 'MARKETPLACE LAUNCH',
-        date: 'January 10, 2025',
+        title: 'FARMER NFT MARKETPLACE',
+        date: 'October 21, 2024',
         status: 'completed',
-        description: 'Introduction of the in-game marketplace for items and assets',
+        phase: 'pre-game',
+        description: 'Introduction of Farmer NFTs and marketplace for trading',
         achievements: [
-            'Item NFT standards implementation',
+            'Farmer NFT standards implementation',
             'Marketplace UI/UX development',
             'Trading system implementation',
-            'Initial item catalog release'
+            'Initial farmer collection release'
         ],
         metrics: [
-            { label: 'Initial Items', value: '145' },
+            { label: 'Farmer Types', value: '24' },
             { label: 'Trading Volume', value: '258,734 WLOS' }
         ],
         icon: 'marketplace'
     },
     {
         id: 'milestone4',
-        title: 'TOURNAMENT SYSTEM',
-        date: 'April 12, 2025',
+        title: 'STAKING SYSTEM',
+        date: 'November 15, 2024',
         status: 'in-progress',
-        description: 'Competitive tournament system with rewards and rankings',
+        phase: 'pre-game',
+        description: 'Comprehensive staking system for farmers and WLOS tokens',
         goals: [
-            'Tournament bracket system',
-            'Rewards distribution mechanism',
-            'Leaderboard implementation',
-            'Tournament UI/UX'
+            'Farmer staking mechanism',
+            'WLOS token staking pools',
+            'Yield distribution system',
+            'Staking dashboard development'
         ],
         progress: {
-            'System Architecture': 90,
-            'Smart Contracts': 70,
-            'Frontend Integration': 55,
-            'Testing & QA': 30
+            'Smart Contracts': 90,
+            'Frontend Integration': 75,
+            'Yield Calculations': 85,
+            'Testing & QA': 60
         },
-        icon: 'tournament'
+        icon: 'staking'
     },
     {
         id: 'milestone5',
-        title: 'ENHANCED STAKING',
-        date: 'May 25, 2025',
+        title: 'WEEKLY LEADERBOARD',
+        date: 'December 10, 2024',
         status: 'planned',
-        description: 'Advanced staking system with multiple tiers and rewards',
+        phase: 'pre-game',
+        description: 'Competitive staking leaderboard with weekly rewards',
         goals: [
-            'Multiple staking pool implementation',
-            'Enhanced rewards mechanism',
-            'Flexible lock periods',
-            'Staking dashboard improvements'
+            'Leaderboard ranking system',
+            'Weekly rewards distribution',
+            'Performance metrics tracking',
+            'Leaderboard UI implementation'
         ],
         dependencies: [
-            'Tournament System Completion',
+            'Staking System Completion',
             'Smart Contract Audit',
             'Governance Approval'
         ],
-        icon: 'staking'
+        icon: 'tournament'
+    },
+    {
+        id: 'milestone6',
+        title: 'HERO NFT COLLECTION',
+        date: 'Q1 2025',
+        status: 'planned',
+        phase: 'battle',
+        description: 'Launch of the Hero NFT collection for the battle phase',
+        goals: [
+            'Hero character design and attributes',
+            'NFT minting mechanism',
+            'Hero rarity system',
+            'Hero marketplace integration'
+        ],
+        dependencies: [
+            'Pre-game Phase Stability',
+            'Community Voting',
+            'Art Asset Development'
+        ],
+        icon: 'collection'
+    },
+    {
+        id: 'milestone7',
+        title: 'BATTLE SYSTEM LAUNCH',
+        date: 'Q2 2025',
+        status: 'planned',
+        phase: 'battle',
+        description: 'Core gameplay system with hero battles and rewards',
+        goals: [
+            'Battle mechanics implementation',
+            'Matchmaking system',
+            'Rewards distribution',
+            'Battle UI/UX development'
+        ],
+        dependencies: [
+            'Hero NFT Collection Launch',
+            'Backend Battle Logic',
+            'Balance Testing'
+        ],
+        icon: 'battle'
     }
 ];
 
@@ -102,6 +147,7 @@ const RoadmapMilestones: React.FC = () => {
     return (
         <section className="roadmap-milestones-section">
             <SectionTitle title="KEY MILESTONES" />
+            <p className="feature-subtitle">Track our progress as we build the Warlords of Solana ecosystem</p>
 
             <div className="milestones-container">
                 {milestones.map((milestone) => (
@@ -110,6 +156,9 @@ const RoadmapMilestones: React.FC = () => {
                         className={`milestone-card clip-card border-blue ${milestone.status}`}
                     >
                         <div className="accent-border top blue"></div>
+                        <div className={`phase-tag ${milestone.phase}`}>
+                            {milestone.phase.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} Phase
+                        </div>
 
                         <div className="milestone-header">
                             <div className="milestone-icon-container">

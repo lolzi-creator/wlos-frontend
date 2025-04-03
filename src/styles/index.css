@@ -161,6 +161,11 @@ body {
     gap: 16px;
 }
 
+.nav-items.centered {
+    margin: 0 auto;
+    justify-content: center;
+}
+
 .nav-item {
     padding: 4px 12px;
     position: relative;
@@ -810,4 +815,110 @@ body {
     .token-content {
         grid-template-columns: 1fr;
     }
+}
+
+/* Battle Coming Soon Section */
+.battle-coming-soon-section {
+  padding: 40px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.battle-coming-soon-section .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.battle-coming-soon-section .coming-soon-wrapper {
+  background: linear-gradient(135deg, rgba(20, 24, 40, 0.7), rgba(12, 16, 33, 0.9));
+  border-radius: 12px;
+  border: 1px solid rgba(153, 69, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  padding: 40px;
+  text-align: center;
+  position: relative;
+}
+
+.battle-coming-soon-section .coming-soon-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(153, 69, 255, 0.2), transparent 70%);
+  z-index: 0;
+}
+
+.battle-coming-soon-section .section-content {
+  position: relative;
+  z-index: 1;
+}
+
+.battle-coming-soon-section .section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #9945FF, #14F195);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 2px;
+}
+
+.battle-coming-soon-section .coming-soon-badge {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(90deg, #9945FF, #14F195);
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  animation: pulse 2s infinite;
+}
+
+.battle-coming-soon-section .section-description {
+  font-size: 1.1rem;
+  color: #b4bbce;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  line-height: 1.5;
+}
+
+.battle-coming-soon-section .estimate {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  color: #ffffff;
+  opacity: 0.7;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(153, 69, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(153, 69, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(153, 69, 255, 0);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .battle-coming-soon-section .section-title {
+    font-size: 2rem;
+  }
+  
+  .battle-coming-soon-section .section-description {
+    font-size: 1rem;
+  }
+  
+  .battle-coming-soon-section .coming-soon-wrapper {
+    padding: 30px 20px;
+  }
 }

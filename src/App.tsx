@@ -6,7 +6,7 @@ import WlosTokenPage from './pages/WlosTokenPage';
 import RoadmapPage from './pages/RoadmapPage';
 import WalletPage from './pages/WalletPage';
 import FarmerPage from './pages/FarmerPage';
-import HeroPage from './pages/HeroPage';
+// import HeroPage from './pages/HeroPage'; // Will be used in future release
 import { WalletContextProvider } from './context/WalletContext';
 import { WalletConnectionProvider } from './context/WalletConnectionProvider';
 import { MarketplaceProvider } from './context/MarketplaceContext';
@@ -59,14 +59,14 @@ function App() {
                                         <Routes>
                                             <Route path="/" element={<HomePage />} />
                                             <Route path="/stake" element={<StakingPage />} />
-                                            <Route path="/battle" element={<Navigate to="/" />} /> {/* Placeholder for future Battle page */}
+                                            {/* Battle and Heroes features are planned for future releases */}
+                                            {/* <Route path="/heroes" element={<HeroPage />} /> */}
                                             <Route path="/marketplace" element={<MarketplacePage />} />
                                             <Route path="/wlos-token" element={<WlosTokenPage />} />
                                             <Route path="/farmers" element={<FarmerPage />} />
-                                            <Route path="/heroes" element={<HeroPage />} />
                                             <Route path="/roadmap" element={<RoadmapPage />} />
                                             <Route path="/wallet" element={<WalletPage />} />
-                                            <Route path="*" element={<Navigate to="/" />} /> {/* Redirect any unknown routes to home */}
+                                            <Route path="*" element={<Navigate to="/" />} />
                                         </Routes>
                                     </div>
                                 </Router>

@@ -2,162 +2,193 @@ import React, { useState } from 'react';
 import SectionTitle from '../../common/SectionTitle';
 import Button from '../../common/Button';
 
-// Feature data
+// Updated feature data with current pre-game and upcoming battle phases
 const upcomingFeatures = [
     {
-        id: 'tournament',
-        title: 'TOURNAMENT SYSTEM',
-        category: 'Battle',
-        eta: 'April 2025',
+        id: 'advanced-staking',
+        title: 'ADVANCED STAKING',
+        category: 'Economy',
+        eta: 'June 2024',
         priority: 'High',
         progress: 65,
-        description: 'A competitive tournament system allowing players to compete in scheduled events for exclusive rewards and leaderboard rankings.',
+        description: 'Enhanced staking mechanisms with better rewards and flexible lock periods to maximize your token earnings.',
         details: [
-            'Bracketed elimination rounds',
-            'Weekly and monthly tournaments',
-            'Special tournament-only rewards',
-            'Tournament leaderboards',
-            'Clan-based tournaments'
-        ],
-        image: 'tournament'
-    },
-    {
-        id: 'enhanced-staking',
-        title: 'ENHANCED STAKING',
-        category: 'Economy',
-        eta: 'May 2025',
-        priority: 'High',
-        progress: 35,
-        description: 'Advanced staking mechanisms with additional tiers, special rewards, and more flexible lock periods.',
-        details: [
-            'Additional staking pools',
-            'Special ability unlocks',
+            'Multiple staking tiers with different reward rates',
             'Flexible lock/unlock periods',
-            'Staking-based governance weight',
-            'NFT staking integration'
+            'Staking rewards boosts',
+            'Auto-compounding options',
+            'Staking analytics dashboard'
         ],
-        image: 'staking'
+        image: 'staking',
+        phase: 'pre-game'
     },
     {
-        id: 'clan-system',
-        title: 'CLAN SYSTEM',
-        category: 'Social',
-        eta: 'July 2025',
-        priority: 'Medium',
-        progress: 20,
-        description: 'A social system allowing players to form clans, compete together, share resources, and build clan reputation.',
+        id: 'marketplace',
+        title: 'EXPANDED MARKETPLACE',
+        category: 'Economy',
+        eta: 'August 2024',
+        priority: 'High',
+        progress: 45,
+        description: 'A comprehensive marketplace for trading farmers, items, and resources with advanced filtering and trading features.',
         details: [
-            'Clan formation and management',
-            'Clan treasury and resource sharing',
-            'Clan-vs-clan battles',
-            'Clan territories and benefits',
-            'Clan rankings and reputation'
+            'Enhanced search and filtering',
+            'Price history tracking',
+            'Auction system',
+            'Bundle sales',
+            'NFT metadata verification'
         ],
-        image: 'clan'
+        image: 'marketplace',
+        phase: 'pre-game'
     },
     {
-        id: 'special-events',
-        title: 'SPECIAL EVENTS',
-        category: 'Content',
-        eta: 'August 2025',
-        priority: 'Medium',
-        progress: 15,
-        description: 'Limited-time special events with unique challenges, rewards, and gameplay mechanics.',
-        details: [
-            'Seasonal themed events',
-            'Special challenge modes',
-            'Limited-edition rewards',
-            'Collaborative event objectives',
-            'Event leaderboards'
-        ],
-        image: 'events'
-    },
-    {
-        id: 'warlord-evolution',
-        title: 'WARLORD EVOLUTION',
+        id: 'farmer-collection',
+        title: 'RARE FARMERS',
         category: 'Gameplay',
-        eta: 'October 2025',
+        eta: 'September 2024',
+        priority: 'Medium',
+        progress: 30,
+        description: 'Expansion of the farmer collection with special rare and legendary farmers with unique abilities and higher yield rates.',
+        details: [
+            'Legendary farmer types',
+            'Special harvest abilities',
+            'Yield multiplier bonuses',
+            'Unique visual attributes',
+            'Limited edition seasonal farmers'
+        ],
+        image: 'farmers',
+        phase: 'pre-game'
+    },
+    {
+        id: 'hero-collection',
+        title: 'HERO COLLECTION',
+        category: 'Battle',
+        eta: 'October 2024',
+        priority: 'High',
+        progress: 15,
+        description: 'Launch of the hero collection system that introduces battle-ready characters with unique abilities and attributes.',
+        details: [
+            'Various hero classes and types',
+            'Special combat abilities',
+            'Hero leveling system',
+            'Equipment and gear system',
+            'Hero combination mechanics'
+        ],
+        image: 'heroes',
+        phase: 'battle'
+    },
+    {
+        id: 'battle-system',
+        title: 'BATTLE SYSTEM',
+        category: 'Battle',
+        eta: 'November 2024',
         priority: 'High',
         progress: 10,
-        description: 'Advanced evolution mechanics allowing warlords to transform, upgrade, and unlock new abilities over time.',
+        description: 'Core battle system featuring strategic combat mechanics, matchmaking, and rewards for victorious players.',
         details: [
-            'Multiple evolution paths',
-            'Specialty class system',
-            'Ability trees and skill points',
-            'Evolution materials and requirements',
-            'Visual transformations'
+            'Turn-based strategic combat',
+            'Skill-based mechanics',
+            'Matchmaking system',
+            'Battle rewards and incentives',
+            'Battle history and replays'
         ],
-        image: 'evolution'
+        image: 'battle',
+        phase: 'battle'
     },
     {
-        id: 'cross-chain',
-        title: 'CROSS-CHAIN INTEGRATION',
-        category: 'Technology',
-        eta: 'January 2026',
-        priority: 'Low',
+        id: 'tournaments',
+        title: 'TOURNAMENTS',
+        category: 'Battle',
+        eta: 'December 2024',
+        priority: 'Medium',
         progress: 5,
-        description: 'Expanding the ecosystem to integrate with other blockchain networks for broader interoperability.',
+        description: 'Weekly and special tournaments where players can compete for exclusive rewards and leaderboard rankings.',
         details: [
-            'Multi-chain asset support',
-            'Cross-chain battles',
-            'Asset bridging mechanisms',
-            'Expanded marketplace reach',
-            'Multi-chain governance'
+            'Weekly tournament schedule',
+            'Bracketed elimination rounds',
+            'Special tournament rewards',
+            'Leaderboards and rankings',
+            'Tournament spectator mode'
         ],
-        image: 'cross-chain'
+        image: 'tournament',
+        phase: 'battle'
     }
 ];
 
 const RoadmapFeatures: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const [selectedPhase, setSelectedPhase] = useState<string>('all');
     const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
 
-    // Filter features by category
-    const filteredFeatures = selectedCategory === 'all'
-        ? upcomingFeatures
-        : upcomingFeatures.filter(feature => feature.category.toLowerCase() === selectedCategory.toLowerCase());
-
+    // Filter features by category and phase
+    const filteredFeatures = upcomingFeatures.filter(feature => {
+        const categoryMatch = selectedCategory === 'all' || 
+            feature.category.toLowerCase() === selectedCategory.toLowerCase();
+        const phaseMatch = selectedPhase === 'all' || 
+            feature.phase === selectedPhase;
+        return categoryMatch && phaseMatch;
+    });
 
     const categories = [
         { id: 'all', name: 'ALL FEATURES' },
-        { id: 'battle', name: 'BATTLE' },
         { id: 'economy', name: 'ECONOMY' },
-        { id: 'social', name: 'SOCIAL' },
-        { id: 'content', name: 'CONTENT' },
         { id: 'gameplay', name: 'GAMEPLAY' },
-        { id: 'technology', name: 'TECHNOLOGY' }
+        { id: 'battle', name: 'BATTLE' }
+    ];
+
+    const phases = [
+        { id: 'all', name: 'ALL PHASES' },
+        { id: 'pre-game', name: 'PRE-GAME PHASE' },
+        { id: 'battle', name: 'BATTLE PHASE' }
     ];
 
     return (
         <section className="roadmap-features-section">
             <SectionTitle title="UPCOMING FEATURES" />
+            <div className="feature-subtitle">Detailed look at our planned features across different development phases</div>
 
-            <div className="feature-categories">
-                {categories.map(category => (
-                    <button
-                        key={category.id}
-                        className={`category-button ${selectedCategory === category.id.toLowerCase() ? 'active' : ''}`}
-                        onClick={() => setSelectedCategory(category.id.toLowerCase())}
-                    >
-                        {category.name}
-                        {selectedCategory === category.id.toLowerCase() && (
-                            <>
-                                <div className="corner-accent top-right"></div>
-                                <div className="corner-accent bottom-left"></div>
-                            </>
-                        )}
-                    </button>
-                ))}
+            <div className="filter-container">
+                <div className="filter-group">
+                    <div className="filter-label">FILTER BY CATEGORY:</div>
+                    <div className="feature-categories">
+                        {categories.map(category => (
+                            <button
+                                key={category.id}
+                                className={`category-button ${selectedCategory === category.id.toLowerCase() ? 'active' : ''}`}
+                                onClick={() => setSelectedCategory(category.id.toLowerCase())}
+                            >
+                                {category.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                
+                <div className="filter-group">
+                    <div className="filter-label">FILTER BY PHASE:</div>
+                    <div className="phase-categories">
+                        {phases.map(phase => (
+                            <button
+                                key={phase.id}
+                                className={`phase-button ${selectedPhase === phase.id ? 'active' : ''}`}
+                                onClick={() => setSelectedPhase(phase.id)}
+                            >
+                                {phase.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             <div className="features-grid">
                 {filteredFeatures.map(feature => (
                     <div
                         key={feature.id}
-                        className={`feature-card border-blue ${selectedFeature === feature.id ? 'selected' : ''}`}
+                        className={`feature-card ${feature.phase === 'pre-game' ? 'border-purple' : 'border-blue'} ${selectedFeature === feature.id ? 'selected' : ''}`}
                         onClick={() => setSelectedFeature(selectedFeature === feature.id ? null : feature.id)}
                     >
-                        <div className="accent-border top blue"></div>
+                        <div className={`accent-border top ${feature.phase === 'pre-game' ? 'purple' : 'blue'}`}></div>
+                        <div className={`phase-tag ${feature.phase}`}>
+                            {feature.phase === 'pre-game' ? 'PRE-GAME PHASE' : 'BATTLE PHASE'}
+                        </div>
 
                         <div className="feature-header">
                             <div className="feature-title-container">
@@ -182,7 +213,10 @@ const RoadmapFeatures: React.FC = () => {
                                 <div className="info-label">Development Progress:</div>
                                 <div className="info-value">
                                     <div className="progress-bar-bg small">
-                                        <div className="progress-bar blue" style={{ width: `${feature.progress}%` }}></div>
+                                        <div 
+                                            className={`progress-bar ${feature.phase === 'pre-game' ? 'purple' : 'blue'}`} 
+                                            style={{ width: `${feature.progress}%` }}
+                                        ></div>
                                     </div>
                                     <div className="progress-percentage">{feature.progress}%</div>
                                 </div>
@@ -199,7 +233,7 @@ const RoadmapFeatures: React.FC = () => {
                                 <ul className="details-list">
                                     {feature.details.map((detail, idx) => (
                                         <li key={idx} className="detail-item">
-                                            <div className="detail-dot blue"></div>
+                                            <div className={`detail-dot ${feature.phase === 'pre-game' ? 'purple' : 'blue'}`}></div>
                                             <span>{detail}</span>
                                         </li>
                                     ))}
@@ -208,7 +242,7 @@ const RoadmapFeatures: React.FC = () => {
                                 <div className="feature-action">
                                     <Button
                                         text="VOTE FOR PRIORITY"
-                                        color="purple"
+                                        color={feature.phase === 'pre-game' ? 'purple' : 'blue'}
                                         onClick={() => console.log(`Voted for ${feature.id}`)}
                                     />
                                 </div>

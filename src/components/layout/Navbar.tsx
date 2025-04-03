@@ -46,19 +46,8 @@ const Navbar: React.FC = () => {
 
             {/* Navigation Items - Desktop & Mobile */}
             <div className={`nav-container ${mobileMenuOpen ? 'open' : ''}`}>
-                <nav className="nav-items">
-                    <div
-                        className={`nav-item ${isActive('/battle') ? 'active' : ''}`}
-                        onClick={() => handleNavigation('/')}
-                    >
-                        BATTLE
-                        {isActive('/battle') && (
-                            <>
-                                <div className="corner-accent top-right"></div>
-                                <div className="corner-accent bottom-left"></div>
-                            </>
-                        )}
-                    </div>
+                <nav className="nav-items centered">
+                    {/* Battle and Heroes features removed for future release */}
                     <div
                         className={`nav-item ${isActive('/stake') ? 'active' : ''}`}
                         onClick={() => handleNavigation('/stake')}
@@ -101,18 +90,6 @@ const Navbar: React.FC = () => {
                     >
                         FARMERS
                         {isActive('/farmers') && (
-                            <>
-                                <div className="corner-accent top-right"></div>
-                                <div className="corner-accent bottom-left"></div>
-                            </>
-                        )}
-                    </div>
-                    <div
-                        className={`nav-item ${isActive('/heroes') ? 'active' : ''}`}
-                        onClick={() => handleNavigation('/heroes')}
-                    >
-                        HEROES
-                        {isActive('/heroes') && (
                             <>
                                 <div className="corner-accent top-right"></div>
                                 <div className="corner-accent bottom-left"></div>

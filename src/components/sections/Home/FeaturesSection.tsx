@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../../common/Button';
 import '../../../styles/modules/home/FeaturesSection.css';
+import { useNavigate } from 'react-router-dom';
 
 const FeaturesSection: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [powerWidth, setPowerWidth] = useState(0);
+    const navigate = useNavigate();
 
     // Animation when component enters viewport
     useEffect(() => {
@@ -39,35 +41,35 @@ const FeaturesSection: React.FC = () => {
 
             {/* Section Title */}
             <div className="features-title-container">
-                <h2 className="features-title">NEURAL COMBAT SYSTEMS</h2>
+                <h2 className="features-title">WARLORDS ECOSYSTEM</h2>
             </div>
 
             {/* Features Grid */}
             <div className="features-grid">
-                {/* Battle Card */}
+                {/* Marketplace Card */}
                 <div className="feature-card border-purple">
                     <div className="accent-border top purple"></div>
 
-                    <h3 className="feature-title">BATTLE ARENA</h3>
+                    <h3 className="feature-title">MARKETPLACE</h3>
 
-                    <div className="feature-desc">STRATEGIC BATTLE SYSTEM</div>
-                    <div className="feature-desc">ADVANCED BATTLE TACTICS</div>
+                    <div className="feature-desc">TRADE RARE ASSETS</div>
+                    <div className="feature-desc">COLLECT UNIQUE ITEMS</div>
 
-                    {/* Battle Power Bar */}
+                    {/* Market Power Bar */}
                     <div className="power-bar-container">
                         <div className="power-bar-bg">
                             <div className="power-bar purple" style={{ width: `${powerWidth}%` }}>
                                 <div className="energy-flow"></div>
                             </div>
                         </div>
-                        <div className="power-label">BATTLE POWER: 85%</div>
+                        <div className="power-label">MARKET ACTIVITY: 85%</div>
                     </div>
 
                     <div className="feature-footer">
                         <Button
-                            text="BATTLE NOW"
+                            text="EXPLORE"
                             color="purple"
-                            onClick={() => console.log('Initialize battle')}
+                            onClick={() => navigate('/marketplace')}
                         />
 
                         <div className="feature-metric">
@@ -85,7 +87,7 @@ const FeaturesSection: React.FC = () => {
                     <h3 className="feature-title">STAKING VAULT</h3>
 
                     <div className="feature-desc">EARN PASSIVE REWARDS</div>
-                    <div className="feature-desc">ENHANCE BATTLE CAPABILITIES</div>
+                    <div className="feature-desc">INCREASE YOUR EARNINGS</div>
 
                     {/* Staking Graph */}
                     <div className="stake-graph-container">
@@ -105,7 +107,7 @@ const FeaturesSection: React.FC = () => {
                         <Button
                             text="STAKE WLOS"
                             color="green"
-                            onClick={() => console.log('Stake WLOS')}
+                            onClick={() => navigate('/stake')}
                         />
 
                         <div className="feature-metric">
@@ -116,14 +118,14 @@ const FeaturesSection: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Power Boosts Card */}
+                {/* Farmers Card */}
                 <div className="feature-card border-yellow">
                     <div className="accent-border top yellow"></div>
 
-                    <h3 className="feature-title">POWER BOOSTS</h3>
+                    <h3 className="feature-title">FARMERS</h3>
 
-                    <div className="feature-desc">QUANTUM BOOSTS FOR WARLORDS</div>
-                    <div className="feature-desc">POWER UP YOUR WARLORDS</div>
+                    <div className="feature-desc">HARVEST WLOS TOKENS</div>
+                    <div className="feature-desc">COLLECT POWERFUL FARMERS</div>
 
                     {/* Item Blocks */}
                     <div className="item-blocks">
@@ -133,17 +135,17 @@ const FeaturesSection: React.FC = () => {
                         <div className="item-block yellow"></div>
                         <div className="item-block yellow"></div>
                     </div>
-                    <div className="items-label">BOOST COLLECTION</div>
+                    <div className="items-label">FARMER COLLECTION</div>
 
                     <div className="feature-footer">
                         <Button
-                            text="ENHANCE"
+                            text="HARVEST"
                             color="yellow"
-                            onClick={() => console.log('Enhance')}
+                            onClick={() => navigate('/farmers')}
                         />
 
                         <div className="feature-metric">
-                            <div className="metric-value yellow-text">14 ITEMS</div>
+                            <div className="metric-value yellow-text">14 FARMERS</div>
                             <div className="metric-line yellow"></div>
                             <div className="metric-dot yellow"></div>
                         </div>

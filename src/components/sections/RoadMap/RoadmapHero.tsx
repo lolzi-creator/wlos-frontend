@@ -9,25 +9,25 @@ const RoadmapHero: React.FC = () => {
 
                 <div className="grid md:grid-cols-2 gap-8">
                     <div>
-                        <h2 className="hero-title glow-text">NEURAL NETWORK ROADMAP</h2>
-                        <p className="hero-subtitle">STRATEGIC EXPANSION | ECOSYSTEM DEVELOPMENT | QUANTUM EVOLUTION</p>
+                        <h2 className="hero-title glow-text">WARLORDS OF SOLANA ROADMAP</h2>
+                        <p className="hero-subtitle">FARMERS • STAKING • HEROES • BATTLES</p>
 
                         <div className="roadmap-hero-desc">
-                            <p>The Warlords of Solana roadmap outlines our vision for evolving the ecosystem through strategic development phases and feature deployments.</p>
+                            <p>The Warlords of Solana roadmap outlines our strategic development from the current pre-game phase through the exciting battle phase and beyond.</p>
                         </div>
 
                         <div className="feature-list">
                             <div className="feature-item">
-                                <div className="feature-dot blue"></div>
-                                <span className="feature-text">Ecosystem expansion through 2025</span>
+                                <div className="feature-dot purple"></div>
+                                <span className="feature-text">Farmer NFTs and staking mechanisms</span>
                             </div>
                             <div className="feature-item">
-                                <div className="feature-dot blue"></div>
-                                <span className="feature-text">New battle mechanics & game modes</span>
+                                <div className="feature-dot purple"></div>
+                                <span className="feature-text">Weekly leaderboards with token rewards</span>
                             </div>
                             <div className="feature-item">
-                                <div className="feature-dot blue"></div>
-                                <span className="feature-text">Enhanced staking & reward systems</span>
+                                <div className="feature-dot orange"></div>
+                                <span className="feature-text">Hero collection and battle system in 2025</span>
                             </div>
                         </div>
                     </div>
@@ -41,35 +41,35 @@ const RoadmapHero: React.FC = () => {
                                 <div className="metric-label">Overall Completion</div>
                                 <div className="progress-bar-container">
                                     <div className="progress-bar-bg">
-                                        <div className="progress-bar blue" style={{ width: '42%' }}>
+                                        <div className="progress-bar purple" style={{ width: '38%' }}>
                                             <div className="progress-glow"></div>
                                         </div>
                                     </div>
-                                    <div className="progress-value">42% Complete</div>
+                                    <div className="progress-value">38% Complete</div>
                                 </div>
                             </div>
 
                             <div className="current-phase">
                                 <div className="phase-header">
-                                    <div className="phase-dot blue"></div>
-                                    <div className="phase-title">CURRENT PHASE: NEURAL EXPANSION</div>
+                                    <div className="phase-dot purple"></div>
+                                    <div className="phase-title">CURRENT PHASE: PRE-GAME</div>
                                 </div>
                                 <div className="phase-description">
-                                    Enhancing core battle mechanics, expanding marketplace functionality, and implementing advanced staking mechanisms.
+                                    Establishing farmer NFT marketplace, deploying staking mechanisms, and implementing weekly leaderboards with token rewards.
                                 </div>
-                                <div className="phase-timeline">Q1 2025 - Q2 2025</div>
+                                <div className="phase-timeline">Q4 2024 - Q1 2025</div>
                             </div>
 
                             <div className="next-milestone">
                                 <div className="milestone-header">
                                     <div className="milestone-icon"></div>
-                                    <div className="milestone-title">NEXT MILESTONE: TOURNAMENT SYSTEM</div>
+                                    <div className="milestone-title">NEXT MILESTONE: STAKING SYSTEM</div>
                                 </div>
-                                <div className="milestone-date">Estimated Completion: April 12, 2025</div>
+                                <div className="milestone-date">Estimated Completion: November 25, 2024</div>
                                 <div className="milestone-progress-bar">
-                                    <div className="milestone-progress blue" style={{ width: '65%' }}></div>
+                                    <div className="milestone-progress purple" style={{ width: '78%' }}></div>
                                 </div>
-                                <div className="milestone-percentage">65%</div>
+                                <div className="milestone-percentage">78%</div>
                             </div>
                         </div>
                     </div>
