@@ -86,10 +86,6 @@ body {
 .main-content {
     position: relative;
     z-index: 1;
-    padding: 40px;
-    padding-top: 100px;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 /* Navbar */
@@ -921,4 +917,8 @@ body {
   .battle-coming-soon-section .coming-soon-wrapper {
     padding: 30px 20px;
   }
+}
+
+html {
+    scroll-behavior: smooth;
 }

@@ -5,6 +5,7 @@ import StakingStatsSection from './StakingStatsSection';
 import StakingPoolsSection from './StakingPoolsSection';
 import StakingRewardsSection from './StakingRewardsSection';
 import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
+import WalletConnectButton from '../../../common/WalletConnectButton';
 import '../../../../styles/modules/staking/new/StakingPage.css';
 
 export const NewStakingPage: React.FC = () => {
@@ -66,26 +67,27 @@ export const NewStakingPage: React.FC = () => {
                     </div>
                 ) : (
                     <div className="connect-wallet-section">
-                        <div className="connect-card">
-                            <div className="connect-content">
-                                <h3 className="connect-title">Connect Your Wallet</h3>
+                        <div className="connect-wallet-card">
+                            <div className="card-content">
+                                <h3 className="connect-title">CONNECT WALLET TO ACCESS STAKING</h3>
                                 <p className="connect-description">
                                     Connect your wallet to access staking features and earn rewards.
                                 </p>
-                                <ul className="benefits-list">
-                                    <li className="benefit-item">
-                                        <span className="benefit-icon">🔒</span>
+                                <div className="features-list">
+                                    <div className="feature">
+                                        <div className="feature-icon">🔒</div>
                                         <span>Securely stake your WLOS tokens</span>
-                                    </li>
-                                    <li className="benefit-item">
-                                        <span className="benefit-icon">💰</span>
+                                    </div>
+                                    <div className="feature">
+                                        <div className="feature-icon">💰</div>
                                         <span>Earn up to 25.7% APY on your tokens</span>
-                                    </li>
-                                    <li className="benefit-item">
-                                        <span className="benefit-icon">⚡</span>
+                                    </div>
+                                    <div className="feature">
+                                        <div className="feature-icon">⚡</div>
                                         <span>Boost your Warlord powers in battles</span>
-                                    </li>
-                                </ul>
+                                    </div>
+                                </div>
+                                <WalletConnectButton color="green" />
                             </div>
                         </div>
                     </div>

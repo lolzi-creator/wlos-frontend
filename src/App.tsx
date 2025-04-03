@@ -15,6 +15,7 @@ import { HeroProvider } from './context/HeroContext';
 import { StakingProvider } from './context/StakingContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ScrollToTop from './components/common/ScrollToTop';
 
 import './styles/farmers.css';
 import './styles/heroes.css';
@@ -55,6 +56,7 @@ function App() {
                         <HeroProvider>
                             <StakingProvider>
                                 <Router>
+                                    <ScrollToTop />
                                     <div className="app-container">
                                         <Routes>
                                             <Route path="/" element={<HomePage />} />
