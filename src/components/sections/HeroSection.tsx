@@ -2,9 +2,15 @@ import React from 'react';
 import Button from '../common/Button';
 import { useWalletConnection } from '../../context/WalletConnectionProvider';
 import WalletConnectButton from '../common/WalletConnectButton';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
     const { isConnected } = useWalletConnection();
+    const navigate = useNavigate();
+
+    const handleStakingClick = () => {
+        navigate('/staking');
+    };
 
     return (
         <section className="hero-section">
@@ -18,9 +24,9 @@ const HeroSection: React.FC = () => {
 
                     <div className="flex gap-4">
                         <Button
-                            text="START BATTLE"
+                            text="START STAKING"
                             color="purple"
-                            onClick={() => console.log('Battle initialized')}
+                            onClick={handleStakingClick}
                         />
 
                         {!isConnected && (

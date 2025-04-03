@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../../../common/Button';
 import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
-import WalletConnectButton from '../../../common/WalletConnectButton';
 import '../../../../styles/modules/staking/new/StakingHeroSection.css';
 
 export const StakingHeroSection: React.FC = () => {
@@ -85,20 +84,15 @@ export const StakingHeroSection: React.FC = () => {
                     </div>
                     
                     <div className="hero-buttons-container">
-                        {isConnected ? (
-                            <Button
-                                text="STAKE NOW"
-                                color="green"
-                                onClick={() => console.log('Staking initialized')}
-                            />
-                        ) : (
-                            <WalletConnectButton color="green" />
-                        )}
-                        
                         <Button
-                            text="LEARN MORE"
-                            color="transparent"
-                            onClick={() => console.log('Learn more about staking')}
+                            text="STAKE NOW"
+                            color="green"
+                            onClick={() => {
+                                const poolsSection = document.getElementById('staking-pools');
+                                if (poolsSection) {
+                                    poolsSection.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            }}
                         />
                     </div>
                 </div>

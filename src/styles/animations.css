@@ -44,7 +44,7 @@
 /* Glow animation for buttons */
 @keyframes buttonGlow {
     0% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.3); }
-    50% { box-shadow: 0 0 10px rgba(153, 69, 255, 0.5); }
+    50% { box-shadow: 0 0 15px rgba(153, 69, 255, 0.6); }
     100% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.3); }
 }
 
@@ -66,20 +66,32 @@
 
 @keyframes purpleButtonGlow {
     0% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.3); }
-    50% { box-shadow: 0 0 10px rgba(153, 69, 255, 0.5); }
+    50% { box-shadow: 0 0 15px rgba(153, 69, 255, 0.6); }
     100% { box-shadow: 0 0 5px rgba(153, 69, 255, 0.3); }
 }
 
 @keyframes greenButtonGlow {
     0% { box-shadow: 0 0 5px rgba(20, 241, 149, 0.3); }
-    50% { box-shadow: 0 0 10px rgba(20, 241, 149, 0.5); }
+    50% { box-shadow: 0 0 15px rgba(20, 241, 149, 0.6); }
     100% { box-shadow: 0 0 5px rgba(20, 241, 149, 0.3); }
 }
 
 @keyframes yellowButtonGlow {
     0% { box-shadow: 0 0 5px rgba(255, 184, 0, 0.3); }
-    50% { box-shadow: 0 0 10px rgba(255, 184, 0, 0.5); }
+    50% { box-shadow: 0 0 15px rgba(255, 184, 0, 0.6); }
     100% { box-shadow: 0 0 5px rgba(255, 184, 0, 0.3); }
+}
+
+@keyframes blueButtonGlow {
+    0% { box-shadow: 0 0 5px rgba(88, 101, 242, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(88, 101, 242, 0.6); }
+    100% { box-shadow: 0 0 5px rgba(88, 101, 242, 0.3); }
+}
+
+@keyframes cyanButtonGlow {
+    0% { box-shadow: 0 0 5px rgba(0, 194, 255, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(0, 194, 255, 0.6); }
+    100% { box-shadow: 0 0 5px rgba(0, 194, 255, 0.3); }
 }
 
 /* Data flow animation for graphs */

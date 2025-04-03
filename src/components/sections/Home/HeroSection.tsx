@@ -3,9 +3,11 @@ import Button from '../../common/Button';
 import { useWalletConnection } from '../../../context/WalletConnectionProvider';
 import WalletConnectButton from '../../common/WalletConnectButton';
 import '../../../styles/modules/home/HeroSection.css';
+import { useNavigate } from 'react-router-dom';
 
 export const HeroSection: React.FC = () => {
     const { isConnected } = useWalletConnection();
+    const navigate = useNavigate();
     const [particles, setParticles] = useState<Array<{ id: number, x: number, y: number, size: number, color: string, delay: number }>>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -76,9 +78,18 @@ export const HeroSection: React.FC = () => {
                     
                     <div className="hero-buttons-container">
                         <Button
-                            text="START BATTLE"
-                            color="purple"
-                            onClick={() => console.log('Battle initialized')}
+                            text="START STAKING"
+                            color="green"
+                            onClick={() => {
+                                navigate('/stake');
+                                // Increase delay to give the page more time to load
+                                setTimeout(() => {
+                                    const poolsSection = document.getElementById('staking-pools');
+                                    if (poolsSection) {
+                                        poolsSection.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }, 500);
+                            }}
                         />
 
                         {!isConnected && (

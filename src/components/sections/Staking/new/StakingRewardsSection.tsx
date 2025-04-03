@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useStaking } from '../../../../context/StakingContext';
+import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
 import Button from '../../../common/Button';
+import WalletConnectButton from '../../../common/WalletConnectButton';
 import '../../../../styles/modules/staking/new/StakingRewardsSection.css';
 
 // Define reward type
@@ -15,7 +17,9 @@ interface StakingReward {
 export const StakingRewardsSection: React.FC = () => {
     // Create a safe fallback for rewards if not in context
     const stakingContext = useStaking();
+    const { isConnected } = useWalletConnection();
     const [visible, setVisible] = useState(false);
+    const [showConnectPrompt, setShowConnectPrompt] = useState<boolean>(false);
     
     // Use the rewards from context if available, otherwise use dummy data
     const userRewards: StakingReward[] = stakingContext.isLoading || !stakingContext.rewards
@@ -40,12 +44,22 @@ export const StakingRewardsSection: React.FC = () => {
     }, []);
     
     const handleClaim = (rewardId: string) => {
+        if (!isConnected) {
+            setShowConnectPrompt(true);
+            return;
+        }
+        
         if (stakingContext.claimRewards) {
             stakingContext.claimRewards(rewardId);
         }
     };
     
     const handleClaimAll = () => {
+        if (!isConnected) {
+            setShowConnectPrompt(true);
+            return;
+        }
+        
         if (stakingContext.claimRewards) {
             userRewards
                 .filter((reward: StakingReward) => reward.claimable)
@@ -61,6 +75,10 @@ export const StakingRewardsSection: React.FC = () => {
             hour: '2-digit',
             minute: '2-digit'
         }).format(date);
+    };
+    
+    const handleClosePrompt = () => {
+        setShowConnectPrompt(false);
     };
 
     return (
@@ -165,6 +183,19 @@ export const StakingRewardsSection: React.FC = () => {
                     </div>
                 </div>
             </div>
+            
+            {showConnectPrompt && (
+                <div className="wallet-connect-overlay" onClick={handleClosePrompt}>
+                    <div className="wallet-connect-modal" onClick={(e) => e.stopPropagation()}>
+                        <h3>Connect Wallet to Claim Rewards</h3>
+                        <p>Connect your wallet to claim your staking rewards.</p>
+                        <div className="modal-actions">
+                            <WalletConnectButton color="green" />
+                            <Button text="CANCEL" color="transparent" onClick={handleClosePrompt} />
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };

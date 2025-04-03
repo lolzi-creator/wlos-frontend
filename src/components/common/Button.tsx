@@ -20,19 +20,19 @@ const Button: React.FC<ButtonProps> = ({
 
     switch (color) {
         case 'purple':
-            colorClasses = 'bg-purple-glow border-purple';
+            colorClasses = 'bg-purple-glow border-purple hover:bg-purple-glow-intense';
             break;
         case 'green':
-            colorClasses = 'bg-green-glow border-green';
+            colorClasses = 'bg-green-glow border-green hover:bg-green-glow-intense';
             break;
         case 'yellow':
-            colorClasses = 'bg-yellow-glow border-yellow';
+            colorClasses = 'bg-yellow-glow border-yellow hover:bg-yellow-glow-intense';
             break;
         case 'blue':
-            colorClasses = 'bg-blue-glow border-blue';
+            colorClasses = 'bg-blue-glow border-blue hover:bg-blue-glow-intense';
             break;
         case 'cyan':
-            colorClasses = 'bg-cyan-glow border-cyan';
+            colorClasses = 'bg-cyan-glow border-cyan hover:bg-cyan-glow-intense';
             break;
         case 'transparent':
             colorClasses = 'bg-transparent border-white hover:bg-white/10';
@@ -45,7 +45,8 @@ const Button: React.FC<ButtonProps> = ({
             onClick={onClick}
             disabled={disabled}
         >
-            {text}
+            <span className="button-text-wrapper">{text}</span>
+            <span className="button-highlight"></span>
         </button>
     );
 };

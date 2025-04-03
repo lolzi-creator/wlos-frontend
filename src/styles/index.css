@@ -277,18 +277,83 @@ body {
     clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
     position: relative;
     background-color: transparent;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.futuristic-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+}
+
+.button-text-wrapper {
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease;
+}
+
+.futuristic-button:hover .button-text-wrapper {
+    transform: scale(1.05);
+}
+
+.button-highlight {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+    z-index: 1;
+}
+
+.futuristic-button:hover .button-highlight {
+    width: 250%;
+    height: 300%;
 }
 
 .bg-purple-glow {
     background-color: rgba(153, 69, 255, 0.2);
 }
 
+.bg-purple-glow-intense {
+    background-color: rgba(153, 69, 255, 0.4);
+}
+
 .bg-green-glow {
     background-color: rgba(20, 241, 149, 0.2);
 }
 
+.bg-green-glow-intense {
+    background-color: rgba(20, 241, 149, 0.4);
+}
+
 .bg-yellow-glow {
     background-color: rgba(255, 184, 0, 0.2);
+}
+
+.bg-yellow-glow-intense {
+    background-color: rgba(255, 184, 0, 0.4);
+}
+
+.bg-blue-glow {
+    background-color: rgba(88, 101, 242, 0.2);
+}
+
+.bg-blue-glow-intense {
+    background-color: rgba(88, 101, 242, 0.4);
+}
+
+.bg-cyan-glow {
+    background-color: rgba(0, 194, 255, 0.2);
+}
+
+.bg-cyan-glow-intense {
+    background-color: rgba(0, 194, 255, 0.4);
 }
 
 .border-purple {
@@ -303,16 +368,8 @@ body {
     border-color: var(--color-yellow);
 }
 
-.bg-blue-glow {
-    background-color: rgba(88, 101, 242, 0.2);
-}
-
 .border-blue {
     border-color: var(--color-blue);
-}
-
-.bg-cyan-glow {
-    background-color: rgba(0, 194, 255, 0.2);
 }
 
 .border-cyan {

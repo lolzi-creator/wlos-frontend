@@ -319,7 +319,9 @@
     font-weight: 600;
     width: 100%;
     max-width: 200px;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
 }
 
 /* Style input type number to remove arrows */
@@ -351,17 +353,22 @@
 /* Hover effects for buttons */
 .pool-card.purple .action-buttons button:hover {
     background: linear-gradient(90deg, rgba(119, 0, 255, 0.9), rgba(153, 69, 255, 0.9));
-    box-shadow: 0 0 15px rgba(153, 69, 255, 0.5);
+    box-shadow: 0 0 20px rgba(153, 69, 255, 0.5);
 }
 
 .pool-card.green .action-buttons button:hover {
     background: linear-gradient(90deg, rgba(0, 204, 102, 0.9), rgba(20, 241, 149, 0.9));
-    box-shadow: 0 0 15px rgba(20, 241, 149, 0.5);
+    box-shadow: 0 0 20px rgba(20, 241, 149, 0.5);
 }
 
 .pool-card.yellow .action-buttons button:hover {
     background: linear-gradient(90deg, rgba(204, 153, 0, 0.9), rgba(255, 184, 0, 0.9));
-    box-shadow: 0 0 15px rgba(255, 184, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 184, 0, 0.5);
+}
+
+.action-buttons button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
 }
 
 /* Media queries */
@@ -437,5 +444,128 @@
     .stake-input {
         padding: 10px 14px;
         font-size: 14px;
+    }
+}
+
+/* Wallet Connect Overlay */
+.wallet-connect-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.wallet-connect-modal {
+    background: rgba(14, 14, 40, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    animation: modalSlideUp 0.4s ease;
+    backdrop-filter: blur(10px);
+}
+
+.wallet-connect-modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-green), var(--color-purple));
+}
+
+.wallet-connect-modal::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at bottom right, rgba(153, 69, 255, 0.1), transparent 70%);
+    z-index: -1;
+}
+
+.wallet-connect-modal h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, var(--color-green), var(--color-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.wallet-connect-modal p {
+    color: #B3B3B3;
+    margin-bottom: 25px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-actions button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive fixes for the modal */
+@media (max-width: 768px) {
+    .wallet-connect-modal {
+        width: 90%;
+        padding: 25px;
+    }
+    
+    .wallet-connect-modal h3 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .wallet-connect-modal {
+        padding: 20px;
+    }
+    
+    .wallet-connect-modal h3 {
+        font-size: 18px;
+    }
+    
+    .modal-actions {
+        gap: 10px;
     }
 } 

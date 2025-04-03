@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useStaking } from '../../../../context/StakingContext';
 import Button from '../../../common/Button';
+import WalletConnectButton from '../../../common/WalletConnectButton';
+import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
 import '../../../../styles/modules/staking/new/StakingPoolsSection.css';
 
 export const StakingPoolsSection: React.FC = () => {
     const { pools, isLoading } = useStaking();
+    const { isConnected } = useWalletConnection();
     const [activePool, setActivePool] = useState<string | null>(null);
     const [stakeAmount, setStakeAmount] = useState<string>('');
+    const [showConnectPrompt, setShowConnectPrompt] = useState<boolean>(false);
     
     // Dummy data for development
     const stakingPools = isLoading || pools.length === 0 
@@ -22,12 +26,20 @@ export const StakingPoolsSection: React.FC = () => {
         }));
     
     const handleStake = (poolId: string) => {
+        if (!isConnected) {
+            setShowConnectPrompt(true);
+            return;
+        }
         console.log('Staking in pool:', poolId);
         console.log('Amount:', stakeAmount);
         // Implement staking logic
     };
     
     const handlePoolSelect = (poolId: string) => {
+        if (!isConnected) {
+            setShowConnectPrompt(true);
+            return;
+        }
         setActivePool(activePool === poolId ? null : poolId);
     };
     
@@ -41,8 +53,12 @@ export const StakingPoolsSection: React.FC = () => {
         setStakeAmount(e.target.value);
     };
 
+    const handleClosePrompt = () => {
+        setShowConnectPrompt(false);
+    };
+
     return (
-        <section className="staking-pools-section">
+        <section className="staking-pools-section" id="staking-pools">
             <div className="section-header">
                 <h2 className="section-title">STAKING POOLS</h2>
                 <div className="section-subtitle">Select a pool to stake your WLOS tokens</div>
@@ -85,7 +101,7 @@ export const StakingPoolsSection: React.FC = () => {
                             </div>
                         </div>
                         
-                        {activePool === pool.id && (
+                        {isConnected && activePool === pool.id && (
                             <div className="pool-actions" onClick={(e) => e.stopPropagation()}>
                                 <div className="stake-form">
                                     <div className="stake-form-header">Amount to stake</div>
@@ -121,6 +137,19 @@ export const StakingPoolsSection: React.FC = () => {
                     </div>
                 ))}
             </div>
+
+            {showConnectPrompt && (
+                <div className="wallet-connect-overlay" onClick={handleClosePrompt}>
+                    <div className="wallet-connect-modal" onClick={(e) => e.stopPropagation()}>
+                        <h3>Connect Wallet to Stake</h3>
+                        <p>Connect your wallet to start staking WLOS tokens and earn rewards.</p>
+                        <div className="modal-actions">
+                            <WalletConnectButton color="green" />
+                            <Button text="CANCEL" color="transparent" onClick={handleClosePrompt} />
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };

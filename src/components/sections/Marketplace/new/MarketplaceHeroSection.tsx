@@ -134,12 +134,6 @@ const MarketplaceHeroSection: React.FC<MarketplaceHeroSectionProps> = ({ onViewA
               color="cyan"
               onClick={onViewAll || (() => console.log('Browse marketplace'))}
             />
-            
-            <Button
-              text="LEARN MORE"
-              color="transparent"
-              onClick={() => console.log('Learn more about marketplace')}
-            />
           </div>
         </div>
       </div>
