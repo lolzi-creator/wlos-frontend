@@ -132,7 +132,12 @@ const MarketplaceHeroSection: React.FC<MarketplaceHeroSectionProps> = ({ onViewA
             <Button
               text="BROWSE MARKETPLACE"
               color="cyan"
-              onClick={onViewAll || (() => console.log('Browse marketplace'))}
+              onClick={onViewAll || (() => {
+                const itemsSection = document.getElementById('marketplace-items');
+                if (itemsSection) {
+                  itemsSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              })}
             />
           </div>
         </div>
