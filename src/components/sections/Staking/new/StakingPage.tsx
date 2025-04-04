@@ -4,12 +4,10 @@ import StakingHeroSection from './StakingHeroSection';
 import StakingStatsSection from './StakingStatsSection';
 import StakingPoolsSection from './StakingPoolsSection';
 import StakingRewardsSection from './StakingRewardsSection';
-import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
 import '../../../../styles/modules/staking/new/StakingPage.css';
 
 export const NewStakingPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'staking' | 'rewards'>('staking');
-    const { isConnected } = useWalletConnection();
 
     return (
         <Layout>

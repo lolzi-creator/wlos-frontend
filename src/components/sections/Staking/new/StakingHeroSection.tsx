@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../../../common/Button';
-import { useWalletConnection } from '../../../../context/WalletConnectionProvider';
 import '../../../../styles/modules/staking/new/StakingHeroSection.css';
 
 export const StakingHeroSection: React.FC = () => {
-    const { isConnected } = useWalletConnection();
     const [particles, setParticles] = useState<Array<{ id: number, x: number, y: number, size: number, color: string, delay: number }>>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 

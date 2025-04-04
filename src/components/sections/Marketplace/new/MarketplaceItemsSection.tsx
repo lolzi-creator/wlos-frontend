@@ -322,7 +322,7 @@ const MarketplaceItemsSection: React.FC<MarketplaceItemsSectionProps> = ({
         }
     };
     
-    const getAssetType = (item: MarketplaceItem): 'item' | 'hero' | 'farmer' => {
+    const getAssetType = (): 'item' | 'hero' | 'farmer' => {
         // Logic to determine asset type based on the item
         return 'item'; // Default to item for now
     };
@@ -551,7 +551,7 @@ const MarketplaceItemsSection: React.FC<MarketplaceItemsSectionProps> = ({
                     }}
                     actionType="buy"
                     assetName={activeItem.name}
-                    assetType={getAssetType(activeItem)}
+                    assetType={getAssetType()}
                     assetRarity={activeItem.rarity}
                     assetImage={activeItem.image}
                     currentPrice={activeItem.price}
