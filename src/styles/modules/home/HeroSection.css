@@ -232,7 +232,7 @@
     font-size: 18px;
     letter-spacing: 4px;
     color: #B3B3B3;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     position: relative;
     width: 100%;
     text-align: center;
@@ -242,16 +242,19 @@
 /* Button container */
 .hero-buttons-container {
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 30px;
     width: 100%;
+    max-width: 800px;
 }
 
 /* Add shine effect to buttons */
 .hero-buttons-container button {
     position: relative;
     overflow: hidden;
+    min-width: 180px;
 }
 
 .hero-buttons-container button::after {
@@ -350,6 +353,15 @@
     .hero-title::after {
         width: 150px;
     }
+    
+    .hero-buttons-container {
+        gap: 12px;
+        max-width: 700px;
+    }
+    
+    .hero-buttons-container button {
+        min-width: 160px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -371,6 +383,14 @@
     .hero-buttons-container {
         flex-direction: column;
         align-items: center;
+        gap: 15px;
+        max-width: 100%;
+    }
+    
+    .hero-buttons-container button {
+        min-width: 220px;
+        width: 100%;
+        max-width: 300px;
     }
     
     .hero-grid {
@@ -405,5 +425,318 @@
     .hero-title::before,
     .hero-title::after {
         width: 100px;
+    }
+    
+    .hero-buttons-container button {
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+/* Countdown Timer */
+.countdown-container {
+    margin-top: 0;
+    margin-bottom: 40px;
+    background: rgba(10, 15, 30, 0.8);
+    border: 1px solid rgba(153, 69, 255, 0.3);
+    border-radius: 12px;
+    padding: 25px 40px;
+    backdrop-filter: blur(8px);
+    position: relative;
+    box-shadow: 0 0 30px rgba(153, 69, 255, 0.25);
+    width: 100%;
+    max-width: 650px;
+    overflow: hidden;
+}
+
+.countdown-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(153, 69, 255, 0.8), transparent);
+    animation: scanGlow 3s infinite alternate;
+}
+
+.countdown-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(20, 241, 149, 0.8), transparent);
+    animation: scanGlow 3s infinite alternate-reverse;
+}
+
+@keyframes scanGlow {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
+.countdown-title {
+    font-size: 16px;
+    letter-spacing: 3px;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+}
+
+.countdown-title::before,
+.countdown-title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(153, 69, 255, 0), rgba(153, 69, 255, 0.7));
+}
+
+.countdown-title::before {
+    right: 105%;
+}
+
+.countdown-title::after {
+    left: 105%;
+    transform: rotate(180deg);
+}
+
+.countdown-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.countdown-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-width: 80px;
+}
+
+.countdown-value {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #9945FF, #14F195);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 15px rgba(153, 69, 255, 0.5);
+    position: relative;
+    padding: 0 5px;
+    min-width: 70px;
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    display: flex;
+    justify-content: center;
+}
+
+.countdown-value::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(153, 69, 255, 0.2);
+    border-radius: 5px;
+    background: rgba(153, 69, 255, 0.05);
+    z-index: -1;
+}
+
+.countdown-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 1px;
+    margin-top: 8px;
+}
+
+.countdown-separator {
+    color: rgba(153, 69, 255, 0.8);
+    font-size: 48px;
+    line-height: 60px;
+    align-self: flex-start;
+    animation: pulsate 1.5s infinite;
+}
+
+@keyframes pulsate {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Responsive countdown */
+@media (max-width: 768px) {
+    .countdown-container {
+        padding: 15px 20px;
+    }
+    
+    .countdown-value {
+        font-size: 36px;
+        min-width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+    
+    .countdown-separator {
+        font-size: 36px;
+        line-height: 50px;
+    }
+    
+    .countdown-grid {
+        gap: 10px;
+    }
+    
+    .countdown-segment {
+        min-width: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .countdown-container {
+        padding: 10px;
+    }
+    
+    .countdown-value {
+        font-size: 28px;
+        min-width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+    
+    .countdown-label {
+        font-size: 10px;
+    }
+    
+    .countdown-separator {
+        font-size: 28px;
+        line-height: 40px;
+    }
+    
+    .countdown-grid {
+        gap: 5px;
+    }
+    
+    .countdown-segment {
+        min-width: 40px;
+    }
+    
+    .countdown-title {
+        font-size: 14px;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+    }
+}
+
+/* Phase Banner */
+.phase-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    background: rgba(153, 69, 255, 0.1);
+    border: 1px solid rgba(153, 69, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px 20px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 20px rgba(153, 69, 255, 0.15);
+    animation: pulse 2s ease-in-out infinite alternate;
+    max-width: 650px;
+    width: 100%;
+}
+
+@keyframes pulse {
+    0% {
+        background: rgba(153, 69, 255, 0.1);
+        box-shadow: 0 0 20px rgba(153, 69, 255, 0.15);
+    }
+    100% {
+        background: rgba(153, 69, 255, 0.15);
+        box-shadow: 0 0 30px rgba(153, 69, 255, 0.25);
+    }
+}
+
+.phase-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(153, 69, 255, 0.9);
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(153, 69, 255, 0.5);
+}
+
+.roadmap-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 1px solid rgba(153, 69, 255, 0.4);
+    border-radius: 4px;
+    background: rgba(153, 69, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.roadmap-link:hover {
+    background: rgba(153, 69, 255, 0.25);
+    border-color: rgba(153, 69, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(153, 69, 255, 0.3);
+}
+
+.roadmap-link svg {
+    transition: transform 0.2s ease;
+}
+
+.roadmap-link:hover svg {
+    transform: translateX(3px);
+}
+
+/* Responsive adjustments for phase banner */
+@media (max-width: 768px) {
+    .phase-banner {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px 15px;
+    }
+    
+    .phase-label {
+        font-size: 14px;
+    }
+    
+    .roadmap-link {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .phase-banner {
+        padding: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .phase-label {
+        font-size: 12px;
     }
 } 

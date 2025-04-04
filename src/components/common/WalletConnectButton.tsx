@@ -40,16 +40,39 @@ const WalletConnectButton: React.FC<WalletConnectButtonProps> = ({
         );
     }
 
+    // Get color classes
+    let colorClasses = '';
+    switch (color) {
+        case 'purple':
+            colorClasses = 'bg-purple-glow border-purple hover:bg-purple-glow-intense';
+            break;
+        case 'green':
+            colorClasses = 'bg-green-glow border-green hover:bg-green-glow-intense';
+            break;
+        case 'yellow':
+            colorClasses = 'bg-yellow-glow border-yellow hover:bg-yellow-glow-intense';
+            break;
+        case 'blue':
+            colorClasses = 'bg-blue-glow border-blue hover:bg-blue-glow-intense';
+            break;
+        case 'cyan':
+            colorClasses = 'bg-cyan-glow border-cyan hover:bg-cyan-glow-intense';
+            break;
+        default:
+            colorClasses = 'bg-purple-glow border-purple hover:bg-purple-glow-intense';
+    }
+
     // For the disconnect state, we're going to use a single button that opens the wallet selection modal
     return (
         <>
             <WalletMultiButton className="wallet-adapter-button-trigger" />
-            <Button
-                text="CONNECT WALLET"
-                color={color}
+            <button
+                className={`futuristic-button ${colorClasses} ${fullWidth ? 'w-full' : ''}`}
                 onClick={() => document.querySelector<HTMLElement>('.wallet-adapter-button-trigger')?.click()}
-                fullWidth={fullWidth}
-            />
+            >
+                <span className="button-text-wrapper">CONNECT WALLET</span>
+                <span className="button-highlight"></span>
+            </button>
         </>
     );
 };

@@ -34,59 +34,112 @@
   overflow: hidden;
 }
 
-.bg-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    linear-gradient(to right, rgba(153, 69, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(153, 69, 255, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  opacity: 0.3;
-}
-
-.purple-orb {
-  position: absolute;
-  top: 30%;
-  right: 15%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(153, 69, 255, 0.1) 0%, rgba(153, 69, 255, 0) 70%);
-  filter: blur(80px);
-  opacity: 0.6;
-  animation: float 25s ease-in-out infinite;
-}
-
-.blue-orb {
-  position: absolute;
-  bottom: 20%;
-  left: 10%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0, 194, 255, 0.1) 0%, rgba(0, 194, 255, 0) 70%);
-  filter: blur(70px);
-  opacity: 0.5;
-  animation: float 20s ease-in-out infinite reverse;
-}
-
-.bg-particles {
+/* Grid background */
+.hero-grid {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle, rgba(153, 69, 255, 0.2) 1px, transparent 1px),
-                   radial-gradient(circle, rgba(0, 194, 255, 0.2) 1px, transparent 1px);
-  background-size: 60px 60px, 40px 40px;
-  background-position: 0 0, 30px 30px;
+  background: linear-gradient(90deg, rgba(153, 69, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(0deg, rgba(153, 69, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  transform: perspective(500px) rotateX(30deg);
+  transform-origin: center bottom;
+  opacity: 0.4;
+}
+
+/* Circuit pattern */
+.hero-circuit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   opacity: 0.1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Cpath d='M10,10 L50,10 L50,50 L90,50 L90,90' stroke='%239945FF' stroke-width='0.5' fill='none'/%3E%3Cpath d='M90,10 L50,50 L10,90' stroke='%2314F195' stroke-width='0.5' fill='none'/%3E%3Ccircle cx='10' cy='10' r='2' fill='%2314F195'/%3E%3Ccircle cx='50' cy='50' r='1' fill='%239945FF'/%3E%3Ccircle cx='90' cy='90' r='2' fill='%23FFB800'/%3E%3C/svg%3E");
+}
+
+/* Hero section glow */
+.hero-glow {
+  position: absolute;
+  width: 60%;
+  height: 300px;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(153, 69, 255, 0.15) 0%, rgba(153, 69, 255, 0) 70%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+/* Energy orbs */
+.energy-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.purple-orb {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(153, 69, 255, 0.3) 0%, rgba(153, 69, 255, 0) 70%);
+  right: -50px;
+  top: 100px;
+  animation: float 15s ease-in-out infinite;
+}
+
+.green-orb {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(20, 241, 149, 0.2) 0%, rgba(20, 241, 149, 0) 70%);
+  left: -50px;
+  bottom: 50px;
+  animation: float 12s ease-in-out infinite alternate;
+}
+
+.yellow-orb {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 184, 0, 0.25) 0%, rgba(255, 184, 0, 0) 70%);
+  left: 20%;
+  top: 20%;
+  animation: float 18s ease-in-out infinite alternate-reverse;
+}
+
+/* Scan lines */
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(153, 69, 255, 0) 0%, rgba(153, 69, 255, 0.5) 50%, rgba(153, 69, 255, 0) 100%);
+  opacity: 0.3;
+  z-index: 1;
+  pointer-events: none;
+  animation: scanMove 3s linear infinite;
+}
+
+@keyframes scanMove {
+  0% {
+      top: -10px;
+  }
+  100% {
+      top: 100%;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(40px, 40px); }
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-30px) scale(1.1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Main content */
@@ -102,11 +155,16 @@
 .hero-section {
   padding: 6rem 0 4rem;
   text-align: center;
+  position: relative;
+  border: none; /* Remove border */
+  background-color: transparent; /* Remove background color */
+  clip-path: none; /* Remove clip-path */
 }
 
 .hero-content {
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
 }
 
 .hero-title {
@@ -119,6 +177,38 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   font-family: 'Orbitron', sans-serif;
+  position: relative;
+  text-shadow: 0 0 20px rgba(153, 69, 255, 0.5);
+  animation: glowPulse 3s infinite alternate;
+}
+
+/* Add highlight lines above and below the title for subtle emphasis */
+.hero-title::before,
+.hero-title::after {
+  content: '';
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(153, 69, 255, 0) 0%, rgba(153, 69, 255, 0.6) 50%, rgba(153, 69, 255, 0) 100%);
+  width: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hero-title::before {
+  top: -15px;
+}
+
+.hero-title::after {
+  bottom: -15px;
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 15px rgba(153, 69, 255, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 25px rgba(153, 69, 255, 0.7);
+  }
 }
 
 .hero-subtitle {
@@ -142,13 +232,15 @@
   background: var(--panel-bg);
   backdrop-filter: blur(10px);
   padding: 1.5rem 2.5rem;
-  border-radius: 10px;
+  border-radius: 0;
   width: 180px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(153, 69, 255, 0.3);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  /* Use a clip-path to give it an angled design */
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
 }
 
 .token-stat-card::before {
@@ -193,17 +285,16 @@
 .button {
   display: inline-block;
   padding: 0.8rem 2rem;
-  border-radius: 4px;
+  border-radius: 0;
   font-weight: 600;
   font-size: 0.9rem;
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  font-family: 'Orbitron', sans-serif;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
 }
 
 .button.primary {

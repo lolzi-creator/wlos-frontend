@@ -150,6 +150,24 @@ export const HomeHeroSection: React.FC = () => {
                             color="purple"
                             onClick={() => console.log('Battle initialized')}
                         />
+                        
+                        <Button
+                            text="EXPLORE MARKETPLACE"
+                            color="blue"
+                            onClick={() => window.location.href = '/marketplace'}
+                        />
+                        
+                        <Button
+                            text="BUY FARMER PACKS"
+                            color="green"
+                            onClick={() => window.location.href = '/farmers'}
+                        />
+                        
+                        <Button
+                            text="LEARN ABOUT WLOS"
+                            color="yellow"
+                            onClick={() => window.location.href = '/wlos-token'}
+                        />
 
                         {!isConnected && (
                             <WalletConnectButton color="purple" />

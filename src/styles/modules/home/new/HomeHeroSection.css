@@ -232,16 +232,19 @@
 /* Button container */
 .hero-buttons-container {
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 30px;
     width: 100%;
+    max-width: 800px;
 }
 
 /* Add shine effect to buttons */
 .hero-buttons-container button {
     position: relative;
     overflow: hidden;
+    min-width: 180px;
 }
 
 .hero-buttons-container button::after {
@@ -517,6 +520,15 @@
     .countdown-separator {
         font-size: 40px;
     }
+    
+    .hero-buttons-container {
+        gap: 12px;
+        max-width: 600px;
+    }
+    
+    .hero-buttons-container button {
+        min-width: 160px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -539,6 +551,14 @@
     .hero-buttons-container {
         flex-direction: column;
         align-items: center;
+        gap: 15px;
+        max-width: 100%;
+    }
+    
+    .hero-buttons-container button {
+        min-width: 220px;
+        width: 100%;
+        max-width: 300px;
     }
     
     .hero-grid {
@@ -628,5 +648,10 @@
     .countdown-title::before,
     .countdown-title::after {
         width: 20px;
+    }
+    
+    .hero-buttons-container button {
+        min-width: 0;
+        width: 100%;
     }
 } 

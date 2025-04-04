@@ -10,13 +10,24 @@ import { FARMER_PACKS } from '../types/FarmerTypes';
 import FarmersHeroSection from '../components/sections/Farmers/new/FarmersHeroSection';
 import FarmersDashboardSection from '../components/sections/Farmers/new/FarmersDashboardSection';
 import FarmersShowcaseSection from '../components/sections/Farmers/new/FarmersShowcaseSection';
+import { useLocation } from 'react-router-dom';
 import '../styles/modules/farmers/new/FarmersPage.css';
 
 const FarmerPage: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'showcase' | 'packs' | 'inventory'>('dashboard');
+    const location = useLocation();
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'showcase' | 'packs' | 'inventory'>('showcase');
     const [activeLine, setActiveLine] = useState(0);
+    const [showConnectPrompt, setShowConnectPrompt] = useState(false);
     const { isConnected } = useWalletConnection();
     const { ownedPacks, buyPack, openPack, isLoading, error } = useFarmer();
+
+    // Check URL hash on initial load
+    useEffect(() => {
+        // Check if hash is #packs to navigate directly to packs tab
+        if (location.hash === '#packs') {
+            setActiveTab('packs');
+        }
+    }, [location]);
 
     // Animation for scanning effect
     useEffect(() => {
@@ -25,6 +36,44 @@ const FarmerPage: React.FC = () => {
         }, 30);
         return () => clearInterval(interval);
     }, []);
+
+    // Set initial tab based on wallet connection
+    useEffect(() => {
+        if (isConnected) {
+            setActiveTab(prevTab => {
+                // If #packs is in the URL, prioritize that
+                if (location.hash === '#packs') return 'packs';
+                // Otherwise, use default logic
+                return prevTab === 'showcase' ? prevTab : 'dashboard';
+            });
+        } else {
+            setActiveTab(prevTab => {
+                // If #packs is in the URL, prioritize that
+                if (location.hash === '#packs') return 'packs';
+                // Otherwise, use default logic
+                return ['dashboard', 'inventory'].includes(prevTab) ? 'showcase' : prevTab;
+            });
+        }
+    }, [isConnected, location]);
+
+    // Handle tab click - check if wallet connection is required
+    const handleTabClick = (tab: 'dashboard' | 'showcase' | 'packs' | 'inventory') => {
+        if (!isConnected && (tab === 'dashboard' || tab === 'inventory')) {
+            setShowConnectPrompt(true);
+        } else {
+            setActiveTab(tab);
+            setShowConnectPrompt(false);
+        }
+    };
+
+    // Handle pack purchase attempt - check if wallet is connected
+    const handleBuyPackAttempt = (packId: string) => {
+        if (!isConnected) {
+            setShowConnectPrompt(true);
+            return Promise.resolve(false);
+        }
+        return buyPack(packId);
+    };
 
     return (
         <Layout>
@@ -51,79 +100,89 @@ const FarmerPage: React.FC = () => {
             </div>
 
             <main className="main-content">
-                {isConnected ? (
-                    <>
-                        {/* Hero Section always visible when connected */}
-                        <FarmersHeroSection />
-                        
-                        <div className="farmers-tab-navigation">
-                            <button
-                                className={`tab-button ${activeTab === 'dashboard' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('dashboard')}
-                            >
-                                YOUR FARMERS
-                            </button>
-                            <button
-                                className={`tab-button ${activeTab === 'showcase' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('showcase')}
-                            >
-                                SHOWCASE
-                            </button>
-                            <button
-                                className={`tab-button ${activeTab === 'packs' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('packs')}
-                            >
-                                PACK STORE
-                            </button>
-                            <button
-                                className={`tab-button ${activeTab === 'inventory' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('inventory')}
-                            >
-                                YOUR PACKS
-                            </button>
-                        </div>
+                {/* Hero Section always visible */}
+                <FarmersHeroSection />
+                
+                {/* Tab Navigation */}
+                <div className="farmers-tab-navigation">
+                    {isConnected && (
+                        <button
+                            className={`tab-button ${activeTab === 'dashboard' ? 'active' : ''}`}
+                            onClick={() => handleTabClick('dashboard')}
+                        >
+                            YOUR FARMERS
+                        </button>
+                    )}
+                    <button
+                        className={`tab-button ${activeTab === 'showcase' ? 'active' : ''}`}
+                        onClick={() => handleTabClick('showcase')}
+                    >
+                        SHOWCASE
+                    </button>
+                    <button
+                        className={`tab-button ${activeTab === 'packs' ? 'active' : ''}`}
+                        onClick={() => handleTabClick('packs')}
+                    >
+                        PACK STORE
+                    </button>
+                    {isConnected && (
+                        <button
+                            className={`tab-button ${activeTab === 'inventory' ? 'active' : ''}`}
+                            onClick={() => handleTabClick('inventory')}
+                        >
+                            YOUR PACKS
+                        </button>
+                    )}
+                </div>
 
-                        <div className="farmers-content">
-                            {activeTab === 'dashboard' && <FarmersDashboardSection />}
-                            {activeTab === 'showcase' && <FarmersShowcaseSection />}
-                            {activeTab === 'packs' && (
-                                <div className="farmers-content-section">
-                                    <GenericPackStore
-                                        packs={FARMER_PACKS}
-                                        entityType="farmer"
-                                        buyPack={buyPack}
-                                        isLoading={isLoading}
-                                        error={error}
-                                        title="FARMER PACKS"
-                                    />
-                                </div>
-                            )}
-                            {activeTab === 'inventory' && (
-                                <div className="farmers-content-section">
-                                    <GenericPackInventory
-                                        ownedPacks={ownedPacks}
-                                        packs={FARMER_PACKS}
-                                        openPack={openPack}
-                                        isLoading={isLoading}
-                                        error={error}
-                                        entityType="farmer"
-                                        title="YOUR PACKS"
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    </>
-                ) : (
-                    <div className="wallet-connect-prompt">
-                        <div className="wallet-connect-content">
+                {/* Wallet Connect Prompt (overlay) */}
+                {showConnectPrompt && (
+                    <div className="wallet-connect-prompt-overlay">
+                        <div className="wallet-connect-prompt-modal">
+                            <button className="close-prompt" onClick={() => setShowConnectPrompt(false)}>×</button>
                             <h2 className="prompt-title">CONNECT WALLET</h2>
                             <p className="prompt-description">
-                                Connect your wallet to buy and manage farmers that generate passive WLOS income.
+                                Connect your wallet to {activeTab === 'dashboard' ? 'view your farmers' : 
+                                                        activeTab === 'inventory' ? 'access your packs' : 
+                                                        'purchase farmer packs'}.
                             </p>
-                            <WalletConnectButton color="green" />
+                            <div className="prompt-buttons">
+                                <WalletConnectButton color="green" />
+                            </div>
                         </div>
                     </div>
                 )}
+
+                {/* Content Sections */}
+                <div className="farmers-content">
+                    {activeTab === 'dashboard' && isConnected && <FarmersDashboardSection />}
+                    {activeTab === 'showcase' && <FarmersShowcaseSection />}
+                    {activeTab === 'packs' && (
+                        <div className="farmers-content-section">
+                            <GenericPackStore
+                                packs={FARMER_PACKS}
+                                entityType="farmer"
+                                buyPack={handleBuyPackAttempt}
+                                isLoading={isLoading}
+                                error={error}
+                                title="FARMER PACKS"
+                            />
+                        </div>
+                    )}
+                    {activeTab === 'inventory' && isConnected && (
+                        <div className="farmers-content-section">
+                            <GenericPackInventory
+                                ownedPacks={ownedPacks}
+                                packs={FARMER_PACKS}
+                                openPack={openPack}
+                                isLoading={isLoading}
+                                error={error}
+                                entityType="farmer"
+                                title="YOUR PACKS"
+                            />
+                        </div>
+                    )}
+                </div>
             </main>
         </Layout>
     );

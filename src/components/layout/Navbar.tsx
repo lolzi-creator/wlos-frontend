@@ -124,7 +124,7 @@ const Navbar: React.FC = () => {
 
                 {/* Wallet Button */}
                 <div className="wallet-button-container">
-                    <WalletConnectButton color="purple" />
+                    <WalletConnectButton color="purple" customStyle={true} />
                     {isConnected && <span className="connected-indicator">•</span>}
                 </div>
             </div>

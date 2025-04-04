@@ -10,8 +10,8 @@
     display: flex;
     justify-content: center;
     gap: 5px;
-    margin: 0 auto 20px;
-    max-width: 1000px;
+    margin: 0 auto 30px;
+    max-width: 1400px; /* Match other sections */
     padding: 0 20px;
     position: relative;
     z-index: 2;
@@ -49,10 +49,11 @@
 .farmers-content {
     position: relative;
     min-height: 400px;
+    padding-top: 20px;
 }
 
 .farmers-content-section {
-    max-width: 1200px;
+    max-width: 1400px; /* Match the showcase section width */
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -69,6 +70,77 @@
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Wallet Connect Prompt Overlay */
+.wallet-connect-prompt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.wallet-connect-prompt-modal {
+    background: rgba(6, 10, 20, 0.95);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(20, 241, 149, 0.2);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-prompt {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(20, 241, 149, 0.1);
+    border: 1px solid rgba(20, 241, 149, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-prompt:hover {
+    background: rgba(20, 241, 149, 0.2);
+    color: #fff;
+}
+
+.prompt-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .wallet-connect-prompt::before {

@@ -1,13 +1,12 @@
 /* FarmersShowcaseSection.css */
 .farmers-showcase-section {
     position: relative;
-    padding: 40px 0;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 120px 20px 40px; /* Increased top padding to avoid navbar overlap */
 }
 
 .farmers-showcase-section.visible {
@@ -18,6 +17,7 @@
 .section-header {
     text-align: center;
     margin-bottom: 40px;
+    padding-top: 30px; /* Extra padding for header */
 }
 
 .section-title {
@@ -147,7 +147,7 @@
 
 .entity-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr); /* Force exactly 3 columns */
     gap: 25px;
     margin-bottom: 40px;
 }
@@ -170,7 +170,23 @@
 }
 
 /* Responsive adjustments */
+@media (max-width: 1200px) {
+    .entity-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .entity-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
+    .farmers-showcase-section {
+        padding-top: 100px; /* Adjusted padding for mobile */
+    }
+    
     .entity-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 20px;
@@ -214,7 +230,7 @@
 /* For very small screens */
 @media (max-width: 480px) {
     .farmers-showcase-section {
-        padding: 30px 10px;
+        padding: 90px 10px 30px;
     }
     
     .section-title {
@@ -223,6 +239,5 @@
     
     .entity-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
     }
 } 

@@ -13,10 +13,13 @@ const WlosTokenPage: React.FC = () => {
       <div className="wlos-token-page">
         {/* Background effects */}
         <div className="background-effects">
-          <div className="bg-grid"></div>
-          <div className="purple-orb"></div>
-          <div className="blue-orb"></div>
-          <div className="bg-particles"></div>
+          <div className="hero-grid"></div>
+          <div className="hero-circuit"></div>
+          <div className="energy-orb purple-orb"></div>
+          <div className="energy-orb green-orb"></div>
+          <div className="energy-orb yellow-orb"></div>
+          <div className="hero-glow"></div>
+          <div className="scan-line"></div>
         </div>
         
         <div className="main-content">
